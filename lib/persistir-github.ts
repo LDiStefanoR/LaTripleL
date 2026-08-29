@@ -19,7 +19,7 @@ export function fotosEnGithub() {
 async function git(args: string[]) {
   try {
     const { stdout, stderr } = await exec("git", args, {
-      cwd: process.cwd(),
+      cwd: /* turbopackIgnore: true */ process.cwd(),
       windowsHide: true,
       timeout: 120_000,
       maxBuffer: 20 * 1024 * 1024,

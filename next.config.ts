@@ -1,9 +1,5 @@
 import os from "os";
 import type { NextConfig } from "next";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 function hostsRedLocal() {
   const hosts = new Set<string>(["localhost", "127.0.0.1", "127.0.0.1:3005"]);
@@ -33,16 +29,25 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "veaargentina.vteximg.com.br" },
       { protocol: "https", hostname: "**.vteximg.com.br" },
       { protocol: "https", hostname: "**.vtexassets.com" },
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "*.blob.vercel-storage.com" },
     ],
   },
-  serverExternalPackages: ["bcryptjs", "exceljs", "pdfkit", "googleapis", "@vercel/blob", "sharp"],
+  serverExternalPackages: [
+    "bcryptjs",
+    "exceljs",
+    "pdfkit",
+    "googleapis",
+    "@vercel/blob",
+    "sharp",
+  ],
   experimental: {
     serverActions: {
       bodySizeLimit: "8mb",
     },
   },
-  turbopack: {
-    root: projectRoot,
+  outputFileTracingIncludes: {
+    "/*": ["./data/*.json"],
   },
 };
 

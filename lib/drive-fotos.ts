@@ -168,7 +168,10 @@ export async function bajarFotosDrive(destinoRecursos: string) {
   for (const carpeta of DRIVE_CARPETAS) {
     const carpetaId = await asegurarSubcarpeta(drive, carpeta);
     let pageToken: string | undefined;
-    const dir = path.join(destinoRecursos, carpeta);
+    const dir = path.join(
+      /* turbopackIgnore: true */ destinoRecursos,
+      carpeta,
+    );
     await fs.mkdir(dir, { recursive: true });
     do {
       const { data } = await drive.files.list({
@@ -181,7 +184,7 @@ export async function bajarFotosDrive(destinoRecursos: string) {
       });
       for (const file of data.files ?? []) {
         if (!file.id || !file.name) continue;
-        const dest = path.join(dir, file.name);
+        const dest = path.join(/* turbopackIgnore: true */ dir, file.name);
         const res = await drive.files.get(
           { fileId: file.id, alt: "media", supportsAllDrives: true },
           { responseType: "stream" },
@@ -207,7 +210,10 @@ export async function publicarFotosLocalesEnDrive(origenRecursos: string) {
   if (!drive) return 0;
   let total = 0;
   for (const carpeta of DRIVE_CARPETAS) {
-    const dir = path.join(origenRecursos, carpeta);
+    const dir = path.join(
+      /* turbopackIgnore: true */ origenRecursos,
+      carpeta,
+    );
     let nombres: string[] = [];
     try {
       nombres = (await fs.readdir(dir)).filter((n) => !n.startsWith("."));
@@ -215,7 +221,7 @@ export async function publicarFotosLocalesEnDrive(origenRecursos: string) {
       continue;
     }
     for (const nombre of nombres) {
-      const archivo = path.join(dir, nombre);
+      const archivo = path.join(/* turbopackIgnore: true */ dir, nombre);
       const st = await fs.stat(archivo);
       if (!st.isFile()) continue;
       const buffer = await fs.readFile(archivo);
@@ -223,7 +229,10 @@ export async function publicarFotosLocalesEnDrive(origenRecursos: string) {
       total += 1;
     }
   }
-  const logo = path.join(origenRecursos, "logo.jpg");
+  const logo = path.join(
+    /* turbopackIgnore: true */ origenRecursos,
+    "logo.jpg",
+  );
   try {
     const buffer = await fs.readFile(logo);
     await subirFotoDrive({

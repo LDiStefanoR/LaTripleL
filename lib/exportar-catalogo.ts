@@ -51,13 +51,17 @@ export async function filasCatalogo(): Promise<FilaCatalogo[]> {
 }
 
 function candidatosImagen(imagen: string) {
+  if (/^https?:\/\//i.test(imagen) || imagen.startsWith("/api/media/")) {
+    return [];
+  }
   const limpio = imagen.replace(/^\/+/, "").replace(/\\/g, "/");
   const nombre = path.basename(limpio);
+  const raiz = /* turbopackIgnore: true */ process.cwd();
   return [
-    path.join(process.cwd(), "public", limpio),
-    path.join(process.cwd(), limpio),
-    path.join(process.cwd(), "public", "recursos", "imagenes-productos", nombre),
-    path.join(process.cwd(), "recursos", "imagenes-productos", nombre),
+    path.join(raiz, "public", "recursos", "imagenes-productos", nombre),
+    path.join(raiz, "recursos", "imagenes-productos", nombre),
+    path.join(raiz, "public", "recursos", "imagenes-rubros", nombre),
+    path.join(raiz, "recursos", "imagenes-rubros", nombre),
   ];
 }
 

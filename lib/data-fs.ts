@@ -8,17 +8,16 @@ import {
 
 const memoria = new Map<string, string>();
 
-function directorioEscritura() {
-  if (process.env.VERCEL) {
-    return path.join("/tmp", "latriplel-data");
-  }
-  return path.join(process.cwd(), "data");
+function rutaTmp(nombre: string) {
+  return path.join("/tmp", "latriplel-data", nombre);
 }
 
-function directoriosLectura() {
-  const tmp = path.join("/tmp", "latriplel-data");
-  const repo = path.join(process.cwd(), "data");
-  return process.env.VERCEL ? [tmp, repo] : [repo];
+function rutaRepo(nombre: string) {
+  return path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "data",
+    nombre,
+  );
 }
 
 function parsear<T>(raw: string, vacio: T): T {
@@ -44,9 +43,13 @@ export async function leerJsonData<T>(nombre: string, vacio: T): Promise<T> {
     return parsear(remoto, vacio);
   }
 
-  for (const dir of directoriosLectura()) {
+  const locales = process.env.VERCEL
+    ? [rutaTmp(nombre), rutaRepo(nombre)]
+    : [rutaRepo(nombre)];
+
+  for (const archivo of locales) {
     try {
-      const raw = await fs.readFile(path.join(dir, nombre), "utf8");
+      const raw = await fs.readFile(archivo, "utf8");
       memoria.set(nombre, raw);
       return parsear(raw, vacio);
     } catch {
@@ -58,11 +61,11 @@ export async function leerJsonData<T>(nombre: string, vacio: T): Promise<T> {
 }
 
 async function escribirDisco(nombre: string, raw: string) {
-  if (process.env.VERCEL && blobActivo()) return;
-  const dir = directorioEscritura();
+  if (process.env.VERCEL) return;
   try {
-    await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(path.join(dir, nombre), raw, "utf8");
+    const archivo = rutaRepo(nombre);
+    await fs.mkdir(path.dirname(archivo), { recursive: true });
+    await fs.writeFile(archivo, raw, "utf8");
   } catch (error) {
     console.error(`[data] No se pudo guardar ${nombre} en disco`, error);
   }
@@ -71,6 +74,22 @@ async function escribirDisco(nombre: string, raw: string) {
 export async function escribirJsonData(nombre: string, valor: unknown) {
   const raw = JSON.stringify(valor, null, 2);
   memoria.set(nombre, raw);
+
+  if (process.env.VERCEL) {
+    if (!blobActivo()) {
+      throw new Error(
+        "En internet los datos se guardan en Vercel Blob. Conectá Storage → Blob al proyecto y redesplegá.",
+      );
+    }
+    const ok = await guardarDatoBlob(nombre, raw);
+    if (!ok) {
+      throw new Error(
+        `No se pudo guardar ${nombre} en Vercel Blob. Revisá el token del store.`,
+      );
+    }
+    return true;
+  }
+
   await escribirDisco(nombre, raw);
   if (!blobActivo()) return true;
   const ok = await guardarDatoBlob(nombre, raw);

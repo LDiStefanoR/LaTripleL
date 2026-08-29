@@ -22,6 +22,18 @@ export function parsearRutaFoto(ruta: string) {
   return { carpeta: m[1] as CarpetaFotos, nombre: m[2] };
 }
 
+function rutaLocal(
+  lugar: "recursos" | "public",
+  carpeta: CarpetaFotos,
+  nombre: string,
+) {
+  const raiz = /* turbopackIgnore: true */ process.cwd();
+  if (lugar === "public") {
+    return path.join(raiz, "public", "recursos", carpeta, nombre);
+  }
+  return path.join(raiz, "recursos", carpeta, nombre);
+}
+
 export async function guardarFotoSitio(opts: {
   carpeta: CarpetaFotos;
   nombre: string;
@@ -47,19 +59,8 @@ export async function guardarFotoSitio(opts: {
     }
   }
 
-  const destRecursos = path.join(
-    process.cwd(),
-    "recursos",
-    opts.carpeta,
-    opts.nombre,
-  );
-  const destPublic = path.join(
-    process.cwd(),
-    "public",
-    "recursos",
-    opts.carpeta,
-    opts.nombre,
-  );
+  const destRecursos = rutaLocal("recursos", opts.carpeta, opts.nombre);
+  const destPublic = rutaLocal("public", opts.carpeta, opts.nombre);
   await fs.mkdir(path.dirname(destRecursos), { recursive: true });
   await fs.mkdir(path.dirname(destPublic), { recursive: true });
   await fs.writeFile(destRecursos, opts.buffer);
@@ -97,21 +98,12 @@ export async function borrarFotoSitioSiLibre(
   const parsed = parsearRutaFoto(ruta);
   if (!parsed) return;
 
-  const destRecursos = path.join(
-    process.cwd(),
-    "recursos",
-    parsed.carpeta,
-    parsed.nombre,
-  );
-  const destPublic = path.join(
-    process.cwd(),
-    "public",
-    "recursos",
-    parsed.carpeta,
-    parsed.nombre,
-  );
-  await fs.unlink(destRecursos).catch(() => undefined);
-  await fs.unlink(destPublic).catch(() => undefined);
+  await fs
+    .unlink(rutaLocal("recursos", parsed.carpeta, parsed.nombre))
+    .catch(() => undefined);
+  await fs
+    .unlink(rutaLocal("public", parsed.carpeta, parsed.nombre))
+    .catch(() => undefined);
   if (driveFotosActivo()) {
     await borrarFotoDrive(parsed.carpeta, parsed.nombre).catch((error) => {
       console.error("[drive] No se pudo borrar la foto", error);
