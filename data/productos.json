@@ -1,0 +1,4244 @@
+[
+  {
+    "id": "p11",
+    "codigo": "95",
+    "nombre": "Lia Alka Caramelo Cremoso x 100Gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p11.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p12",
+    "codigo": "298",
+    "nombre": "Cinta Adhesiva Rapifix",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p12.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p13",
+    "codigo": "100",
+    "nombre": "Dulcor Durazno Natural (Lata) x 820gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p13.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p14",
+    "codigo": "99",
+    "nombre": "Nescafe Dolca Suave Nvo. Origens (frasco) x 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 7000,
+    "imagen": "/recursos/imagenes-productos/p14.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p15",
+    "codigo": "gomitas 100gr",
+    "nombre": "Gomitas Billiken bols x 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p15.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p16",
+    "codigo": "gomita acidas",
+    "nombre": "Gomitas Acidas x 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p16.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p17",
+    "codigo": "bolsita mani",
+    "nombre": "Mani Pelado Landy x 120gr Bolsita",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p17.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p18",
+    "codigo": "103",
+    "nombre": "Twistos Minitostaditas 4Quesos x 95gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p18.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p19",
+    "codigo": "96",
+    "nombre": "Arcor Coffler C/Mani Block x 170gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 7600,
+    "imagen": "/recursos/imagenes-productos/p19.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p20",
+    "codigo": "104",
+    "nombre": "Twistos Minitostaditas Jamon x 95gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p20.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p21",
+    "codigo": "291",
+    "nombre": "Tregar Leche Entera x 1Lt",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p21.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p22",
+    "codigo": "292",
+    "nombre": "Vinagre De Alcohol Alcazar x 500ml",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p22.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p23",
+    "codigo": "94",
+    "nombre": "La Virginia Capuccino Dulce De Leche (doypack) x 155gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5000,
+    "imagen": "/recursos/imagenes-productos/p23.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p24",
+    "codigo": "294",
+    "nombre": "Azucar Ledesma Paq x 1 Kg",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p24.jpg",
+    "descripcion": "",
+    "promoActiva": true,
+    "precioPromo": 3200,
+    "precioSuper": 4100
+  },
+  {
+    "id": "p25",
+    "codigo": "92",
+    "nombre": "Arcor Butter Toffees Leche (caramelos) x 80gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p25.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p26",
+    "codigo": "91",
+    "nombre": "Takis Snack Original x 49gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p26.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p27",
+    "codigo": "333",
+    "nombre": "Hellmanns Ketchup x 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2600,
+    "imagen": "/recursos/imagenes-productos/p27.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p28",
+    "codigo": "97",
+    "nombre": "Noel Pure Tomate (tetra) x 520gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 900,
+    "imagen": "/recursos/imagenes-productos/p28.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p29",
+    "codigo": "117",
+    "nombre": "Oblita Cubanito Nougat",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 200,
+    "imagen": "/recursos/imagenes-productos/p29.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p30",
+    "codigo": "263",
+    "nombre": "Aguila Minitorta Dark",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p30.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p31",
+    "codigo": "264",
+    "nombre": "Aguila Minitorta Brownie",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p31.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p32",
+    "codigo": "265",
+    "nombre": "Don Satur Bizcocho negrito x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p32.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p33",
+    "codigo": "266",
+    "nombre": "Don Satur bizcocho dulce x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p33.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p34",
+    "codigo": "267",
+    "nombre": "Galletitas Diversion x 400g",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2800,
+    "imagen": "/recursos/imagenes-productos/p34.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p35",
+    "codigo": "268",
+    "nombre": "Surtido Bagley x 390gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p35.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p36",
+    "codigo": "101",
+    "nombre": "Lheritier Pico Dulce (chupetin)",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 300,
+    "imagen": "/recursos/imagenes-productos/p36.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p37",
+    "codigo": "118",
+    "nombre": "Natura Rocio Vegetal Girasol x 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5400,
+    "imagen": "/recursos/imagenes-productos/p37.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p38",
+    "codigo": "299",
+    "nombre": "Adhesivo en barra x 21gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p38.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p39",
+    "codigo": "114",
+    "nombre": "Stani Palitos De La Selva 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p39.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p40",
+    "codigo": "112",
+    "nombre": "Arcor Mogul Masti-Roll Titti Frutti x 13gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 300,
+    "imagen": "/recursos/imagenes-productos/p40.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p41",
+    "codigo": "111",
+    "nombre": "Arcor Menthoplus Clasico Miel x 29.4gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p41.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p42",
+    "codigo": "110",
+    "nombre": "Arcor Menthoplus Clasico Sandia x 29.4gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p42.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p43",
+    "codigo": "109",
+    "nombre": "Delicias Riojanas Aceitunas Verdes C/Carozo (Doypack) x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p43.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p44",
+    "codigo": "108",
+    "nombre": "Delicias Riojanas Aceitunas Verdes Rell.Morron (Doypack) x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2700,
+    "imagen": "/recursos/imagenes-productos/p44.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p45",
+    "codigo": "106",
+    "nombre": "Arcor Cofler Oblea Avellanas Max x 60gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p45.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p46",
+    "codigo": "120",
+    "nombre": "Nestle Nesquik Polvo Chocolatada x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p46.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p47",
+    "codigo": "envase",
+    "nombre": "Envase De cocacola/birra",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p47.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p48",
+    "codigo": "novillo",
+    "nombre": "Hilo de Algodon En Novillo x 40 gr U",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p48.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p49",
+    "codigo": "65",
+    "nombre": "Arcor Cofler Tab Yogurt Frutilla x 64gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p49.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p50",
+    "codigo": "64",
+    "nombre": "Arcor Air Cofler Aireado Leche x 55gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p50.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p51",
+    "codigo": "63",
+    "nombre": "Mantecol Bajo Sodio Impulso x 111gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p51.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p52",
+    "codigo": "cafe",
+    "nombre": "cafe",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p52.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p53",
+    "codigo": "62",
+    "nombre": "Swift Picadillo (lata) x 90gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p53.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p54",
+    "codigo": "67",
+    "nombre": "La Virginia Te Tilo c/Manzanilla y Cedron x 25u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p54.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p55",
+    "codigo": "60",
+    "nombre": "Arcor Rocklets x 40gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p55.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p56",
+    "codigo": "68",
+    "nombre": "La Virginia Te Manzanilla x 25u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p56.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p57",
+    "codigo": "326",
+    "nombre": "La Virginia Capuccino Original (doypack) x 125gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3700,
+    "imagen": "/recursos/imagenes-productos/p57.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p58",
+    "codigo": "frutos secos",
+    "nombre": "Frutos Secos x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p58.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p59",
+    "codigo": "328",
+    "nombre": "Fantoche Minialfajor blanco x 150gr (6u)",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p59.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p60",
+    "codigo": "329",
+    "nombre": "Fantoche Minialfajor negro x 150gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p60.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p61",
+    "codigo": "59",
+    "nombre": "La Campagnola Extracto Simple De Tomate x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p61.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p62",
+    "codigo": "58",
+    "nombre": "Arcor Menthoplus Clasico Menta x 29.4gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p62.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p63",
+    "codigo": "186",
+    "nombre": "Gallo Arroz Parboil x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p63.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p64",
+    "codigo": "61",
+    "nombre": "Arcor Cofler Aireado Almendras x 55gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p64.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p65",
+    "codigo": "87",
+    "nombre": "Arcor Saladix Calabresa x 40gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 800,
+    "imagen": "/recursos/imagenes-productos/p65.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p66",
+    "codigo": "birome",
+    "nombre": "Birome util uno azul/negro",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 500,
+    "imagen": "/recursos/imagenes-productos/p66.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p67",
+    "codigo": "velas",
+    "nombre": "Velas Largas Torneadas Brillosas",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 800,
+    "imagen": "/recursos/imagenes-productos/p67.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p68",
+    "codigo": "300",
+    "nombre": "Bengala Holografica",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p68.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p69",
+    "codigo": "301",
+    "nombre": "Corrector Util Uno x 7ml",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p69.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p70",
+    "codigo": "globo caritas",
+    "nombre": "Bolsita de Globos C/Caritas",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p70.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p71",
+    "codigo": "90",
+    "nombre": "Lays Papas Onda Flamin Hot x 70gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p71.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p72",
+    "codigo": "66",
+    "nombre": "Lia Sapito Bocaditos Mundial Chocolatoso x 10gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 400,
+    "imagen": "/recursos/imagenes-productos/p72.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p73",
+    "codigo": "88",
+    "nombre": "Lays Papas Ketchup x 77gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p73.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p74",
+    "codigo": "260",
+    "nombre": "Oblea Bon o Bon Negro",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "https://jumboargentina.vteximg.com.br/arquivos/ids/583004/Obleas-Bon-O-Bon-Bañadas-En-Chocolate-Con-Leche-30-Gr-1-20493.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p75",
+    "codigo": "86",
+    "nombre": "Arcor Saladix Jamon x 40gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 800,
+    "imagen": "/recursos/imagenes-productos/p75.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p76",
+    "codigo": "84",
+    "nombre": "Lays Papas Provoleta x 77gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p76.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p77",
+    "codigo": "83",
+    "nombre": "Doritos Dinamita Fh x 82gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3100,
+    "imagen": "/recursos/imagenes-productos/p77.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p78",
+    "codigo": "81",
+    "nombre": "Rosamonte Yerba Clasica x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p78.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p79",
+    "codigo": "74",
+    "nombre": "Arcor Cofler C/Mani Block x 38gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p79.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p80",
+    "codigo": "70",
+    "nombre": "Tang Pomelo Rosado x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p80.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p81",
+    "codigo": "69",
+    "nombre": "Tregar Leche Descremada x 1Lt",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p81.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p82",
+    "codigo": "89",
+    "nombre": "Lays Acanaladas Asado x 77gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p82.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p83",
+    "codigo": "172",
+    "nombre": "La Virginia Especias Surtidas x 25gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p83.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p84",
+    "codigo": "262",
+    "nombre": "Aguila minitorta clasica",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p84.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p85",
+    "codigo": "177",
+    "nombre": "Cañuelas Aceite Girasol Comun x 900cc",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5000,
+    "imagen": "https://jumboargentina.vteximg.com.br/arquivos/ids/210381/Aceite-CaÑuelas-De-Girasol-X-900-Ml-Aceite-De-Girasol-CaÑuelas-900-Ml-1-46785.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p86",
+    "codigo": "225",
+    "nombre": "Knorr Sopa Vegetal Tricolor x 107.5gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p86.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p87",
+    "codigo": "226",
+    "nombre": "Knorr Sopa Caserisimo Vegetal C/Fideos Letras x 107.5gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p87.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p88",
+    "codigo": "227",
+    "nombre": "Coca Cola S/Azucar x 1500CC",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4900,
+    "imagen": "/recursos/imagenes-productos/p88.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p89",
+    "codigo": "228",
+    "nombre": "Sprite x 1500CC",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4900,
+    "imagen": "/recursos/imagenes-productos/p89.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p90",
+    "codigo": "178",
+    "nombre": "Savora Mostaza Original x 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p90.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p91",
+    "codigo": "173",
+    "nombre": "Natura Ketchup Original (Doypack) x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4300,
+    "imagen": "/recursos/imagenes-productos/p91.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p92",
+    "codigo": "181",
+    "nombre": "La Virginia Laurel Hoja sin Tacc x 10gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p92.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p93",
+    "codigo": "171",
+    "nombre": "La Virginia Pimenton sin Tacc x 25gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p93.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p94",
+    "codigo": "169",
+    "nombre": "Hellmanns Ketchup C/Tomate sin Tacc x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5000,
+    "imagen": "/recursos/imagenes-productos/p94.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p95",
+    "codigo": "167",
+    "nombre": "Knorr Sopa Vegetal Pollo c/Fideos Dedalitos Integral x 80gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2700,
+    "imagen": "/recursos/imagenes-productos/p95.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p96",
+    "codigo": "165",
+    "nombre": "Knorr Sopa Caserisimo Pollo c/Fideos cab. Angel x 105.6gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p96.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p97",
+    "codigo": "161",
+    "nombre": "Harina Cañuelas 000 Ultrarefinada c/Vitamina D x 1kg",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p97.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p98",
+    "codigo": "206",
+    "nombre": "Stani Beldent Chicles Mentol Frozen S/Azucar x Unidad",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p98.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p99",
+    "codigo": "159",
+    "nombre": "Inalpa Jardinera Legumbres /Hortalizas (Lata) x 300gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p99.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p100",
+    "codigo": "174",
+    "nombre": "Natura Mostaza Original (doypack) 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1450,
+    "imagen": "/recursos/imagenes-productos/p100.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p101",
+    "codigo": "196",
+    "nombre": "La Virginia Oregano Sin Tacc x 25gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p101.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p102",
+    "codigo": "188",
+    "nombre": "Fachitas Minicoronitas Frambuesa x 140gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p102.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p103",
+    "codigo": "189",
+    "nombre": "Knorr Risotto Cuatro Quesos x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p103.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p104",
+    "codigo": "190",
+    "nombre": "Knorr Pasta Pesto x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p104.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p105",
+    "codigo": "184",
+    "nombre": "Helmmanns Mayonesa C/Ajo x 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2800,
+    "imagen": "/recursos/imagenes-productos/p105.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p106",
+    "codigo": "192",
+    "nombre": "Edulcorante Si-Diet Clasico x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p106.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p107",
+    "codigo": "193",
+    "nombre": "Arcor Ramen Sabor Pollo x 70gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p107.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p108",
+    "codigo": "223",
+    "nombre": "Terrabusi Fideos Municiones x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1100,
+    "imagen": "/recursos/imagenes-productos/p108.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p109",
+    "codigo": "195",
+    "nombre": "Knorr Risotto Calabaza x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p109.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p110",
+    "codigo": "210",
+    "nombre": "Tuy Clasico Edulcorante Liquido x 200CC",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p110.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p111",
+    "codigo": "198",
+    "nombre": "Terrabusi Fideos Coditos x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p111.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p112",
+    "codigo": "200",
+    "nombre": "Terrabusi Fideo Fusilli x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p112.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p113",
+    "codigo": "201",
+    "nombre": "Habana Naipes Estilo Español x Unidad",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p113.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p114",
+    "codigo": "202",
+    "nombre": "Stani Beldent Chicless Menta Power Z/Azucar x Unidad",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p114.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p115",
+    "codigo": "203",
+    "nombre": "Candela Cinta De Embalar x 100mt",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p115.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p116",
+    "codigo": "204",
+    "nombre": "CBSE Yerba Hierbas Cerranas +10% Mundial x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p116.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p117",
+    "codigo": "205",
+    "nombre": "Good Show Pochoclos Clasicos x 90gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p117.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p118",
+    "codigo": "183",
+    "nombre": "Hellmanns Mayonesa Clasica x 237gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p118.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p119",
+    "codigo": "253",
+    "nombre": "Alfajor Blanco y Negro triple x 73gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p119.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p120",
+    "codigo": "149",
+    "nombre": "Terrabusi Fideos Tallarin x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p120.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p121",
+    "codigo": "148",
+    "nombre": "La Virginia Proveenzal Sin Tacc x 25gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p121.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p122",
+    "codigo": "146",
+    "nombre": "Knorr Caldo Iodo Verdura x 2u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 800,
+    "imagen": "/recursos/imagenes-productos/p122.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p123",
+    "codigo": "248",
+    "nombre": "Escarbadientes Toothpick",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p123.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p124",
+    "codigo": "249",
+    "nombre": "Triple Fantoche de Chocolate Negro",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p124.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p125",
+    "codigo": "250",
+    "nombre": "Triple Fantoche de Chocolate Blanco",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p125.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p126",
+    "codigo": "208",
+    "nombre": "Nobleza Gaucha Yerba Suave Sin Tacc x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p126.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p127",
+    "codigo": "252",
+    "nombre": "Guaymallen Alfajor Triple Negro",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 900,
+    "imagen": "/recursos/imagenes-productos/p127.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p128",
+    "codigo": "1",
+    "nombre": "Tang Manzana x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p128.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p129",
+    "codigo": "254",
+    "nombre": "Alfajor Bon o Bon Triple Blanco",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p129.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p130",
+    "codigo": "255",
+    "nombre": "Alfajor Bon o Bon Triple Negro",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p130.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p131",
+    "codigo": "256",
+    "nombre": "Alfajor Tatin Simple Negro",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p131.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p132",
+    "codigo": "126",
+    "nombre": "Harina Pureza 0000 Ultra/Refinada C/Vitamina D x 1kg",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p132.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p133",
+    "codigo": "258",
+    "nombre": "Alfajor Cofler Block",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p133.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p134",
+    "codigo": "259",
+    "nombre": "Oblea Bon o Bon blanco",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p134.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p135",
+    "codigo": "57",
+    "nombre": "Arcor Bon o Bon Leche x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p135.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p136",
+    "codigo": "251",
+    "nombre": "Guaymallen Alfajor Triple Blanco",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 900,
+    "imagen": "/recursos/imagenes-productos/p136.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p137",
+    "codigo": "219",
+    "nombre": "Harina Pureza C/Levadura P/Pizza x 1kg",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p137.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p138",
+    "codigo": "261",
+    "nombre": "Kit Kat nestle x 41.5g",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p138.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p139",
+    "codigo": "140",
+    "nombre": "La Virginia Condimento P/Guisos x 25gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p139.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p140",
+    "codigo": "212",
+    "nombre": "Ready Pop Pochoclo Dulce x 90gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p140.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p141",
+    "codigo": "139",
+    "nombre": "La Virginia Condimento P/Empanadas x 25gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p141.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p142",
+    "codigo": "138",
+    "nombre": "La Virginia Aji Triturado x 25gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p142.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p143",
+    "codigo": "137",
+    "nombre": "La Campañola Pure Tomate x 530gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p143.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p144",
+    "codigo": "136",
+    "nombre": "Arlistan Cafe Suave Mas Aromas (Frasco) x 100gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 6000,
+    "imagen": "/recursos/imagenes-productos/p144.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p145",
+    "codigo": "150",
+    "nombre": "Knorr Pasta Hongos x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p145.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p146",
+    "codigo": "218",
+    "nombre": "Cocinero Salsa De Soja x 500CC",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 6350,
+    "imagen": "/recursos/imagenes-productos/p146.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p147",
+    "codigo": "152",
+    "nombre": "Duracell C&B Alcalinas AA(Blister) x 4u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 6600,
+    "imagen": "/recursos/imagenes-productos/p147.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p148",
+    "codigo": "220",
+    "nombre": "Amanda Yerba Mate Tradicional x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p148.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p149",
+    "codigo": "135",
+    "nombre": "Morixe Atun Desmenuzado Natural 170gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p149.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p150",
+    "codigo": "134",
+    "nombre": "Morixe Atun Desmenuzado En Aceite x 170gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p150.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p151",
+    "codigo": "131",
+    "nombre": "Arcor Mogul Piecitos x 30gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p151.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p152",
+    "codigo": "130",
+    "nombre": "Knorr Caldo Iodo Gallina x 2u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 800,
+    "imagen": "/recursos/imagenes-productos/p152.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p153",
+    "codigo": "154",
+    "nombre": "Mocovi Arroz Doble Carolina Laminado x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p153.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p154",
+    "codigo": "209",
+    "nombre": "Inalpa Choclo Cremoso Amarillo (Lata) x 300gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 850,
+    "imagen": "/recursos/imagenes-productos/p154.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p155",
+    "codigo": "217",
+    "nombre": "Arcor Harina Maiz PrestoPronta x 490gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p155.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p156",
+    "codigo": "412",
+    "nombre": "Disco emp Paladini Freir",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p156.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p157",
+    "codigo": "398",
+    "nombre": "Ralladito Ilolay x40gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p157.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p158",
+    "codigo": "cremoso",
+    "nombre": "Queso Cremoso x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p158.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p159",
+    "codigo": "407",
+    "nombre": "Salchicha Viena Fela x6u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p159.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p160",
+    "codigo": "408",
+    "nombre": "Salchicha Viena Paladini x6u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p160.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p161",
+    "codigo": "409",
+    "nombre": "Cafe La Virginia Inst x 50gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p161.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p162",
+    "codigo": "435",
+    "nombre": "Cheetos Ondulados Ketchup x 80gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3200,
+    "imagen": "/recursos/imagenes-productos/p162.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p163",
+    "codigo": "411",
+    "nombre": "Finlandia original Clasico x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p163.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p164",
+    "codigo": "434",
+    "nombre": "Doritos x 77gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3200,
+    "imagen": "/recursos/imagenes-productos/p164.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p165",
+    "codigo": "414",
+    "nombre": "Disco emp Paladini hojaldre",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p165.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p166",
+    "codigo": "415",
+    "nombre": "Disco emp Paladini Criolla",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p166.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p167",
+    "codigo": "416",
+    "nombre": "Si Diet Stevia x 250ml",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p167.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p168",
+    "codigo": "418",
+    "nombre": "Fideo Don Yeyo Cinta",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p168.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p169",
+    "codigo": "419",
+    "nombre": "Fetas queso Danbo Cremac x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p169.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p170",
+    "codigo": "420",
+    "nombre": "Fdo J.Cocido x 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5200,
+    "imagen": "/recursos/imagenes-productos/p170.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p171",
+    "codigo": "410",
+    "nombre": "Flan Cotar C/DDL x110gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p171.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p172",
+    "codigo": "427",
+    "nombre": "Yogurt Ilolay Sachet Frutilla",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p172.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p173",
+    "codigo": "salamines",
+    "nombre": "Salamines Paladini",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5500,
+    "imagen": "/recursos/imagenes-productos/p173.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p174",
+    "codigo": "400",
+    "nombre": "Ravioles JyQ Paladini",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4300,
+    "imagen": "/recursos/imagenes-productos/p174.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p175",
+    "codigo": "401",
+    "nombre": "Ravioles Espinaca Ricota y Queso Paladini",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4300,
+    "imagen": "/recursos/imagenes-productos/p175.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p176",
+    "codigo": "402",
+    "nombre": "Ravioles Carne y Espinaca Don Yeyo",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p176.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p177",
+    "codigo": "403",
+    "nombre": "Yogurt Ilolay Firme Descremado vainilla",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p177.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p178",
+    "codigo": "33",
+    "nombre": "Lays Papas Queso y Cebolla 77gr uni",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p178.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p179",
+    "codigo": "332",
+    "nombre": "Mayonesa Natura x 237gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p179.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p180",
+    "codigo": "424",
+    "nombre": "Adler Cheddar En Fetas",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p180.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p181",
+    "codigo": "428",
+    "nombre": "Leche La Serenisima Descremada Sachet",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p181.jpg",
+    "descripcion": "",
+    "promoActiva": true,
+    "precioPromo": 2100,
+    "precioSuper": 2800
+  },
+  {
+    "id": "p182",
+    "codigo": "429",
+    "nombre": "Leche La Serenisima Entera Sachet",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p182.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p183",
+    "codigo": "430",
+    "nombre": "Cafe La Virginia Inst x 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 6800,
+    "imagen": "/recursos/imagenes-productos/p183.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p184",
+    "codigo": "431",
+    "nombre": "Cafe Dolca Inst x 170gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 10000,
+    "imagen": "/recursos/imagenes-productos/p184.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p185",
+    "codigo": "432",
+    "nombre": "Fdo Milan Salame Paladini x 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4200,
+    "imagen": "/recursos/imagenes-productos/p185.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p186",
+    "codigo": "433",
+    "nombre": "Conitos 3D x 43gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p186.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p187",
+    "codigo": "406",
+    "nombre": "Ketchup Natura x 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p187.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p188",
+    "codigo": "6",
+    "nombre": "Tang Durazno x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p188.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p189",
+    "codigo": "459",
+    "nombre": "Pan Lactal x 460gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p189.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p190",
+    "codigo": "460",
+    "nombre": "Pan Lactal Salvado x 560gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 4200,
+    "imagen": "/recursos/imagenes-productos/p190.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p191",
+    "codigo": "461",
+    "nombre": "Twistos queso x 40gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p191.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p192",
+    "codigo": "462",
+    "nombre": "Opera x 92gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p192.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p193",
+    "codigo": "464",
+    "nombre": "sonrisas x 118gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p193.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p194",
+    "codigo": "422",
+    "nombre": "Yogurt Cotar c/Cereal",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p194.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p195",
+    "codigo": "21",
+    "nombre": "Cheetos Quesos X 85gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3200,
+    "imagen": "/recursos/imagenes-productos/p195.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p196",
+    "codigo": "454",
+    "nombre": "Don Yeyo Sorrentino J&Q",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5500,
+    "imagen": "/recursos/imagenes-productos/p196.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p197",
+    "codigo": "5",
+    "nombre": "Tang Naranaja Dulce x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p197.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p198",
+    "codigo": "4",
+    "nombre": "Tang Multifruta x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p198.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p199",
+    "codigo": "3",
+    "nombre": "Tang Naranaja x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p199.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p200",
+    "codigo": "2",
+    "nombre": "Tang Naranaja Banana x 15gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 450,
+    "imagen": "/recursos/imagenes-productos/p200.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p201",
+    "codigo": "481",
+    "nombre": "sanguchitos de miga",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p201.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p202",
+    "codigo": "conito",
+    "nombre": "Conitos C/DDL y Choc",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 400,
+    "imagen": "/recursos/imagenes-productos/p202.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p203",
+    "codigo": "23",
+    "nombre": "Fachitas Minicoronitas Chocolate X 140gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p203.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p204",
+    "codigo": "447",
+    "nombre": "Arcor Chicle Topline Extreme Anana x6.7gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 500,
+    "imagen": "/recursos/imagenes-productos/p204.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p205",
+    "codigo": "404",
+    "nombre": "Yogurt Ilolay Firme Frutilla",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p205.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p206",
+    "codigo": "425",
+    "nombre": "Finlandia Clasico light  x 180gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p206.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p207",
+    "codigo": "ojo",
+    "nombre": "Candy Port Ojos Locos Fake (frasco) x 10gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 350,
+    "imagen": "/recursos/imagenes-productos/p207.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p208",
+    "codigo": "442",
+    "nombre": "Georgalos Caramelos Flynn Paff Tutti",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 100,
+    "imagen": "/recursos/imagenes-productos/p208.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p209",
+    "codigo": "443",
+    "nombre": "Bluper Chicle Metro Rollo Loco Tutti Frutti",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p209.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p210",
+    "codigo": "444",
+    "nombre": "La Casa Pastilla Rompemuelas",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 150,
+    "imagen": "/recursos/imagenes-productos/p210.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p211",
+    "codigo": "458",
+    "nombre": "Fdo Cocido Bajo Sodio x 150gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p211.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p212",
+    "codigo": "446",
+    "nombre": "Arcor Chicle Topline 7 Sandia x14gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p212.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p213",
+    "codigo": "456",
+    "nombre": "Ravioles esp y poll Don Yeyo",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p213.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p214",
+    "codigo": "448",
+    "nombre": "Yogurt Ilolay Firme Vainilla x 190gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p214.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p215",
+    "codigo": "449",
+    "nombre": "Yogurt Ilolay C/Cereal",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p215.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p216",
+    "codigo": "451",
+    "nombre": "Flan Cotar C/Caramelo x 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p216.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p217",
+    "codigo": "452",
+    "nombre": "Postre Ilolay Kids Vainilla x 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p217.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p218",
+    "codigo": "453",
+    "nombre": "Postre Ilolay Kids Vainilla C/DDL x 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p218.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p219",
+    "codigo": "423",
+    "nombre": "Manteca Milkaut x 100gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p219.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p220",
+    "codigo": "445",
+    "nombre": "Arcor Chicle Topline 7 Blow.Mand x14gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p220.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p221",
+    "codigo": "360",
+    "nombre": "Cereal Mix Yoghurt & Frutilla x 26gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p221.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p222",
+    "codigo": "353",
+    "nombre": "Kinder Barra Max x 21gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p222.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p223",
+    "codigo": "354",
+    "nombre": "Kinder Chocolate Barrita x 12.5gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p223.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p224",
+    "codigo": "355",
+    "nombre": "Kinder Sorpresa (huevo) nena",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p224.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p225",
+    "codigo": "356",
+    "nombre": "Kinder Sorpresa (huevo) nene",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p225.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p226",
+    "codigo": "357",
+    "nombre": "Kinder Bueno x 43gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3700,
+    "imagen": "/recursos/imagenes-productos/p226.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p227",
+    "codigo": "358",
+    "nombre": "Cereal Mix Pistachi & Mani x 38gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p227.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p228",
+    "codigo": "52",
+    "nombre": "La Virginia Te Comun Saquitos Sin Tac Nat.Intacta x 25u",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p228.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p229",
+    "codigo": "bolitas",
+    "nombre": "bolitas hiper saltarinas",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p229.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p230",
+    "codigo": "350",
+    "nombre": "Sal Fina Celusal Caja x500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p230.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p231",
+    "codigo": "361",
+    "nombre": "Cereal Mix Manzana & Avena x 23gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p231.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p232",
+    "codigo": "426",
+    "nombre": "Yogurt Ilolay Sachet Vainilla",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p232.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p233",
+    "codigo": "362",
+    "nombre": "Sugus Confitados x 50gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p233.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p234",
+    "codigo": "397",
+    "nombre": "Crema La Cabaña x200",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p234.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p235",
+    "codigo": "364",
+    "nombre": "Rollo De Aluminio Familiar x 28CM",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p235.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p236",
+    "codigo": "365",
+    "nombre": "Film Pvc Familiar x 30CM",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p236.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p237",
+    "codigo": "359",
+    "nombre": "Cereal Mix Choco/Pasion x 26gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p237.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p238",
+    "codigo": "342",
+    "nombre": "Mayonesa Hellmanns x 118gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p238.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p239",
+    "codigo": "56",
+    "nombre": "Plin Mielcita Superlong",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 350,
+    "imagen": "/recursos/imagenes-productos/p239.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p240",
+    "codigo": "336",
+    "nombre": "Azucar Arcor x 1Kg",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p240.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p241",
+    "codigo": "337",
+    "nombre": "Jugos Clight Manzana Deliciosa x 7Gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p241.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p242",
+    "codigo": "338",
+    "nombre": "Jugos Clight Pomelo Rosado x 7Gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p242.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p243",
+    "codigo": "339",
+    "nombre": "Jugos Clight Naranja Dulce x 7Gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p243.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p244",
+    "codigo": "340",
+    "nombre": "Yerba Mas Sabor Boldo x 500Gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p244.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p245",
+    "codigo": "352",
+    "nombre": "Terabusi Triple Chocolate x 70gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p245.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p246",
+    "codigo": "1g",
+    "nombre": "GRAMO",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 15000,
+    "imagen": "/recursos/imagenes-rubros/almacen-general.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p247",
+    "codigo": "351",
+    "nombre": "Alfajor Goat x 75gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p247.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p248",
+    "codigo": "343",
+    "nombre": "Ketchup Hellmanns x 60gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p248.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p249",
+    "codigo": "344",
+    "nombre": "Savora x 60gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p249.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p250",
+    "codigo": "346",
+    "nombre": "Cafe La Virginia En Saquitos",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p250.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p251",
+    "codigo": "347",
+    "nombre": "Cappuccino La Virginia En Saquitos",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p251.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p252",
+    "codigo": "348",
+    "nombre": "Arroz Peleador x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p252.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p253",
+    "codigo": "55",
+    "nombre": "Playadito Yerba Mate C/Palo x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3100,
+    "imagen": "/recursos/imagenes-productos/p253.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p254",
+    "codigo": "363",
+    "nombre": "Pipas Gigantes x 50gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1100,
+    "imagen": "/recursos/imagenes-productos/p254.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p255",
+    "codigo": "341",
+    "nombre": "Turoon Misky x 25Gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p255.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p256",
+    "codigo": "382",
+    "nombre": "Par-nor pitusas Merengue x 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p256.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p257",
+    "codigo": "396",
+    "nombre": "Pan Hamburguesa Don Yeyo",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p257.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p258",
+    "codigo": "395",
+    "nombre": "Pan Pancho Don Yeyo",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p258.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p259",
+    "codigo": "394",
+    "nombre": "Durazno Alco",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p259.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p260",
+    "codigo": "promo 1",
+    "nombre": "2 latas y 1 mani saborizado",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 5990,
+    "imagen": "/recursos/imagenes-productos/p260.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p261",
+    "codigo": "391",
+    "nombre": "Hellmanns Salsa Golf Sin Tacc x 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p261.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p262",
+    "codigo": "388",
+    "nombre": "Lays Papas Clasicas",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p262.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p263",
+    "codigo": "387",
+    "nombre": "Fantoche Gall.Yayita Black x 250gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p263.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p264",
+    "codigo": "386",
+    "nombre": "Granix Frutigran c/Chips Chocolate x 255gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2900,
+    "imagen": "/recursos/imagenes-productos/p264.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p265",
+    "codigo": "384",
+    "nombre": "Cbse Yerba Silueta Comillot x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p265.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p266",
+    "codigo": "383",
+    "nombre": "Par-Nor Pitusas Rellena Black x 130gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p266.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p267",
+    "codigo": "49",
+    "nombre": "Arcor Mogul Oso Extreme x 50gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1100,
+    "imagen": "/recursos/imagenes-productos/p267.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p268",
+    "codigo": "380",
+    "nombre": "Swift Picadillo Picante Chile Chipotle (lata) x 90gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p268.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p269",
+    "codigo": "379",
+    "nombre": "Terrabusi Fideo Moños x 500gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p269.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p270",
+    "codigo": "39",
+    "nombre": "Arcor Cofler Aireado Mixto X 55gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p270.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p271",
+    "codigo": "378",
+    "nombre": "Fachitas Minicoronitas Vainilla x 140gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p271.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p272",
+    "codigo": "43",
+    "nombre": "Landy Mani SAborizado Queso (pote) X 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p272.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p273",
+    "codigo": "42",
+    "nombre": "Landy Mani Saborizado Cervecero (Pote) X 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p273.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p274",
+    "codigo": "41",
+    "nombre": "Arcor Cofler Oblea C/Chocolinas Max X 60gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p274.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p275",
+    "codigo": "pastillitas",
+    "nombre": "Pastillitas Lucky 8 (bolsita x 50gr)",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p275.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p276",
+    "codigo": "377",
+    "nombre": "Fachitas Minicoronitas Choc. Blanco x 140gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p276.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p277",
+    "codigo": "44",
+    "nombre": "Landy Mani Saborizado Pizza (pote) X 120gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p277.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p278",
+    "codigo": "moneda",
+    "nombre": "Fel-Fort Piratas X 5gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 500,
+    "imagen": "/recursos/imagenes-productos/p278.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p279",
+    "codigo": "46",
+    "nombre": "Tregar Dulce De Leche Clasico X 200gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p279.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p280",
+    "codigo": "48",
+    "nombre": "Rosamonte Yerba Mate x 25u (saquitos)",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1100,
+    "imagen": "/recursos/imagenes-productos/p280.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p281",
+    "codigo": "40",
+    "nombre": "Arcor Bon o Bon ObleaXL X 45gr",
+    "seccion": "ALMACEN GENERAL",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p281.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p282",
+    "codigo": "244",
+    "nombre": "Lata Stella Artois x473cm",
+    "seccion": "BEBIDAS",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p282.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p283",
+    "codigo": "36",
+    "nombre": "Fanta Naranja X 1,5L",
+    "seccion": "BEBIDAS",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p283.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p284",
+    "codigo": "34",
+    "nombre": "Coca Cola X 500ml",
+    "seccion": "BEBIDAS",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p284.jpg",
+    "descripcion": "",
+    "promoActiva": true,
+    "precioPromo": 1890,
+    "precioSuper": 2490
+  },
+  {
+    "id": "p285",
+    "codigo": "17",
+    "nombre": "Vino Alma Mora Viong Dulce X 750cc",
+    "seccion": "BEBIDAS",
+    "precio": 6500,
+    "imagen": "/recursos/imagenes-productos/p285.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p286",
+    "codigo": "14",
+    "nombre": "Vino Finca Las Moras Malbec X 750cc",
+    "seccion": "BEBIDAS",
+    "precio": 5600,
+    "imagen": "/recursos/imagenes-productos/p286.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p287",
+    "codigo": "15",
+    "nombre": "Vino Estancia Mendoza Malbec X 750cc",
+    "seccion": "BEBIDAS",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p287.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p288",
+    "codigo": "16",
+    "nombre": "Vino Alaris Malbec X 750cc",
+    "seccion": "BEBIDAS",
+    "precio": 5000,
+    "imagen": "/recursos/imagenes-productos/p288.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p289",
+    "codigo": "18",
+    "nombre": "Vino Canciller Blend Blanco Dulce X 750cc",
+    "seccion": "BEBIDAS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p289.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p290",
+    "codigo": "19",
+    "nombre": "Fernet Branca X 450cc",
+    "seccion": "BEBIDAS",
+    "precio": 14000,
+    "imagen": "/recursos/imagenes-productos/p290.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p291",
+    "codigo": "25",
+    "nombre": "Fernet Branca X 750cc",
+    "seccion": "BEBIDAS",
+    "precio": 21000,
+    "imagen": "/recursos/imagenes-productos/p291.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p292",
+    "codigo": "35",
+    "nombre": "Cepita Durazno Delicioso X 1L",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p292.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p293",
+    "codigo": "27",
+    "nombre": "Cassoni Fernet Cola x 1L",
+    "seccion": "BEBIDAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p293.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p294",
+    "codigo": "38",
+    "nombre": "Powerade Manzana X 500ml",
+    "seccion": "BEBIDAS",
+    "precio": 2600,
+    "imagen": "/recursos/imagenes-productos/p294.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p295",
+    "codigo": "28",
+    "nombre": "Coca Cola X 1,5 L",
+    "seccion": "BEBIDAS",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p295.jpg",
+    "descripcion": "",
+    "promoActiva": true,
+    "precioPromo": 3990,
+    "precioSuper": 5290
+  },
+  {
+    "id": "p296",
+    "codigo": "29",
+    "nombre": "Fanta Naranja X 500ML",
+    "seccion": "BEBIDAS",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p296.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p297",
+    "codigo": "31",
+    "nombre": "Powerade Cool Citrus x 500ML",
+    "seccion": "BEBIDAS",
+    "precio": 2600,
+    "imagen": "/recursos/imagenes-productos/p297.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p298",
+    "codigo": "30",
+    "nombre": "Sprite x 500 ML",
+    "seccion": "BEBIDAS",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p298.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p299",
+    "codigo": "26",
+    "nombre": "Skyy Vodka X 700cc",
+    "seccion": "BEBIDAS",
+    "precio": 12700,
+    "imagen": "/recursos/imagenes-productos/p299.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p300",
+    "codigo": "20",
+    "nombre": "Sernova Vodka Clasico X 700cc",
+    "seccion": "BEBIDAS",
+    "precio": 10000,
+    "imagen": "/recursos/imagenes-productos/p300.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p301",
+    "codigo": "246",
+    "nombre": "Agua sierra de los padres x 600ml",
+    "seccion": "BEBIDAS",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p301.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p302",
+    "codigo": "319",
+    "nombre": "Fanta Retornable x 2Lt",
+    "seccion": "BEBIDAS",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p302.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p303",
+    "codigo": "318",
+    "nombre": "Sprite Retornable x 2Lt",
+    "seccion": "BEBIDAS",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p303.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p304",
+    "codigo": "316",
+    "nombre": "Paso De Los Toros Pomelo x 1.5Ml",
+    "seccion": "BEBIDAS",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p304.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p305",
+    "codigo": "315",
+    "nombre": "Vino Toro Tinto En Caja x 1L",
+    "seccion": "BEBIDAS",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p305.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p306",
+    "codigo": "293",
+    "nombre": "Aperitivo Amargo Obrero x 950ML",
+    "seccion": "BEBIDAS",
+    "precio": 5600,
+    "imagen": "/recursos/imagenes-productos/p306.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p307",
+    "codigo": "313",
+    "nombre": "Doble cola x 3L",
+    "seccion": "BEBIDAS",
+    "precio": 2800,
+    "imagen": "/recursos/imagenes-productos/p307.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p308",
+    "codigo": "278",
+    "nombre": "Baggio Fresh Saborizada manzana x 600CC",
+    "seccion": "BEBIDAS",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p308.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p309",
+    "codigo": "brahma",
+    "nombre": "Cerveza retornable Brahma 1l",
+    "seccion": "BEBIDAS",
+    "precio": 3800,
+    "imagen": "/recursos/imagenes-productos/p309.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p310",
+    "codigo": "312",
+    "nombre": "Vino Canciller Blend Tinto x 1125ml",
+    "seccion": "BEBIDAS",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p310.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p311",
+    "codigo": "311",
+    "nombre": "Viña Del Balbo x 1125ml",
+    "seccion": "BEBIDAS",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p311.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p312",
+    "codigo": "quilmes",
+    "nombre": "Cerverza retornable Quilmes",
+    "seccion": "BEBIDAS",
+    "precio": 4300,
+    "imagen": "/recursos/imagenes-productos/p312.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p313",
+    "codigo": "320",
+    "nombre": "Coca Cola Retornable x 2 Lt",
+    "seccion": "BEBIDAS",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p313.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p314",
+    "codigo": "245",
+    "nombre": "Agua Sierra de los padres x 1.5l",
+    "seccion": "BEBIDAS",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p314.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p315",
+    "codigo": "314",
+    "nombre": "Pritty limon x 3L",
+    "seccion": "BEBIDAS",
+    "precio": 3400,
+    "imagen": "/recursos/imagenes-productos/p315.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p316",
+    "codigo": "310",
+    "nombre": "Monster Energy Mango Loco x 473ml",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p316.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p317",
+    "codigo": "247",
+    "nombre": "Baggio Fresh Agua Saborizada Naranja Dulce x 600CC",
+    "seccion": "BEBIDAS",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p317.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p318",
+    "codigo": "309",
+    "nombre": "Monster Energy Blanca x 473ml",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p318.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p319",
+    "codigo": "308",
+    "nombre": "monster Energy Green x 473ml",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p319.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p320",
+    "codigo": "257",
+    "nombre": "Alfajor Tatin Simple Blanco",
+    "seccion": "BEBIDAS",
+    "precio": 600,
+    "imagen": "/recursos/imagenes-productos/p320.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p321",
+    "codigo": "242",
+    "nombre": "Quilmes Clasica Lata x 473cm",
+    "seccion": "BEBIDAS",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p321.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p322",
+    "codigo": "284",
+    "nombre": "Soda Sierra De Los Padres Limonada x 1.5L",
+    "seccion": "BEBIDAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p322.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p323",
+    "codigo": "282",
+    "nombre": "Baggio Fresh/Vida Saborizadas Naranja x 1500ml",
+    "seccion": "BEBIDAS",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p323.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p324",
+    "codigo": "281",
+    "nombre": "Baggio Fresh/Vida Saborizadas pomelo x 1500ml",
+    "seccion": "BEBIDAS",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p324.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p325",
+    "codigo": "280",
+    "nombre": "Baggio Fresh/Vida Saborizadas Manzana x 1500ml",
+    "seccion": "BEBIDAS",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p325.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p326",
+    "codigo": "279",
+    "nombre": "Baggio Fresh Saborizada Pomelo x 600CC",
+    "seccion": "BEBIDAS",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p326.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p327",
+    "codigo": "243",
+    "nombre": "Brahma Chopp lata x 473cm",
+    "seccion": "BEBIDAS",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p327.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p328",
+    "codigo": "450",
+    "nombre": "Yogurt Ilolay C/Cereal Descremado",
+    "seccion": "BEBIDAS",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p328.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p329",
+    "codigo": "439",
+    "nombre": "Cepita anana hf 1LT",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p329.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p330",
+    "codigo": "438",
+    "nombre": "Cepita HF Naranja Tentacion 1LT",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p330.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p331",
+    "codigo": "440",
+    "nombre": "Monster Reser Pineap x 473ml",
+    "seccion": "BEBIDAS",
+    "precio": 3300,
+    "imagen": "/recursos/imagenes-productos/p331.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p332",
+    "codigo": "241",
+    "nombre": "Cerveza retornable Santa Fe 1l",
+    "seccion": "BEBIDAS",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p332.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p333",
+    "codigo": "457",
+    "nombre": "Vino Toro Blanco .Brink x 1lt",
+    "seccion": "BEBIDAS",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p333.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p334",
+    "codigo": "13",
+    "nombre": "Camel Legend X 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p334.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p335",
+    "codigo": "233",
+    "nombre": "Philips Morris Original x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 5800,
+    "imagen": "/recursos/imagenes-productos/p335.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p336",
+    "codigo": "12",
+    "nombre": "Camel Box X 12",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p336.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p337",
+    "codigo": "10",
+    "nombre": "Lucky Strike Comun X 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 4700,
+    "imagen": "/recursos/imagenes-productos/p337.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p338",
+    "codigo": "232",
+    "nombre": "Philips Morris Red Select x 20ud",
+    "seccion": "CIGARRILLOS",
+    "precio": 2700,
+    "imagen": "/recursos/imagenes-productos/p338.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p339",
+    "codigo": "335",
+    "nombre": "Lucky Strike Origen Rojo x 20u",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p339.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p340",
+    "codigo": "9",
+    "nombre": "Lucky Strike Cool x 12",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p340.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p341",
+    "codigo": "234",
+    "nombre": "Philips Morris x 12",
+    "seccion": "CIGARRILLOS",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p341.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p342",
+    "codigo": "8",
+    "nombre": "Lucky Strike Origen Convertible x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p342.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p343",
+    "codigo": "pier",
+    "nombre": "Pier x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p343.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p344",
+    "codigo": "239",
+    "nombre": "Chesterfield Blue Motion x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 5100,
+    "imagen": "/recursos/imagenes-productos/p344.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p345",
+    "codigo": "334",
+    "nombre": "Papelillo Premier",
+    "seccion": "CIGARRILLOS",
+    "precio": 1100,
+    "imagen": "/recursos/imagenes-productos/p345.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p346",
+    "codigo": "331",
+    "nombre": "Encendedor Candela",
+    "seccion": "CIGARRILLOS",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p346.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p347",
+    "codigo": "238",
+    "nombre": "Marlboro crafted x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 4100,
+    "imagen": "/recursos/imagenes-productos/p347.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p348",
+    "codigo": "236",
+    "nombre": "Malvoro x 10",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p348.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p349",
+    "codigo": "237",
+    "nombre": "Marlboro crafted mentolado x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 4100,
+    "imagen": "/recursos/imagenes-productos/p349.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p350",
+    "codigo": "235",
+    "nombre": "Phipis Morris x12 blue spin",
+    "seccion": "CIGARRILLOS",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p350.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p351",
+    "codigo": "240",
+    "nombre": "Chesterfield original x 20",
+    "seccion": "CIGARRILLOS",
+    "precio": 5100,
+    "imagen": "/recursos/imagenes-productos/p351.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p352",
+    "codigo": "468",
+    "nombre": "Cargador Auto Carga Rapida",
+    "seccion": "ELECTRONICA",
+    "precio": 6000,
+    "imagen": "/recursos/imagenes-productos/p352.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p353",
+    "codigo": "482",
+    "nombre": "Tira Led Neon Audiodinamica 5Metros Control y App Rgb-ic Configurable",
+    "seccion": "ELECTRONICA",
+    "precio": 25650,
+    "imagen": "/recursos/imagenes-productos/p353.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p354",
+    "codigo": "466",
+    "nombre": "Adaptador de Red Alta Ganancia USB n 150mbps",
+    "seccion": "ELECTRONICA",
+    "precio": 24500,
+    "imagen": "/recursos/imagenes-productos/p354.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p355",
+    "codigo": "374",
+    "nombre": "Suono Earbuds In-Ear Blanco",
+    "seccion": "ELECTRONICA",
+    "precio": 23000,
+    "imagen": "/recursos/imagenes-productos/p355.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p356",
+    "codigo": "375",
+    "nombre": "Cargadores Pared Only 4.8A 1 USB Solo Cabezal Modo-018Rush",
+    "seccion": "ELECTRONICA",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p356.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p357",
+    "codigo": "467",
+    "nombre": "Power Bank Con de carga Solar",
+    "seccion": "ELECTRONICA",
+    "precio": 45000,
+    "imagen": "/recursos/imagenes-productos/p357.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p358",
+    "codigo": "376",
+    "nombre": "Cable USB Juhuaxin 3.1A 1M -USB a Tipo C- Mallado Reforzado -Nucleo cobre",
+    "seccion": "ELECTRONICA",
+    "precio": 3500,
+    "imagen": "/recursos/imagenes-productos/p358.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p359",
+    "codigo": "372",
+    "nombre": "Pad Mouse Only Negro C/Diseño",
+    "seccion": "ELECTRONICA",
+    "precio": 3100,
+    "imagen": "/recursos/imagenes-productos/p359.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p360",
+    "codigo": "373",
+    "nombre": "Ultrapods Max Air 31/AYVO289",
+    "seccion": "ELECTRONICA",
+    "precio": 11100,
+    "imagen": "/recursos/imagenes-productos/p360.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p361",
+    "codigo": "288",
+    "nombre": "Masita Paseo Cebolla x 250gr",
+    "seccion": "GALLETAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p361.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p362",
+    "codigo": "102",
+    "nombre": "Terrabusi Lincoln Clasica x 153gr",
+    "seccion": "GALLETAS",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p362.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p363",
+    "codigo": "105",
+    "nombre": "Lia Vocacion Acaramelada x 145gr",
+    "seccion": "GALLETAS",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p363.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p364",
+    "codigo": "107",
+    "nombre": "Bagley Amor x 110gr",
+    "seccion": "GALLETAS",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p364.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p365",
+    "codigo": "98",
+    "nombre": "Terrabusi Mini Oreo x 50gr",
+    "seccion": "GALLETAS",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p365.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p366",
+    "codigo": "187",
+    "nombre": "Hojalmar Triangulo x 150gr",
+    "seccion": "GALLETAS",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p366.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p367",
+    "codigo": "289",
+    "nombre": "Masita Paseo Jamon x 250gr",
+    "seccion": "GALLETAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p367.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p368",
+    "codigo": "296",
+    "nombre": "Pan De Mesa Salvado Lactal x 330gr",
+    "seccion": "GALLETAS",
+    "precio": 4300,
+    "imagen": "/recursos/imagenes-productos/p368.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p369",
+    "codigo": "85",
+    "nombre": "Bagley Rex x 75gr",
+    "seccion": "GALLETAS",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p369.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p370",
+    "codigo": "82",
+    "nombre": "Granix Granolitas avena/pasas x 150gr",
+    "seccion": "GALLETAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p370.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p371",
+    "codigo": "80",
+    "nombre": "Arcor Galleta Block C/Chips x 124gr",
+    "seccion": "GALLETAS",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p371.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p372",
+    "codigo": "77",
+    "nombre": "Zupay Oblea Frutilla x 100gr",
+    "seccion": "GALLETAS",
+    "precio": 900,
+    "imagen": "/recursos/imagenes-productos/p372.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p373",
+    "codigo": "71",
+    "nombre": "Celosas Bañadas x 230gr",
+    "seccion": "GALLETAS",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p373.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p374",
+    "codigo": "76",
+    "nombre": "Fantoche Gall. Yayita C/Chips x 275gr",
+    "seccion": "GALLETAS",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p374.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p375",
+    "codigo": "75",
+    "nombre": "Terrabusi Oreo C/Cacao x 118gr",
+    "seccion": "GALLETAS",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p375.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p376",
+    "codigo": "297",
+    "nombre": "Pan De Mesa Blanco Lactal x 315gr",
+    "seccion": "GALLETAS",
+    "precio": 3900,
+    "imagen": "/recursos/imagenes-productos/p376.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p377",
+    "codigo": "166",
+    "nombre": "Lia Mediatarde Crackers x 315gr",
+    "seccion": "GALLETAS",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p377.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p378",
+    "codigo": "151",
+    "nombre": "Bagley Chocolinas x 170gr",
+    "seccion": "GALLETAS",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p378.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p379",
+    "codigo": "153",
+    "nombre": "Granix Frutigran Frutos/Rojos x 250gr",
+    "seccion": "GALLETAS",
+    "precio": 2900,
+    "imagen": "/recursos/imagenes-productos/p379.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p380",
+    "codigo": "156",
+    "nombre": "Arcor Formis Cianos Vai/Frut x 102gr",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p380.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p381",
+    "codigo": "157",
+    "nombre": "Arcor Formis Cianos Chocol/DDL x 102gr",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p381.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p382",
+    "codigo": "132",
+    "nombre": "Granix Granolitas Chocolate y Naranja x 150gr",
+    "seccion": "GALLETAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p382.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p383",
+    "codigo": "133",
+    "nombre": "9 De Oro Bizc Clasicos x 200gr uni",
+    "seccion": "GALLETAS",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p383.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p384",
+    "codigo": "216",
+    "nombre": "Granix Frutigran Avenas/Pasas x 250gr",
+    "seccion": "GALLETAS",
+    "precio": 2600,
+    "imagen": "/recursos/imagenes-productos/p384.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p385",
+    "codigo": "213",
+    "nombre": "Par-Nor Pitusas Chocolate x 160gr",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p385.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p386",
+    "codigo": "211",
+    "nombre": "Bagley Criollitas (Pack x 3 ) x 100gr C/U",
+    "seccion": "GALLETAS",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p386.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p387",
+    "codigo": "141",
+    "nombre": "Zupai Oblea Vainilla x 100gr uni",
+    "seccion": "GALLETAS",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p387.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p388",
+    "codigo": "147",
+    "nombre": "Don satur Bizcochos De Grasa x 200gr",
+    "seccion": "GALLETAS",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p388.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p389",
+    "codigo": "164",
+    "nombre": "Arcor Formis Cianos Vai/Choc x 102gr",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p389.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p390",
+    "codigo": "142",
+    "nombre": "Fantoche Gall Espumita x 300gr uni",
+    "seccion": "GALLETAS",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p390.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p391",
+    "codigo": "168",
+    "nombre": "Fachitas Minicoronitas Choc.c/Jalea de Cereza x 140gr",
+    "seccion": "GALLETAS",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p391.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p392",
+    "codigo": "170",
+    "nombre": "Paseo Cinco Semillas x 300gr",
+    "seccion": "GALLETAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p392.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p393",
+    "codigo": "176",
+    "nombre": "Fachitas Minicoronitas D.Leche x 140gr",
+    "seccion": "GALLETAS",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p393.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p394",
+    "codigo": "224",
+    "nombre": "Granix Frutigran Tropical x 250gr",
+    "seccion": "GALLETAS",
+    "precio": 3200,
+    "imagen": "/recursos/imagenes-productos/p394.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p395",
+    "codigo": "179",
+    "nombre": "Fantoche Gall.Pepas x 300gr",
+    "seccion": "GALLETAS",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p395.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p396",
+    "codigo": "180",
+    "nombre": "Par-Nor Pitusas Rellena Vainilla x160gr",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p396.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p397",
+    "codigo": "221",
+    "nombre": "Granix Frutigran Semilla Chia/Lino x 240gr",
+    "seccion": "GALLETAS",
+    "precio": 2600,
+    "imagen": "/recursos/imagenes-productos/p397.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p398",
+    "codigo": "182",
+    "nombre": "Terrabusi Pepitos Chispas Cadbury x 119gr",
+    "seccion": "GALLETAS",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p398.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p399",
+    "codigo": "194",
+    "nombre": "Par-Nor Pitusas Rellenas Frutilla",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p399.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p400",
+    "codigo": "191",
+    "nombre": "9 De Oro Bizc. Agridulce x 200gr",
+    "seccion": "GALLETAS",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p400.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p401",
+    "codigo": "185",
+    "nombre": "Granix Granolitas Manzana y Canela x 150gr",
+    "seccion": "GALLETAS",
+    "precio": 2200,
+    "imagen": "/recursos/imagenes-productos/p401.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p402",
+    "codigo": "158",
+    "nombre": "Heads y Shoulders Shampoo Sensitive x 180gr",
+    "seccion": "GALLETAS",
+    "precio": 7000,
+    "imagen": "/recursos/imagenes-productos/p402.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p403",
+    "codigo": "115",
+    "nombre": "Granix Granagua Sandwich x 200gr",
+    "seccion": "GALLETAS",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p403.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p404",
+    "codigo": "116",
+    "nombre": "Arcor Hogareñas Mix Cereal x 185gr",
+    "seccion": "GALLETAS",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p404.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p405",
+    "codigo": "113",
+    "nombre": "Arcor Mana Liviana Vainilla x 136gr",
+    "seccion": "GALLETAS",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p405.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p406",
+    "codigo": "145",
+    "nombre": "Dulce Mama Cocina Madalenas Vainilla x 200gr",
+    "seccion": "GALLETAS",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p406.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p407",
+    "codigo": "144",
+    "nombre": "Sweet Vainillas x 180gr uni",
+    "seccion": "GALLETAS",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p407.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p408",
+    "codigo": "160",
+    "nombre": "Vim Lavandina Gel Citric PrevZarro Poder5 x 700ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p408.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p409",
+    "codigo": "349",
+    "nombre": "Agua Lavandina Ayudin 1Lt",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p409.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p410",
+    "codigo": "163",
+    "nombre": "Odol Crema Dental Doble Efecto x 90gr",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p410.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p411",
+    "codigo": "285",
+    "nombre": "Papel Higienico Elegante x 4 x 30M",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2300,
+    "imagen": "/recursos/imagenes-productos/p411.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p412",
+    "codigo": "437",
+    "nombre": "Pañuelos Manhattan",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "https://jumboargentina.vteximg.com.br/arquivos/ids/207674/Pañuelos-Descartables-Manhattan-PaÑuelos-Descartables-Manhattan-pocket-paq-un-6-1-44073.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p413",
+    "codigo": "381",
+    "nombre": "Always Toallas Extra Proteccion Suave x8u",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p413.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p414",
+    "codigo": "389",
+    "nombre": "Ala Lavavjilla Concentrado Pomelo (Botella) x 300ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p414.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p415",
+    "codigo": "390",
+    "nombre": "Lux Jabon Botanc Orquidea Negra x 120gr",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p415.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p416",
+    "codigo": "392",
+    "nombre": "Dea Bolsa Residuos Rollo (60x90)",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1700,
+    "imagen": "/recursos/imagenes-productos/p416.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p417",
+    "codigo": "32",
+    "nombre": "Calipso Toalla Normal C-estracto de seda x 16u dis",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p417.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p418",
+    "codigo": "436",
+    "nombre": "Rollo Cocina Elegante",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2700,
+    "imagen": "/recursos/imagenes-productos/p418.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p419",
+    "codigo": "121",
+    "nombre": "Ala Lavavajilla Concentrado Limon (botella) x 300ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p419.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p420",
+    "codigo": "269",
+    "nombre": "Trapo de piso Gris Fibran Clean",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1300,
+    "imagen": "/recursos/imagenes-productos/p420.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p421",
+    "codigo": "47",
+    "nombre": "Doncella Hisopos X 100u",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p421.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p422",
+    "codigo": "286",
+    "nombre": "Papel Higienico Campanita Texturado x 4",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2000,
+    "imagen": "/recursos/imagenes-productos/p422.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p423",
+    "codigo": "207",
+    "nombre": "Prime Tachas x 3U",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p423.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p424",
+    "codigo": "270",
+    "nombre": "Franela nuvia",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p424.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p425",
+    "codigo": "24",
+    "nombre": "Dea Esponja Esponjosa",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p425.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p426",
+    "codigo": "222",
+    "nombre": "Prime Superfino x 3U",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p426.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p427",
+    "codigo": "22",
+    "nombre": "Felpita Rollo Cocina +Conveniente X 3",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2100,
+    "imagen": "/recursos/imagenes-productos/p427.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p428",
+    "codigo": "pano amarillo",
+    "nombre": "Pano Amarillo suelto x unidad",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 700,
+    "imagen": "https://jumboargentina.vteximg.com.br/arquivos/ids/306376/PaÑo-Task-Multiuso-Amarillo-X-10-Unid-amarillo-10-Unidades-paq-un-10-1-196518.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p429",
+    "codigo": "274",
+    "nombre": "Rejilla Blanca Nuvia 32x42cm",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p429.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p430",
+    "codigo": "275",
+    "nombre": "Trapo De Piso Blanco Fibran Clean x u",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p430.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p431",
+    "codigo": "276",
+    "nombre": "Esponja Dorada Dea x unid",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1200,
+    "imagen": "/recursos/imagenes-productos/p431.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p432",
+    "codigo": "480",
+    "nombre": "ROLLO DE COCINA NEWPEL 360 PAÑOS 4 PACKS X 3",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 5700,
+    "imagen": "/recursos/imagenes-productos/p432.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p433",
+    "codigo": "119",
+    "nombre": "Ala Liquido Lav. Mano Lavado Total (doypack) x 800ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 3000,
+    "imagen": "/recursos/imagenes-productos/p433.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p434",
+    "codigo": "127",
+    "nombre": "Dove Jabon Blanco Original x 90gr",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2500,
+    "imagen": "/recursos/imagenes-productos/p434.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p435",
+    "codigo": "73",
+    "nombre": "Virulana Esponja Cuadraditos unid",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 900,
+    "imagen": "/recursos/imagenes-productos/p435.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p436",
+    "codigo": "72",
+    "nombre": "Fragante Lavandina x 2Lt",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1800,
+    "imagen": "/recursos/imagenes-productos/p436.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p437",
+    "codigo": "128",
+    "nombre": "Lux Jabon Botanc Rosas Francesas x 120gr",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p437.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p438",
+    "codigo": "129",
+    "nombre": "Cif Detergente Bio Active Lima x 300ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2400,
+    "imagen": "/recursos/imagenes-productos/p438.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p439",
+    "codigo": "162",
+    "nombre": "Colgate Crema Dental Proteccion Anticarie x 90gr",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 3700,
+    "imagen": "/recursos/imagenes-productos/p439.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p440",
+    "codigo": "50",
+    "nombre": "Head y Shoulders shampoo Argan x 180ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 7000,
+    "imagen": "/recursos/imagenes-productos/p440.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p441",
+    "codigo": "215",
+    "nombre": "Prime Mega x 3U",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p441.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p442",
+    "codigo": "214",
+    "nombre": "Prime Extralubricado x 3U",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 4500,
+    "imagen": "/recursos/imagenes-productos/p442.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p443",
+    "codigo": "125",
+    "nombre": "Algabo Polvo Desodorante P/Pies (Talquera) x 200gr",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 3200,
+    "imagen": "/recursos/imagenes-productos/p443.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p444",
+    "codigo": "124",
+    "nombre": "Jhonson Glade Apc Caricias de Bebe x 875ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p444.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p445",
+    "codigo": "155",
+    "nombre": "Head y Shoulders Shampoo Purez Cap x 180ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 7000,
+    "imagen": "/recursos/imagenes-productos/p445.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p446",
+    "codigo": "78",
+    "nombre": "Doncella Toallas Nocturnas x 8u",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-productos/p446.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p447",
+    "codigo": "79",
+    "nombre": "Doncella Toallas C/Alas Pocket x 8u",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-productos/p447.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p448",
+    "codigo": "123",
+    "nombre": "Jhonson Glade Apc Pino x 875ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 4000,
+    "imagen": "/recursos/imagenes-productos/p448.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p449",
+    "codigo": "143",
+    "nombre": "Lux Jabon Botanc Lirio Azul 120gr uni",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1600,
+    "imagen": "/recursos/imagenes-productos/p449.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p450",
+    "codigo": "277",
+    "nombre": "Esponja Acero dea x unid",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 700,
+    "imagen": "/recursos/imagenes-productos/p450.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p451",
+    "codigo": "122",
+    "nombre": "Granby Plus Liquido Lav. Ropa Bicarbonato Rosas (doypack) x 800ml",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 2600,
+    "imagen": "/recursos/imagenes-productos/p451.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p452",
+    "codigo": "290",
+    "nombre": "Rollos De Cocina Eco Family x 3",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p452.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p453",
+    "codigo": "54",
+    "nombre": "Skip Liquido Ropa Bio Enzimas Tec Mic (doy pack) x 3L",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 15000,
+    "imagen": "/recursos/imagenes-productos/p453.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p454",
+    "codigo": "330",
+    "nombre": "Gillette Prestobarba",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1400,
+    "imagen": "/recursos/imagenes-productos/p454.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p455",
+    "codigo": "51",
+    "nombre": "Cartabella Papel Higienico blanco x 4Un (30mts)",
+    "seccion": "LIMPIEZA E HIGENE",
+    "precio": 1900,
+    "imagen": "/recursos/imagenes-productos/p455.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p456",
+    "codigo": "presta1000",
+    "nombre": "Prestamo dinero efectivo $1.000",
+    "seccion": "OTROS",
+    "precio": 1500,
+    "imagen": "/recursos/imagenes-rubros/otros.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p457",
+    "codigo": "478",
+    "nombre": "Envio a domicilio",
+    "seccion": "OTROS",
+    "precio": 1000,
+    "imagen": "/recursos/imagenes-rubros/otros.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p458",
+    "codigo": "479",
+    "nombre": "parlante JBL go pro",
+    "seccion": "TECNOLOGIA",
+    "precio": 35000,
+    "imagen": "/recursos/imagenes-productos/p458.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p459",
+    "codigo": "477",
+    "nombre": "Teclado ultra slim",
+    "seccion": "TECNOLOGIA",
+    "precio": 14500,
+    "imagen": "/recursos/imagenes-productos/p459.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p460",
+    "codigo": "476",
+    "nombre": "plancha",
+    "seccion": "TECNOLOGIA",
+    "precio": 35000,
+    "imagen": "/recursos/imagenes-productos/p460.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p461",
+    "codigo": "473",
+    "nombre": "Elfbar DUKE (Mango Magic)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p461.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p462",
+    "codigo": "302",
+    "nombre": "Vaper Elfbar GH 23.000 PUFF Strawberry Ice",
+    "seccion": "VAPERS",
+    "precio": 27000,
+    "imagen": "/recursos/imagenes-productos/p462.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p463",
+    "codigo": "475",
+    "nombre": "Elfbar DUKE ( Strawberry Kiwi Ice)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p463.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p464",
+    "codigo": "474",
+    "nombre": "Elfbar DUKE (Pineapple Ice)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p464.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p465",
+    "codigo": "307",
+    "nombre": "Vaper Elfbar GH 23.000 PUFF Miami Mint",
+    "seccion": "VAPERS",
+    "precio": 27000,
+    "imagen": "/recursos/imagenes-productos/p465.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p466",
+    "codigo": "472",
+    "nombre": "Elfbar Ice King 40kPuf Bubbaloo Tutti Frutti",
+    "seccion": "VAPERS",
+    "precio": 30000,
+    "imagen": "/recursos/imagenes-productos/p466.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p467",
+    "codigo": "471",
+    "nombre": "Elfbar Ice King 40kPuf Watermelon Roll Ups",
+    "seccion": "VAPERS",
+    "precio": 30000,
+    "imagen": "/recursos/imagenes-productos/p467.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p468",
+    "codigo": "470",
+    "nombre": "Elfbar Ice King 40kPuf Strawberry Watermelon",
+    "seccion": "VAPERS",
+    "precio": 30000,
+    "imagen": "/recursos/imagenes-productos/p468.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p469",
+    "codigo": "306",
+    "nombre": "Vaper Elfbar GH 23.000 PUFF Watermelon Ice",
+    "seccion": "VAPERS",
+    "precio": 27000,
+    "imagen": "/recursos/imagenes-productos/p469.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p470",
+    "codigo": "304",
+    "nombre": "Vaper Elfbar GH 23.000 PUFF Strawberry Banana",
+    "seccion": "VAPERS",
+    "precio": 27000,
+    "imagen": "/recursos/imagenes-productos/p470.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p471",
+    "codigo": "322",
+    "nombre": "Elfbar Sweet King 40k puff Wintergreen Savers",
+    "seccion": "VAPERS",
+    "precio": 30000,
+    "imagen": "/recursos/imagenes-productos/p471.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p472",
+    "codigo": "323",
+    "nombre": "Elfbar TE30k Strawberry ice",
+    "seccion": "VAPERS",
+    "precio": 35000,
+    "imagen": "/recursos/imagenes-productos/p472.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p473",
+    "codigo": "324",
+    "nombre": "Elfbar TE30k Blueberry Ice",
+    "seccion": "VAPERS",
+    "precio": 35000,
+    "imagen": "/recursos/imagenes-productos/p473.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p474",
+    "codigo": "366",
+    "nombre": "Elfbar DUKE (Blue Razz Ice)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p474.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p475",
+    "codigo": "371",
+    "nombre": "Elfbar Ice King (Watermelon Ice)",
+    "seccion": "VAPERS",
+    "precio": 30000,
+    "imagen": "/recursos/imagenes-productos/p475.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p476",
+    "codigo": "370",
+    "nombre": "Elfbar Ice King (Blue Razz Ice)",
+    "seccion": "VAPERS",
+    "precio": 30000,
+    "imagen": "/recursos/imagenes-productos/p476.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p477",
+    "codigo": "369",
+    "nombre": "Elfbar DUKE (Coconut Strawberry Ice)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p477.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p478",
+    "codigo": "368",
+    "nombre": "Elfbar DUKE (Icy Mint)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p478.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p479",
+    "codigo": "367",
+    "nombre": "Elfbar DUKE (Grape Ice)",
+    "seccion": "VAPERS",
+    "precio": 27500,
+    "imagen": "/recursos/imagenes-productos/p479.jpg",
+    "descripcion": ""
+  },
+  {
+    "id": "p480",
+    "codigo": "305",
+    "nombre": "Vaper Elfbar GH 23.000 PUFF Grape Ice",
+    "seccion": "VAPERS",
+    "precio": 27000,
+    "imagen": "/recursos/imagenes-productos/p480.jpg",
+    "descripcion": ""
+  }
+]

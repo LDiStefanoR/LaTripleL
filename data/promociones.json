@@ -1,0 +1,48 @@
+{
+  "ofertas": [
+    {
+      "id": "of-p24",
+      "productoId": "p24",
+      "tipo": "precio",
+      "precioPromo": 3200,
+      "carrusel": true,
+      "activa": true,
+      "creadoEn": "2026-08-27T02:40:28.867Z"
+    },
+    {
+      "id": "of-p181",
+      "productoId": "p181",
+      "tipo": "precio",
+      "precioPromo": 2100,
+      "carrusel": true,
+      "activa": true,
+      "creadoEn": "2026-08-27T02:40:28.867Z"
+    },
+    {
+      "id": "of-p284",
+      "productoId": "p284",
+      "tipo": "precio",
+      "precioPromo": 1890,
+      "carrusel": true,
+      "activa": true,
+      "creadoEn": "2026-08-27T02:40:28.867Z"
+    },
+    {
+      "id": "of-p295",
+      "productoId": "p295",
+      "tipo": "precio",
+      "precioPromo": 3990,
+      "carrusel": true,
+      "activa": true,
+      "creadoEn": "2026-08-27T02:40:28.867Z"
+    }
+  ],
+  "afiches": [
+    {
+      "id": "124bb637-d076-4d6e-b6ee-74a783f7f76c",
+      "imagen": "/recursos/web/promo-a4-1787800162627.jpg",
+      "creadoEn": "2026-08-27T03:09:22.658Z"
+    }
+  ],
+  "migrado": true
+}

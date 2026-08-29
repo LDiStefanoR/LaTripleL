@@ -1,0 +1,47 @@
+[
+  {
+    "clave": "ALMACEN GENERAL",
+    "etiqueta": "Almacén",
+    "imagen": "/recursos/imagenes-rubros/almacen-general.jpg"
+  },
+  {
+    "clave": "BEBIDAS",
+    "etiqueta": "Bebidas",
+    "imagen": "/recursos/imagenes-rubros/bebidas.jpg"
+  },
+  {
+    "clave": "CIGARRILLOS",
+    "etiqueta": "Cigarrillos",
+    "imagen": "/recursos/imagenes-rubros/cigarrillos.jpg"
+  },
+  {
+    "clave": "ELECTRONICA",
+    "etiqueta": "Electrónica",
+    "imagen": "/recursos/imagenes-rubros/electronica.jpg"
+  },
+  {
+    "clave": "GALLETAS",
+    "etiqueta": "Galletas",
+    "imagen": "/recursos/imagenes-rubros/galletas.jpg"
+  },
+  {
+    "clave": "LIMPIEZA E HIGENE",
+    "etiqueta": "Limpieza e higiene",
+    "imagen": "/recursos/imagenes-rubros/limpieza-e-higene.jpg"
+  },
+  {
+    "clave": "OTROS",
+    "etiqueta": "Otros",
+    "imagen": "/recursos/imagenes-rubros/otros.jpg"
+  },
+  {
+    "clave": "TECNOLOGIA",
+    "etiqueta": "Tecnología",
+    "imagen": "/recursos/imagenes-rubros/tecnologia.jpg"
+  },
+  {
+    "clave": "VAPERS",
+    "etiqueta": "Vapers",
+    "imagen": "/recursos/imagenes-rubros/vapers.jpg"
+  }
+]
