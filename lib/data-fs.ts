@@ -5,8 +5,19 @@ import {
   guardarDatoBlob,
   leerDatoBlob,
 } from "@/lib/blob-datos";
+import {
+  guardarDatoTurso,
+  leerDatoTurso,
+  tursoActivo,
+} from "@/lib/turso-datos";
 
-const memoria = new Map<string, string>();
+const memoriaGlobal = globalThis as typeof globalThis & {
+  __latriplelMemoria?: Map<string, string>;
+};
+if (!memoriaGlobal.__latriplelMemoria) {
+  memoriaGlobal.__latriplelMemoria = new Map();
+}
+const memoria = memoriaGlobal.__latriplelMemoria;
 
 function rutaTmp(nombre: string) {
   return path.join("/tmp", "latriplel-data", nombre);
@@ -28,19 +39,31 @@ function parsear<T>(raw: string, vacio: T): T {
   }
 }
 
+function remotoActivo() {
+  return tursoActivo() || blobActivo();
+}
+
 export async function leerJsonData<T>(nombre: string, vacio: T): Promise<T> {
   // En Vercel cada función tiene su propia memoria. Si leemos de acá,
   // el catálogo sigue mostrando el JSON del repo aunque otra instancia
-  // ya haya guardado la foto nueva en Blob.
+  // ya haya guardado la foto nueva en Blob/Turso.
   if (!process.env.VERCEL) {
     const enMemoria = memoria.get(nombre);
     if (enMemoria) return parsear(enMemoria, vacio);
   }
 
-  const remoto = await leerDatoBlob(nombre);
-  if (remoto) {
-    memoria.set(nombre, remoto);
-    return parsear(remoto, vacio);
+  if (tursoActivo()) {
+    const remoto = await leerDatoTurso(nombre);
+    if (remoto) {
+      memoria.set(nombre, remoto);
+      return parsear(remoto, vacio);
+    }
+  }
+
+  const blob = await leerDatoBlob(nombre);
+  if (blob) {
+    memoria.set(nombre, blob);
+    return parsear(blob, vacio);
   }
 
   const locales = process.env.VERCEL
@@ -76,9 +99,18 @@ export async function escribirJsonData(nombre: string, valor: unknown) {
   memoria.set(nombre, raw);
 
   if (process.env.VERCEL) {
+    if (tursoActivo()) {
+      const ok = await guardarDatoTurso(nombre, raw);
+      if (!ok) {
+        throw new Error(
+          `No se pudo guardar ${nombre} en Turso. Revisá TURSO_DATABASE_URL y TURSO_AUTH_TOKEN.`,
+        );
+      }
+      return true;
+    }
     if (!blobActivo()) {
       throw new Error(
-        "En internet los datos se guardan en Vercel Blob. Conectá Storage → Blob al proyecto y redesplegá.",
+        "En internet los datos se guardan en Turso (o Vercel Blob). Cargá TURSO_DATABASE_URL y redesplegá.",
       );
     }
     const ok = await guardarDatoBlob(nombre, raw);
@@ -91,6 +123,15 @@ export async function escribirJsonData(nombre: string, valor: unknown) {
   }
 
   await escribirDisco(nombre, raw);
+
+  if (tursoActivo()) {
+    const ok = await guardarDatoTurso(nombre, raw);
+    if (!ok) {
+      console.error(`[data] No se pudo guardar ${nombre} en Turso.`);
+      return false;
+    }
+  }
+
   if (!blobActivo()) return true;
   const ok = await guardarDatoBlob(nombre, raw);
   if (!ok) {
@@ -98,4 +139,8 @@ export async function escribirJsonData(nombre: string, valor: unknown) {
     return false;
   }
   return true;
+}
+
+export function almacenamientoRemotoActivo() {
+  return remotoActivo();
 }

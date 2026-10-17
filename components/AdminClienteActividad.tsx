@@ -1,17 +1,18 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   adminAgregarTicket,
+  adminBorrarTicket,
   adminGuardarTicket,
   adminMarcarDeudaTotal,
   adminMarcarTicketPagado,
   adminPagoParcial,
   type EstadoCuentaAdmin,
 } from "@/app/acciones/cuenta-admin";
-import { formatoFecha, formatoPesos } from "@/lib/format";
+import { formatoFecha, formatoPesos, digitosMonto, textoMonto } from "@/lib/format";
 import {
   ETIQUETA_COBRO,
   estadoCobroTicket,
@@ -21,6 +22,7 @@ import {
   semaforoDeuda,
   vencimientoDeTicket,
 } from "@/lib/deuda";
+import { politicaDeCliente } from "@/lib/politica-cliente";
 import { whatsappUrl } from "@/lib/whatsapp";
 import type { ResumenCliente, TicketDeuda } from "@/types/cuenta";
 
@@ -43,7 +45,17 @@ function fechaMasDias(dias: number) {
   return d.toISOString().slice(0, 10);
 }
 
-export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) {
+export function AdminClienteActividad({
+  resumen,
+  moraCredito,
+  moraCuenta,
+  onVolver,
+}: {
+  resumen: ResumenCliente;
+  moraCredito?: number[];
+  moraCuenta?: number[];
+  onVolver?: () => void;
+}) {
   const router = useRouter();
   const [mensaje, setMensaje] = useState<EstadoCuentaAdmin>(null);
   const [pending, start] = useTransition();
@@ -51,17 +63,18 @@ export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) 
   const [totalNuevo, setTotalNuevo] = useState("");
   const [pagoNuevo, setPagoNuevo] = useState("");
 
+  const politica = politicaDeCliente(resumen.cliente, { moraCredito, moraCuenta });
   const semaforo = semaforoDeuda(resumen.ticketsVigentes);
   const capital = resumen.saldoTotal;
-  const mora = interesTotalDeuda(resumen.ticketsVigentes);
+  const mora = interesTotalDeuda(resumen.ticketsVigentes, politica);
   const actividad = useMemo(() => {
     return [...resumen.ticketsVigentes, ...resumen.ticketsPagados].sort((a, b) =>
       b.fecha.localeCompare(a.fecha),
     );
   }, [resumen]);
 
-  const totalNum = Number(totalNuevo.replace(/\./g, "").replace(",", ".")) || 0;
-  const pagoNum = Number(pagoNuevo.replace(/\./g, "").replace(",", ".")) || 0;
+  const totalNum = Number(digitosMonto(totalNuevo)) || 0;
+  const pagoNum = Number(digitosMonto(pagoNuevo)) || 0;
   const quedaNuevo =
     cobro === "pagado"
       ? 0
@@ -86,9 +99,15 @@ export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) 
 
   return (
     <div className="space-y-6">
-      <Link href="/admin/cuentas" className="text-sm font-bold text-movipack underline">
-        ← Todos los clientes
-      </Link>
+      {onVolver ? (
+        <button type="button" onClick={onVolver} className="text-sm font-bold text-movipack underline">
+          ← Todos los clientes
+        </button>
+      ) : (
+        <Link href="/caja" className="text-sm font-bold text-movipack underline">
+          ← Volver a la caja
+        </Link>
+      )}
 
       <section className={`rounded-3xl p-5 shadow-sm ${TONO[semaforo]}`}>
         <p className="text-sm font-semibold opacity-80">Perfil</p>
@@ -167,7 +186,6 @@ export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) 
           }}
         >
           <input type="hidden" name="clienteId" value={resumen.cliente.id} />
-          <input name="numero" placeholder="N° ticket" className={`${campo} w-28`} />
           <input
             name="descripcion"
             placeholder="Concepto"
@@ -177,9 +195,10 @@ export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) 
             name="total"
             required
             placeholder="Importe"
-            value={totalNuevo}
-            onChange={(e) => setTotalNuevo(e.target.value)}
-            className={`${campo} w-28`}
+            inputMode="numeric"
+            value={textoMonto(totalNuevo)}
+            onChange={(e) => setTotalNuevo(digitosMonto(e.target.value))}
+            className={`${campo} w-32`}
           />
           <label className="text-[11px] font-bold text-neutral-500">
             Vencimiento
@@ -211,9 +230,10 @@ export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) 
             <input
               name="pagado"
               placeholder="Pagó"
-              value={pagoNuevo}
-              onChange={(e) => setPagoNuevo(e.target.value)}
-              className={`${campo} w-24`}
+              inputMode="numeric"
+              value={textoMonto(pagoNuevo)}
+              onChange={(e) => setPagoNuevo(digitosMonto(e.target.value))}
+              className={`${campo} w-28`}
             />
           )}
           <label className="text-[11px] font-bold text-neutral-500">
@@ -236,71 +256,204 @@ export function AdminClienteActividad({ resumen }: { resumen: ResumenCliente }) 
         )}
       </section>
 
-      <section className="rounded-2xl border border-movipack/15 bg-white p-4 shadow-sm">
-        <p className="text-sm font-bold text-movipack-deep">Actividad</p>
-        <ul className="mt-3 space-y-2">
-          {actividad.length === 0 && (
-            <li className="text-sm text-neutral-500">Todavía no hay movimientos.</li>
-          )}
-          {actividad.map((ticket) => (
-            <FilaTicket
-              key={ticket.id}
-              ticket={ticket}
-              clienteId={resumen.cliente.id}
-              pending={pending}
-              onSave={(data) => run(() => adminGuardarTicket(data))}
-              onPagar={() => {
-                const data = new FormData();
-                data.set("ticketId", ticket.id);
-                run(() => adminMarcarTicketPagado(data));
-              }}
-              onParcial={(data) => run(() => adminPagoParcial(data))}
-            />
-          ))}
-        </ul>
-      </section>
+      <Actividad
+        actividad={actividad}
+        politica={politica}
+        clienteId={resumen.cliente.id}
+        pending={pending}
+        onSave={(data) => run(() => adminGuardarTicket(data))}
+        onPagar={(ticketId) => {
+          const data = new FormData();
+          data.set("ticketId", ticketId);
+          run(() => adminMarcarTicketPagado(data));
+        }}
+        onParcial={(data) => run(() => adminPagoParcial(data))}
+        onBorrar={(ticketId) => {
+          const data = new FormData();
+          data.set("ticketId", ticketId);
+          run(() => adminBorrarTicket(data));
+        }}
+      />
+    </div>
+  );
+}
+
+const ESTADO_FILA = {
+  impago: { texto: "Impago", clase: "bg-red-100 text-cape" },
+  parcial: { texto: "Parcial", clase: "bg-amber-100 text-amber-900" },
+  abonado: { texto: "Pagado", clase: "bg-emerald-100 text-emerald-800" },
+} as const;
+
+function Actividad({
+  actividad,
+  politica,
+  clienteId,
+  pending,
+  onSave,
+  onPagar,
+  onParcial,
+  onBorrar,
+}: {
+  actividad: TicketDeuda[];
+  politica: { moraModo?: "escala" | "fijo" | "sin"; moraPorcentaje?: number };
+  clienteId: string;
+  pending: boolean;
+  onSave: (data: FormData) => void;
+  onPagar: (ticketId: string) => void;
+  onParcial: (data: FormData) => void;
+  onBorrar: (ticketId: string) => void;
+}) {
+  const [vista, setVista] = useState<"todos" | "impagos" | "pagados">("todos");
+  const [q, setQ] = useState("");
+  const visibles = actividad.filter((ticket) => {
+    const cobro = estadoCobroTicket(ticket);
+    if (vista === "impagos" && cobro === "abonado") return false;
+    if (vista === "pagados" && cobro !== "abonado") return false;
+    const busqueda = q.trim().toLowerCase();
+    if (!busqueda) return true;
+    return numeroVisibleTicket(ticket).toLowerCase().includes(busqueda);
+  });
+
+  return (
+    <section className="rounded-2xl border border-movipack/15 bg-white p-4 shadow-sm">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <p className="text-sm font-bold text-movipack-deep">Comprobantes</p>
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Número"
+          className={`${campo} w-32`}
+        />
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {(
+          [
+            ["todos", "Todos"],
+            ["impagos", "Impagos"],
+            ["pagados", "Pagados"],
+          ] as const
+        ).map(([id, texto]) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setVista(id)}
+            className={`rounded-full px-3 py-1 text-xs font-bold ${vista === id ? "bg-movipack text-white" : "bg-neutral-100 text-neutral-700"}`}
+          >
+            {texto}
+          </button>
+        ))}
+      </div>
+      <ul className="mt-3 divide-y divide-neutral-100">
+        {visibles.length === 0 && (
+          <li className="py-4 text-sm text-neutral-500">No hay comprobantes con ese filtro.</li>
+        )}
+        {visibles.map((ticket) => (
+          <FilaTicket
+            key={ticket.id}
+            ticket={ticket}
+            politica={politica}
+            clienteId={clienteId}
+            pending={pending}
+            onSave={onSave}
+            onPagar={() => onPagar(ticket.id)}
+            onParcial={onParcial}
+            onBorrar={() => onBorrar(ticket.id)}
+          />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function Popup({
+  titulo,
+  onCerrar,
+  children,
+}: {
+  titulo: string;
+  onCerrar: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-auto bg-black/40 p-3 pt-8"
+      onClick={onCerrar}
+    >
+      <div
+        className="w-full max-w-lg rounded-2xl bg-white p-4 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-display text-2xl font-bold">{titulo}</h3>
+          <button type="button" onClick={onCerrar} className={btn}>
+            Cerrar
+          </button>
+        </div>
+        <div className="mt-3">{children}</div>
+      </div>
     </div>
   );
 }
 
 function FilaTicket({
   ticket,
+  politica,
   clienteId,
   pending,
   onSave,
   onPagar,
   onParcial,
+  onBorrar,
 }: {
   ticket: TicketDeuda;
+  politica: { moraModo?: "escala" | "fijo" | "sin"; moraPorcentaje?: number };
   clienteId: string;
   pending: boolean;
   onSave: (data: FormData) => void;
   onPagar: () => void;
   onParcial: (data: FormData) => void;
+  onBorrar: () => void;
 }) {
-  const [extra, setExtra] = useState<"pago" | "interes" | null>(null);
+  const [detalle, setDetalle] = useState(false);
+  const [pago, setPago] = useState(false);
+  const [confirmarBorrado, setConfirmarBorrado] = useState(false);
+  const [importe, setImporte] = useState(String(ticket.total || ""));
+  const [queda, setQueda] = useState(String(ticket.debe || ""));
   const cobro = estadoCobroTicket(ticket);
+  const estado = ESTADO_FILA[cobro];
   const vto = vencimientoDeTicket(ticket);
-  const mora = interesDeTicket(ticket);
+  const mora = interesDeTicket(ticket, undefined, politica);
+  const pagado = Math.max(0, (Number(importe) || 0) - (Number(queda) || 0));
+  const aCobrar = (Number(queda) || 0) + (ticket.debe > 0 ? mora.interes : 0);
+
+  useEffect(() => {
+    setImporte(String(ticket.total || ""));
+    setQueda(String(ticket.debe || ""));
+  }, [ticket.total, ticket.debe]);
+
   return (
-    <li className="rounded-xl border border-neutral-100 p-3">
+    <li className="flex items-center gap-3 py-2">
+      <p className="min-w-0 flex-1 font-bold">Comprobante {numeroVisibleTicket(ticket)}</p>
+      <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${estado.clase}`}>
+        {estado.texto}
+      </span>
+      <button type="button" className={btn} onClick={() => setDetalle(true)}>
+        Ver detalle
+      </button>
+      {detalle && (
+        <Popup titulo={`Comprobante ${numeroVisibleTicket(ticket)}`} onCerrar={() => setDetalle(false)}>
+          <p className="text-xs font-semibold text-neutral-500">
+            {formatoFecha(ticket.fecha)} · {ETIQUETA_COBRO[cobro]}
+          </p>
       <form
-        className="flex flex-wrap items-end gap-2"
+        className="mt-3 space-y-3"
         onSubmit={(e) => {
           e.preventDefault();
           onSave(new FormData(e.currentTarget));
         }}
       >
         <input type="hidden" name="ticketId" value={ticket.id} />
-        <label className="text-[11px] font-bold text-neutral-500">
-          N°
-          <input
-            name="numero"
-            defaultValue={numeroVisibleTicket(ticket)}
-            className={`${campo} mt-0.5 w-28`}
-          />
-        </label>
-        <label className="min-w-40 flex-1 text-[11px] font-bold text-neutral-500">
+        <label className="block text-[11px] font-bold text-neutral-500">
           Concepto
           <input
             name="descripcion"
@@ -308,44 +461,76 @@ function FilaTicket({
             className={`${campo} mt-0.5 w-full`}
           />
         </label>
-        <label className="text-[11px] font-bold text-neutral-500">
-          Importe
-          <input
-            name="total"
-            defaultValue={ticket.total}
-            className={`${campo} mt-0.5 w-24`}
-          />
-        </label>
-        <label className="text-[11px] font-bold text-neutral-500">
-          Queda
-          <input
-            name="debe"
-            defaultValue={ticket.debe}
-            className={`${campo} mt-0.5 w-24`}
-          />
-        </label>
-        <label className="text-[11px] font-bold text-neutral-500">
-          Vence
-          <input
-            name="vencimiento"
-            type="date"
-            defaultValue={vto}
-            className={`${campo} mt-0.5 w-36`}
-          />
-        </label>
-        <button type="submit" disabled={pending} className={btn}>
-          Guardar
-        </button>
-      </form>
-      <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-neutral-500">
-        <span>
-          {formatoFecha(ticket.fecha)} · {ETIQUETA_COBRO[cobro]}
-        </span>
-        {ticket.debe > 0 && mora.interes > 0 && (
-          <span className="font-semibold text-cape">
-            + {formatoPesos(mora.interes)} mora ({Math.round(mora.tasa * 100)}%)
-          </span>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          <label className="text-[11px] font-bold text-neutral-500">
+            Importe
+            <input
+              name="total"
+              inputMode="numeric"
+              value={textoMonto(importe)}
+              onChange={(e) => setImporte(digitosMonto(e.target.value))}
+              className={`${campo} mt-0.5 w-full`}
+            />
+          </label>
+          <p className="text-[11px] font-bold text-neutral-500">
+            Pagado
+            <span className="mt-0.5 block rounded-lg bg-neutral-50 px-2.5 py-2 text-sm font-semibold text-neutral-800">
+              {formatoPesos(pagado)}
+            </span>
+          </p>
+          <label className="text-[11px] font-bold text-neutral-500">
+            Queda
+            <input
+              name="debe"
+              inputMode="numeric"
+              value={textoMonto(queda)}
+              onChange={(e) => setQueda(digitosMonto(e.target.value))}
+              className={`${campo} mt-0.5 w-full`}
+            />
+          </label>
+          <label className="text-[11px] font-bold text-neutral-500">
+            Vence
+            <input
+              name="vencimiento"
+              type="date"
+              defaultValue={vto}
+              className={`${campo} mt-0.5 w-full`}
+            />
+          </label>
+        </div>
+        {(ticket.lineas ?? []).length > 0 && (
+          <ul className="rounded-lg bg-neutral-50 px-3 py-2 text-sm">
+            {ticket.lineas.map((linea, indice) => (
+              <li key={`${linea.codigo}-${indice}`} className="flex justify-between gap-3 py-1">
+                <span>
+                  {linea.codigo ? `${linea.codigo} · ` : ""}
+                  {linea.nombre}
+                </span>
+                <span className="font-semibold">{formatoPesos(linea.monto ?? 0)}</span>
+              </li>
+            ))}
+          </ul>
         )}
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+          <p className="font-semibold text-neutral-700">
+            Mora {formatoPesos(ticket.debe > 0 ? mora.interes : 0)}
+            {ticket.debe > 0 && mora.interes > 0 ? ` (${Math.round(mora.tasa * 100)}%)` : ""}
+            {" · "}a cobrar {formatoPesos(aCobrar)}
+          </p>
+          <button type="submit" disabled={pending} className={btn}>
+            Guardar importes
+          </button>
+        </div>
+      </form>
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs">
+        <a
+          href={`/caja/deuda/${ticket.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold text-movipack underline"
+        >
+          Imprimir factura
+        </a>
         {ticket.adjunto ? (
           <a
             href={ticket.adjunto}
@@ -354,17 +539,15 @@ function FilaTicket({
             rel="noopener noreferrer"
             className="font-bold text-movipack underline"
           >
-            Descargar factura
+            Archivo adjunto
           </a>
-        ) : (
-          <span>Sin factura</span>
-        )}
+        ) : null}
         {ticket.debe > 0 && (
           <>
             <button
               type="button"
-              className="font-bold text-movipack underline"
-              onClick={() => setExtra(extra === "pago" ? null : "pago")}
+              className={btn}
+              onClick={() => setPago(true)}
             >
               Pago parcial
             </button>
@@ -378,96 +561,96 @@ function FilaTicket({
             </button>
           </>
         )}
-        <button
-          type="button"
-          className="font-bold text-neutral-400 underline"
-          onClick={() => setExtra(extra === "interes" ? null : "interes")}
-        >
-          Interés
-        </button>
+        {confirmarBorrado ? (
+          <button
+            type="button"
+            disabled={pending}
+            className="font-bold text-cape underline"
+            onClick={onBorrar}
+          >
+            Confirmar borrado
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="font-bold text-cape underline"
+            onClick={() => setConfirmarBorrado(true)}
+          >
+            Borrar deuda
+          </button>
+        )}
       </div>
-
-      {extra === "pago" && ticket.debe > 0 && (
-        <form
-          className="mt-3 flex flex-wrap items-end gap-2 rounded-lg bg-neutral-50 p-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const form = e.currentTarget;
-            onParcial(new FormData(form));
-            form.reset();
-          }}
-        >
-          <input type="hidden" name="clienteId" value={clienteId} />
-          <input type="hidden" name="ticketId" value={ticket.id} />
-          <p className="w-full text-xs text-neutral-600">
-            Queda {formatoPesos(ticket.debe)} de este ticket.
-          </p>
-          <input
-            name="monto"
-            required
-            placeholder="Monto de este pago"
-            className={`${campo} w-36`}
-          />
-          <select name="medio" className={`${campo} w-40`} defaultValue="local">
-            <option value="local">En el local</option>
-            <option value="transferencia">Transferencia</option>
+      <form
+        className="mt-4 space-y-2 border-t border-neutral-100 pt-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSave(new FormData(e.currentTarget));
+        }}
+      >
+        <input type="hidden" name="ticketId" value={ticket.id} />
+        <p className="text-xs text-neutral-600">
+          Mora automática: hoy calcularía {formatoPesos(mora.automatico)}
+          {mora.semanas > 0 ? ` (${Math.round((mora.tasa || 0) * 100)}%).` : "."}
+        </p>
+        <label className="block text-[11px] font-bold text-neutral-500">
+          Interés de este comprobante
+          <select
+            name="interesDesactivado"
+            defaultValue={ticket.interesDesactivado ? "1" : "0"}
+            className={`${campo} mt-0.5 w-full`}
+          >
+            <option value="0">Automático (5 / 10 / 20 / 40%)</option>
+            <option value="1">Desactivado</option>
           </select>
-          <button type="submit" disabled={pending} className={btnFuerte}>
-            Registrar pago
-          </button>
-        </form>
+        </label>
+        <input type="hidden" name="interesAuto" value="1" />
+        <label className="block text-[11px] font-bold text-neutral-500">
+          O un monto fijo de interés
+          <input
+            name="interesManual"
+            defaultValue={typeof ticket.interesManual === "number" ? ticket.interesManual : ""}
+            placeholder={String(mora.automatico || "")}
+            className={`${campo} mt-0.5 w-32`}
+          />
+        </label>
+        <button type="submit" disabled={pending} className={btn}>
+          Guardar interés
+        </button>
+      </form>
+        </Popup>
       )}
-
-      {extra === "interes" && (
-        <form
-          className="mt-3 space-y-2 rounded-lg bg-neutral-50 p-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSave(new FormData(e.currentTarget));
-          }}
-        >
-          <input type="hidden" name="ticketId" value={ticket.id} />
-          <p className="text-xs text-neutral-600">
-            Automático: 5% / 10% / 20% / 40% según las semanas de mora. Hoy
-            calcularía {formatoPesos(mora.automatico)}
-            {mora.semanas > 0 ? ` (${Math.round((mora.tasa || 0) * 100)}%).` : "."}
-          </p>
-          <label className="block text-[11px] font-bold text-neutral-500">
-            Interés de este comprobante
-            <select
-              name="interesDesactivado"
-              defaultValue={ticket.interesDesactivado ? "1" : "0"}
-              className={`${campo} mt-0.5 w-56`}
-            >
-              <option value="0">Automático (5 / 10 / 20 / 40%)</option>
-              <option value="1">Desactivado</option>
-            </select>
-          </label>
-          <input type="hidden" name="interesAuto" value="1" />
-          <label className="block text-[11px] font-bold text-neutral-500">
-            O un monto fijo de interés
-            <input
-              name="interesManual"
-              defaultValue={
-                typeof ticket.interesManual === "number" ? ticket.interesManual : ""
-              }
-              placeholder={String(mora.automatico || "")}
-              className={`${campo} mt-0.5 w-32`}
-            />
-          </label>
-          <label className="block text-[11px] font-bold text-neutral-500">
-            Reemplazar factura
-            <input
-              name="adjunto"
-              type="file"
-              accept="image/jpeg,image/png,image/webp,application/pdf"
-              className="mt-0.5 block text-xs"
-            />
-          </label>
-          <button type="submit" disabled={pending} className={btn}>
-            Guardar interés
-          </button>
-        </form>
+      {pago && ticket.debe > 0 && (
+        <Popup titulo={`Pago parcial · ${numeroVisibleTicket(ticket)}`} onCerrar={() => setPago(false)}>
+          <form
+            className="flex flex-wrap items-end gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              onParcial(new FormData(form));
+              setPago(false);
+            }}
+          >
+            <input type="hidden" name="clienteId" value={clienteId} />
+            <input type="hidden" name="ticketId" value={ticket.id} />
+            <p className="w-full text-sm text-neutral-600">
+              Queda {formatoPesos(ticket.debe)} de este comprobante.
+            </p>
+            <label className="text-[11px] font-bold text-neutral-500">
+              Monto
+              <input name="monto" required placeholder="$0" className={`${campo} mt-0.5 w-36`} />
+            </label>
+            <label className="text-[11px] font-bold text-neutral-500">
+              Medio
+              <select name="medio" className={`${campo} mt-0.5 w-40`} defaultValue="local">
+                <option value="local">En el local</option>
+                <option value="transferencia">Transferencia</option>
+              </select>
+            </label>
+            <button type="submit" disabled={pending} className={btnFuerte}>
+              Imputar pago
+            </button>
+          </form>
+        </Popup>
       )}
     </li>
   );

@@ -1,12 +1,9 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AdminNav } from "@/components/AdminNav";
 import { AdminPromosPanel } from "@/components/AdminPromosPanel";
-import { contarNovedadesPendientes } from "@/lib/cuentas";
-import { listarPedidos } from "@/lib/pedidos";
 import { leerProductos } from "@/lib/productos";
 import { combosActivos, ofertasActivas } from "@/lib/promos";
 import { getSesion } from "@/lib/sesion";
-import { listarUsuarios } from "@/lib/usuarios";
 
 export const dynamic = "force-dynamic";
 
@@ -14,16 +11,11 @@ export default async function AdminPromosPage() {
   const sesion = await getSesion();
   if (sesion?.rol !== "admin") redirect("/ingresar");
 
-  const [productos, ofertas, combos, pedidos, usuarios, novedades] = await Promise.all([
+  const [productos, ofertas, combos] = await Promise.all([
     leerProductos(),
     ofertasActivas(),
     combosActivos(),
-    listarPedidos(),
-    listarUsuarios(),
-    contarNovedadesPendientes(),
   ]);
-  const solicitudes = usuarios.filter((u) => u.estado === "pendiente").length;
-  const pedidosNuevos = pedidos.filter((p) => p.estado === "sin_atender").length;
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
@@ -38,12 +30,11 @@ export default async function AdminPromosPage() {
         destacarlos en el carrusel y en Promos. Los afiches A4 se cargan en esa
         misma página.
       </p>
-      <AdminNav
-        activa="promos"
-        solicitudes={solicitudes}
-        pedidosNuevos={pedidosNuevos}
-        novedades={novedades}
-      />
+      <p className="mt-3 text-sm font-bold">
+        <Link href="/admin/pedidos" className="text-movipack underline">
+          Ir a pedidos
+        </Link>
+      </p>
       <div className="mt-8">
         <AdminPromosPanel productos={productos} ofertas={ofertas} combos={combos} />
       </div>

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 import {
   guardarAliasCliente,
   informarPagoCliente,
@@ -188,6 +189,16 @@ export async function clienteActualizarPerfil(
     telefono: texto(form, "telefono"),
     nombre: texto(form, "nombre") || usuario.nombre,
   });
+  if (form.has("aliasCbu")) {
+    const vinculo = await resumenPorEmail(sesion.email);
+    if (!vinculo && texto(form, "aliasCbu")) {
+      return { error: "El local todavía no te habilitó la cuenta para cargar un alias." };
+    }
+    if (vinculo) {
+      const alias = await guardarAliasCliente(vinculo.resumen.cliente.id, texto(form, "aliasCbu"));
+      if ("error" in alias) return { error: alias.error };
+    }
+  }
   revalidar();
   return { ok: "Guardamos tus datos." };
 }
@@ -200,11 +211,14 @@ export async function clienteCambiarClave(
   if (!sesion) return { error: "Ingresá con tu cuenta de cliente." };
   const usuario = await buscarUsuarioPorEmail(sesion.email);
   if (!usuario) return { error: "No encontramos tu usuario." };
-  const resultado = await cambiarPasswordUsuario(
-    usuario.id,
-    texto(form, "password"),
-  );
+  const actual = texto(form, "actual");
+  const nueva = texto(form, "password");
+  const repetir = texto(form, "repetir");
+  if (nueva !== repetir) return { error: "La contraseña nueva no coincide las dos veces." };
+  const coincide = await bcrypt.compare(actual, usuario.passwordHash);
+  if (!coincide) return { error: "La contraseña actual no es correcta." };
+  const resultado = await cambiarPasswordUsuario(usuario.id, nueva);
   if ("error" in resultado) return { error: resultado.error };
   revalidar();
-  return { ok: "Actualizamos tu contraseña o PIN." };
+  return { ok: "Actualizamos tu contraseña." };
 }

@@ -48,7 +48,7 @@ export function BrandLogo({ variant = "header", className = "" }: Props) {
   if (variant === "header") {
     return (
       <span
-        className={`inline-flex h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-movipack/15 sm:h-14 sm:w-14 ${className}`}
+        className={`inline-flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-movipack/15 sm:h-14 sm:w-14 ${className}`}
       >
         <Image
           src="/recursos/logo.jpg"

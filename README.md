@@ -35,12 +35,14 @@ Los productos viven en `data/productos.json`. Las fotos de góndola están en `r
 
 **Guía reutilizable para otro proyecto:** [docs/guia-imagenes-catalogo.md](docs/guia-imagenes-catalogo.md)
 
-## Publicar en internet (Vercel)
+## Publicar en internet (Vercel + Turso)
 
-1. Importá el repo de GitHub en [Vercel](https://vercel.com).
-2. En el proyecto: **Storage → Create Database → Blob** y conectalo. Eso deja el token para guardar cuentas, pedidos, promos y fotos.
-3. En **Environment Variables** cargá:
-   - `AUTH_SECRET` — un texto largo aleatorio (mínimo 16 caracteres)
-   - `NEXT_PUBLIC_SITE_URL` — `https://tudominio.com`
-   - `BLOB_READ_WRITE_TOKEN` y `BLOB_STORE_ID` (Vercel los suele crear al conectar Blob)
-4. Redesplegá. Sin Blob, en internet no se conservan registros ni pedidos (el disco de Vercel se borra).
+1. Creá una base en [Turso](https://app.turso.tech) y copiá `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`.
+2. En local: cargá esas variables en `.env.local` (junto con `AUTH_SECRET`) y corré `npm run subir-turso` para subir el catálogo, cuentas y pedidos.
+3. Importá el repo en [Vercel](https://vercel.com) o desplegá con `npx vercel --prod`.
+4. En **Environment Variables** cargá:
+   - `AUTH_SECRET` — el mismo que usaste al subir (cifra usuarios, pedidos y cuentas)
+   - `TURSO_DATABASE_URL` y `TURSO_AUTH_TOKEN`
+   - `NEXT_PUBLIC_SITE_URL` — la URL de Vercel (ej. `https://la-triple-l.vercel.app`)
+   - Opcional: `BLOB_READ_WRITE_TOKEN` / `BLOB_STORE_ID` si querés subir fotos nuevas desde admin (el catálogo ya va en el build)
+5. Redesplegá. En internet los JSON del negocio viven en Turso (el disco de Vercel se borra).

@@ -15,7 +15,7 @@ export const ETIQUETA_TIPO_CUENTA: Record<TipoCuentaCliente, string> = {
 };
 
 export const DETALLE_TIPO_CUENTA: Record<TipoCuentaCliente, string> = {
-  generico: "Ves los precios de lista. Esta cuenta no tiene descuento ni crédito.",
+  generico: "En el catálogo ves el descuento de cliente registrado. Esta cuenta no tiene crédito.",
   descuentos:
     "En el catálogo ves tu precio de cliente, más bajo que el de lista. Sin crédito asignado.",
   credito_super:

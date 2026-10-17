@@ -1,0 +1,24 @@
+[
+  {
+    "id": "d3556af2-d80b-418f-954f-558e7d2b9411",
+    "numero": 1,
+    "proveedorId": "46c1e5cf-49d5-4a36-882a-91ae27097fa5",
+    "proveedorNombre": "Proveedor de prueba",
+    "lineas": [
+      {
+        "productoId": "p11",
+        "codigo": "95",
+        "nombre": "Lia Alka Caramelo Cremoso x 100Gr",
+        "cantidad": 1
+      },
+      {
+        "productoId": "p15",
+        "codigo": "gomitas 100gr",
+        "nombre": "Gomitas Billiken bols x 100gr",
+        "cantidad": 1
+      }
+    ],
+    "estado": "pedido",
+    "creadoEn": "2026-10-12T05:10:37.045Z"
+  }
+]

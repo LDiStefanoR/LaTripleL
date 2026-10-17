@@ -96,21 +96,21 @@ export function ProductCatalog({
   }
 
   return (
-    <section id="catalogo" className="scroll-mt-24 bg-[#f4f5f7] pb-16">
+    <section id="catalogo" className="scroll-mt-20 overflow-x-clip bg-[#f4f5f7] pb-28 sm:pb-16">
       <div className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
+        <div className="mx-auto flex w-full max-w-7xl min-w-0 flex-col gap-3 px-3 py-4 sm:gap-4 sm:px-6 sm:py-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
             <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-cape">
               Catálogo online
             </p>
-            <h1 className="font-display text-3xl font-bold not-italic tracking-tight text-neutral-900">
+            <h1 className="font-display text-2xl font-bold not-italic tracking-tight text-neutral-900 sm:text-3xl">
               {tituloRubro}
             </h1>
-          <p className="mt-1 text-sm text-neutral-500">
-            {productos.length} productos · Pedido online · Envío a Rosario
-          </p>
+            <p className="mt-1 text-xs text-neutral-500 sm:text-sm">
+              {productos.length} productos · Pedido online · Envío a Rosario
+            </p>
           </div>
-          <label className="relative block w-full lg:max-w-md">
+          <label className="relative block w-full min-w-0 lg:max-w-md">
             <span className="sr-only">Buscar producto</span>
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">
               ⌕
@@ -123,7 +123,7 @@ export function ProductCatalog({
                 setVisible(PAGE);
               }}
               placeholder="Buscá producto, marca o código…"
-              className="h-12 w-full rounded-xl border border-neutral-300 bg-neutral-50 pl-9 pr-4 text-sm outline-none transition placeholder:text-neutral-400 focus:border-movipack focus:bg-white focus:ring-2 focus:ring-movipack/20"
+              className="h-12 w-full rounded-xl border border-neutral-300 bg-neutral-50 pl-9 pr-4 text-base outline-none transition placeholder:text-neutral-400 focus:border-movipack focus:bg-white focus:ring-2 focus:ring-movipack/20 sm:text-sm"
             />
           </label>
         </div>
@@ -131,18 +131,18 @@ export function ProductCatalog({
 
       {aviso && (
         <div className="border-b border-amber-200 bg-amber-50">
-          <p className="mx-auto max-w-7xl px-4 py-2.5 text-sm text-amber-950 sm:px-6">
+          <p className="mx-auto max-w-7xl px-3 py-2.5 text-xs leading-snug text-amber-950 sm:px-6 sm:text-sm">
             {aviso}
           </p>
         </div>
       )}
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[220px_1fr]">
-        <aside className="lg:sticky lg:top-20 lg:self-start">
+      <div className="mx-auto grid w-full max-w-7xl min-w-0 gap-4 px-3 py-4 sm:gap-6 sm:px-6 sm:py-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+        <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
           <p className="mb-2 hidden text-[11px] font-bold uppercase tracking-wide text-neutral-400 lg:block">
             Categorías
           </p>
-          <div className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
+          <div className="-mx-3 flex gap-2 overflow-x-auto overscroll-x-contain px-3 pb-2 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
             <CatBtn
               active={filtro === "todas"}
               onClick={() => elegirRubro("todas")}
@@ -167,8 +167,8 @@ export function ProductCatalog({
           </div>
         </aside>
 
-        <div>
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-4 sm:gap-3">
             <p className="text-sm text-neutral-500">
               <span className="font-bold text-neutral-800">
                 {listado.length}
@@ -180,7 +180,7 @@ export function ProductCatalog({
               <select
                 value={orden}
                 onChange={(e) => setOrden(e.target.value as Orden)}
-                className="h-10 rounded-lg border border-neutral-300 bg-white px-2 text-sm font-semibold text-neutral-800 outline-none focus:border-movipack"
+                className="h-11 rounded-lg border border-neutral-300 bg-white px-2 text-sm font-semibold text-neutral-800 outline-none focus:border-movipack sm:h-10"
               >
                 <option value="relevancia">Destacados</option>
                 <option value="precio-asc">Menor precio</option>
@@ -202,36 +202,36 @@ export function ProductCatalog({
           ) : (
             <>
               {mostrarCombos && (
-                  <section className="mb-8">
-                    <h2 className="font-display text-xl font-bold not-italic text-neutral-900">
-                      Combos
-                    </h2>
-                    <p className="mt-1 text-sm text-neutral-500">
-                      Llevá 2 o 3 productos juntos y se aplica la promo en el
-                      carrito.
-                    </p>
-                    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
-                      {combos.map((c) => (
-                        <ComboCard key={c.id} combo={c} />
-                      ))}
-                    </div>
-                  </section>
-                )}
+                <section className="mb-6 sm:mb-8">
+                  <h2 className="font-display text-xl font-bold not-italic text-neutral-900">
+                    Combos
+                  </h2>
+                  <p className="mt-1 text-sm text-neutral-500">
+                    Llevá 2 o 3 productos juntos y se aplica la promo en el
+                    carrito.
+                  </p>
+                  <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+                    {combos.map((c) => (
+                      <ComboCard key={c.id} combo={c} />
+                    ))}
+                  </div>
+                </section>
+              )}
               {filtro === "promos" && listado.length > 0 && (
                 <h2 className="mb-4 font-display text-xl font-bold not-italic text-neutral-900">
                   Promos activas
                 </h2>
               )}
               {listado.length > 0 && (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
-              {mostrados.map((p) => (
-                <ProductCard
-                  key={p.id}
-                  producto={p}
-                  etiqueta={etiquetas[p.seccion] ?? p.seccion}
-                />
-              ))}
-            </div>
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+                  {mostrados.map((p) => (
+                    <ProductCard
+                      key={p.id}
+                      producto={p}
+                      etiqueta={etiquetas[p.seccion] ?? p.seccion}
+                    />
+                  ))}
+                </div>
               )}
             </>
           )}
@@ -241,7 +241,7 @@ export function ProductCatalog({
               <button
                 type="button"
                 onClick={() => setVisible((n) => n + PAGE)}
-                className="h-12 rounded-xl border border-neutral-300 bg-white px-6 text-sm font-bold text-neutral-800 hover:border-movipack hover:text-movipack"
+                className="h-12 w-full max-w-sm rounded-xl border border-neutral-300 bg-white px-6 text-sm font-bold text-neutral-800 hover:border-movipack hover:text-movipack sm:w-auto"
               >
                 Mostrar más productos
               </button>
@@ -268,13 +268,13 @@ function CatBtn({
     <button
       type="button"
       onClick={onClick}
-      className={`flex shrink-0 items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold transition lg:w-full ${
+      className={`flex shrink-0 items-center justify-between gap-2 rounded-full px-3.5 py-2.5 text-left text-sm font-semibold transition touch-manipulation lg:w-full lg:rounded-lg lg:gap-3 ${
         active
           ? "bg-neutral-900 text-white"
           : "bg-white text-neutral-700 ring-1 ring-neutral-200 hover:ring-movipack/40"
       }`}
     >
-      <span>{label}</span>
+      <span className="whitespace-nowrap">{label}</span>
       <span
         className={`tabular-nums text-xs ${
           active ? "text-white/60" : "text-neutral-400"

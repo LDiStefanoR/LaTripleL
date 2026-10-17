@@ -456,10 +456,12 @@ export function AdminClienteFicha({
           <label className={etiqueta}>
             Permiso de la cuenta
             <p className={ayuda}>
-              Cliente entra al catálogo. Administrador entra al panel del local.
+              Cliente entra al catálogo. Caja cobra en el local. Administrador
+              entra al panel.
             </p>
             <select name="rol" defaultValue={usuario.rol} className={campo}>
               <option value="cliente">Cliente (genérico / con cuenta)</option>
+              <option value="caja">Caja (cobrar ventas)</option>
               <option value="admin">Administrador</option>
             </select>
           </label>

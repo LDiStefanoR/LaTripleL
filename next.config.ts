@@ -1,4 +1,5 @@
 import os from "os";
+import path from "path";
 import type { NextConfig } from "next";
 
 function hostsRedLocal() {
@@ -16,6 +17,9 @@ function hostsRedLocal() {
 }
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   allowedDevOrigins: hostsRedLocal(),
   images: {
     remotePatterns: [
@@ -39,6 +43,7 @@ const nextConfig: NextConfig = {
     "pdfkit",
     "googleapis",
     "@vercel/blob",
+    "@libsql/client",
     "sharp",
   ],
   experimental: {

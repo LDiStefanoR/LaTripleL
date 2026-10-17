@@ -26,6 +26,29 @@ export type ClienteFiado = {
   pinInicial: string;
   limiteAlmacen: number;
   limiteEfectivo: number;
+  /** Compatibilidad: si no hay mora de crédito o de cuenta, se usa esta. */
+  moraModo?: "escala" | "fijo" | "sin";
+  moraPorcentaje?: number;
+  /** Mora semanal si se vence un crédito. */
+  moraCreditoModo?: "escala" | "fijo" | "sin";
+  moraCreditoPorcentaje?: number;
+  /** Mora semanal si se vence la cuenta corriente. */
+  moraCuentaModo?: "escala" | "fijo" | "sin";
+  moraCuentaPorcentaje?: number;
+  /** Dinero ya acreditado, para pagar compras. */
+  saldo?: number;
+  /** Máximo histórico. Si hay cuotas habilitadas, esas mandan. */
+  cuotasMaximas?: 1 | 2 | 3 | 6;
+  /** Cuáles de 1, 2, 3 y 6 puede usar. Vacío sigue el máximo. */
+  cuotasHabilitadas?: (1 | 2 | 3 | 6)[];
+  /** general: tasas de mantenimiento. propio: los intereses de esta ficha. */
+  interesModo?: "general" | "propio";
+  interes1?: number;
+  interes2?: number;
+  interes3?: number;
+  interes6?: number;
+  /** Días para pagar mercadería. Vacío usa el plazo general. */
+  plazoCuenta?: number;
   aliasCbu: string;
   activo: boolean;
 };
@@ -92,6 +115,15 @@ export type AjustesCuenta = {
   cbu: string;
   titular: string;
   banco: string;
+  nombreLocal?: string;
+  mailLocal?: string;
+  telefonoLocal?: string;
+  direccionLocal?: string;
+  horariosLocal?: string;
+  /** Logo para presupuestos y comprobantes. Ruta /recursos/... o URL Blob. */
+  logoLocal?: string;
+  /** Texto que ve el cliente cuando pide lo antes posible. */
+  demoraEntrega?: string;
   limiteAlmacenDefault: number;
   limiteEfectivoDefault: number;
   plazoEfectivoHoras: number;

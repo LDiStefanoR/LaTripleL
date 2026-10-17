@@ -2,13 +2,14 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { adminCambiarEstadoPedido, type EstadoAdminCuentas } from "@/app/acciones/cuentas";
-import { formatoPesos, nombreVitrina } from "@/lib/format";
-import { resumenOperativoPedidos } from "@/lib/pedidos-resumen";
+import { adminCambiarEstadoPedido, adminResolverCredito, adminResolverRecarga, type EstadoAdminCuentas } from "@/app/acciones/cuentas";
+import { digitosMonto, formatoPesos, nombreVitrina, textoMonto } from "@/lib/format";
+import { publicarPedidoEnCaja } from "@/lib/caja-pedido-web";
 import { whatsappUrl } from "@/lib/whatsapp";
+import type { CreditoPendiente } from "@/lib/cuentas";
 import {
   ETIQUETA_FRANJA,
-  ETIQUETA_SI_FALTA,
+  ETIQUETA_PAGO_PEDIDO,
   type Pedido,
 } from "@/types/pedido";
 
@@ -18,10 +19,17 @@ const campo =
 const ESTADO_LABEL: Record<Pedido["estado"], string> = {
   sin_atender: "Sin atender",
   en_proceso: "En proceso",
+  enviando: "Enviando pedido",
   terminado: "Entregado",
 };
 
-export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
+export function AdminPedidosPanel({
+  pedidos,
+  creditos,
+}: {
+  pedidos: Pedido[];
+  creditos: CreditoPendiente[];
+}) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [estado, setEstado] = useState<"activos" | Pedido["estado"] | "todos">(
@@ -30,16 +38,17 @@ export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
   const [tipo, setTipo] = useState<"todos" | "registrado" | "generico">("todos");
   const [abierto, setAbierto] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<EstadoAdminCuentas>(null);
+  const [avisoCaja, setAvisoCaja] = useState("");
+  const [montos, setMontos] = useState<Record<string, string>>({});
   const [pending, start] = useTransition();
-
-  const stats = useMemo(() => resumenOperativoPedidos(pedidos), [pedidos]);
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
     const tel = t.replace(/\D/g, "");
     return pedidos.filter((p) => {
+      if (p.esRecarga) return false;
       if (estado === "activos") {
-        if (p.estado !== "sin_atender" && p.estado !== "en_proceso") return false;
+        if (p.estado !== "sin_atender" && p.estado !== "en_proceso" && p.estado !== "enviando") return false;
       } else if (estado !== "todos" && p.estado !== estado) return false;
       if (tipo === "registrado" && !p.clienteRegistrado) return false;
       if (tipo === "generico" && p.clienteRegistrado) return false;
@@ -72,32 +81,182 @@ export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
     });
   }
 
-  return (
-    <div className="space-y-6">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Tarjeta
-          titulo="Pedidos de hoy"
-          cantidad={stats.hoy.cantidad}
-          total={stats.hoy.total}
-        />
-        <Tarjeta
-          titulo="Esta semana"
-          cantidad={stats.semana.cantidad}
-          total={stats.semana.total}
-        />
-        <Tarjeta
-          titulo="Este mes"
-          cantidad={stats.mes.cantidad}
-          total={stats.mes.total}
-        />
-        <Tarjeta
-          titulo="Activos ahora"
-          cantidad={stats.activos.cantidad}
-          total={stats.activos.total}
-          destaque
-        />
-      </div>
+  const recargas = pedidos.filter((p) => p.esRecarga && !p.recargaAcreditada && !p.recargaRechazada);
 
+  function montoDe(id: string, base: number) {
+    return montos[id] ?? String(base);
+  }
+
+  function mandarACaja(pedido: Pedido) {
+    const lineas = pedido.lineas
+      .filter((linea) => linea.codigo && linea.codigo !== "RECARGA" && linea.cantidad > 0)
+      .map((linea) => ({
+        codigo: linea.codigo,
+        cantidad: linea.cantidad,
+        precio: Math.max(0, Math.round(linea.precio) || 0),
+      }));
+    if (lineas.length === 0) {
+      setAvisoCaja("Ese pedido no tiene productos para cargar en la caja.");
+      return;
+    }
+    const pago = pedido.pago;
+    const partesPago = pago
+      ? [
+          pago.transferencia > 0 ? `Transferencia ${formatoPesos(pago.transferencia)}` : "",
+          (pago.saldo ?? 0) > 0 ? `Saldo a cuenta ${formatoPesos(pago.saldo ?? 0)}` : "",
+          pago.cuentaCorriente > 0 ? `Cuenta corriente ${formatoPesos(pago.cuentaCorriente)}` : "",
+        ].filter(Boolean)
+      : [];
+    const entrega = [
+      pedido.modoEntrega === "antes_posible" ? "Lo antes posible" : "",
+      pedido.modoEntrega === "programado" && pedido.fechaEntrega ? pedido.fechaEntrega : "",
+      pedido.franjaReparto ? ETIQUETA_FRANJA[pedido.franjaReparto] : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    publicarPedidoEnCaja({
+      pedidoId: pedido.id,
+      numero: pedido.numeroTicket || pedido.id.slice(0, 6),
+      cliente: pedido.contacto.nombre,
+      email: pedido.contacto.email,
+      telefono: pedido.contacto.telefono,
+      direccion: pedido.contacto.direccion,
+      entrega,
+      pago: partesPago.join(" · ") || (pago ? ETIQUETA_PAGO_PEDIDO[pago.forma] : ""),
+      lineas,
+    });
+    setAvisoCaja(`Mandamos el pedido ${pedido.numeroTicket || ""} a la caja. Si la caja está abierta en otra pestaña, los productos ya quedaron cargados.`);
+  }
+
+  return (
+    <div className="space-y-8">
+      <section className="rounded-3xl border border-amber-200 bg-amber-50 p-4">
+        <h2 className="font-display text-2xl font-bold text-amber-950">Crédito y saldo</h2>
+        <p className="mt-1 text-sm text-amber-950/80">
+          Los pedidos de efectivo y las recargas de saldo se atienden acá, separados de la mercadería. Podés corregir el importe antes de aceptar, por si transfirieron otro monto o no transfirieron.
+        </p>
+        {creditos.length === 0 && recargas.length === 0 && (
+          <p className="mt-3 text-sm text-amber-950/70">No hay créditos ni recargas pendientes.</p>
+        )}
+        <ul className="mt-3 space-y-3">
+          {creditos.map((credito) => (
+            <li key={credito.id} className="rounded-2xl bg-white p-3">
+              <p className="font-bold">Crédito solicitado · {credito.nombre}</p>
+              <p className="text-sm text-neutral-600">
+                Acreditar en {credito.aliasCbu || "sin alias"}
+                {credito.nota ? ` · ${credito.nota}` : ""}
+              </p>
+              <label className="mt-2 block text-xs font-bold text-neutral-600">
+                Importe a aceptar
+                <input
+                  inputMode="numeric"
+                  value={textoMonto(montoDe(credito.id, credito.monto))}
+                  onChange={(e) => setMontos((prev) => ({ ...prev, [credito.id]: digitosMonto(e.target.value) }))}
+                  className={`${campo} mt-1 max-w-40`}
+                />
+              </label>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={pending}
+                  className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-bold text-white disabled:opacity-60"
+                  onClick={() => {
+                    const data = new FormData();
+                    data.set("id", credito.id);
+                    data.set("aceptar", "1");
+                    data.set("monto", montoDe(credito.id, credito.monto));
+                    start(async () => {
+                      const resultado = await adminResolverCredito(data);
+                      setMensaje(resultado);
+                      if (resultado?.ok) router.refresh();
+                    });
+                  }}
+                >
+                  Aceptar crédito
+                </button>
+                <button
+                  type="button"
+                  disabled={pending}
+                  className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-bold"
+                  onClick={() => {
+                    const data = new FormData();
+                    data.set("id", credito.id);
+                    data.set("aceptar", "0");
+                    data.set("monto", "0");
+                    start(async () => {
+                      const resultado = await adminResolverCredito(data);
+                      setMensaje(resultado);
+                      if (resultado?.ok) router.refresh();
+                    });
+                  }}
+                >
+                  Rechazar
+                </button>
+              </div>
+            </li>
+          ))}
+          {recargas.map((pedido) => (
+            <li key={pedido.id} className="rounded-2xl bg-white p-3">
+              <p className="font-bold">Saldo a cuenta · {pedido.contacto.nombre}</p>
+              <p className="text-sm text-neutral-600">
+                {pedido.contacto.email} · avisó una transferencia de {formatoPesos(pedido.total)}
+              </p>
+              <label className="mt-2 block text-xs font-bold text-neutral-600">
+                Importe que sí entró
+                <input
+                  inputMode="numeric"
+                  value={textoMonto(montoDe(pedido.id, pedido.total))}
+                  onChange={(e) => setMontos((prev) => ({ ...prev, [pedido.id]: digitosMonto(e.target.value) }))}
+                  className={`${campo} mt-1 max-w-40`}
+                />
+              </label>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={pending}
+                  className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-bold text-white disabled:opacity-60"
+                  onClick={() => {
+                    const data = new FormData();
+                    data.set("id", pedido.id);
+                    data.set("acreditar", "1");
+                    data.set("monto", montoDe(pedido.id, pedido.total));
+                    start(async () => {
+                      const resultado = await adminResolverRecarga(data);
+                      setMensaje(resultado);
+                      if (resultado?.ok) router.refresh();
+                    });
+                  }}
+                >
+                  Acreditar saldo
+                </button>
+                <button
+                  type="button"
+                  disabled={pending}
+                  className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-bold"
+                  onClick={() => {
+                    const data = new FormData();
+                    data.set("id", pedido.id);
+                    data.set("acreditar", "0");
+                    start(async () => {
+                      const resultado = await adminResolverRecarga(data);
+                      setMensaje(resultado);
+                      if (resultado?.ok) router.refresh();
+                    });
+                  }}
+                >
+                  Rechazar
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="font-display text-2xl font-bold text-movipack-deep">Pedidos de mercadería</h2>
+        <p className="text-sm text-neutral-600">
+          Mandá el pedido a la caja para cobrarlo con los productos ya cargados. Al cerrar la venta pasa a enviando y, 30 minutos después, queda entregado.
+        </p>
       <div className="grid gap-3 sm:grid-cols-3">
         <label className="text-xs font-bold text-neutral-600 sm:col-span-3">
           Buscar
@@ -119,6 +278,7 @@ export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
             <option value="todos">Todos</option>
             <option value="sin_atender">Sin atender</option>
             <option value="en_proceso">En proceso</option>
+            <option value="enviando">Enviando</option>
             <option value="terminado">Entregados</option>
           </select>
         </label>
@@ -147,6 +307,11 @@ export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
       {mensaje?.ok && (
         <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
           {mensaje.ok}
+        </p>
+      )}
+      {avisoCaja && (
+        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-950">
+          {avisoCaja}
         </p>
       )}
 
@@ -182,22 +347,48 @@ export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
                       (pedido.franjaReparto
                         ? ETIQUETA_FRANJA[pedido.franjaReparto]
                         : "")}
-                    {pedido.siFaltaProducto
-                      ? ` · ${ETIQUETA_SI_FALTA[pedido.siFaltaProducto]}`
+                    {pedido.pago
+                      ? ` · ${ETIQUETA_PAGO_PEDIDO[pedido.pago.forma]}${
+                          pedido.pago.forma === "mixto"
+                            ? ` (cuenta ${formatoPesos(pedido.pago.cuentaCorriente)} + transferencia ${formatoPesos(pedido.pago.transferencia)})`
+                            : ""
+                        }`
                       : ""}
                   </p>
                 </div>
-                <select
-                  key={`${pedido.id}-${pedido.estado}`}
-                  defaultValue={pedido.estado}
-                  disabled={pending}
-                  className="rounded-lg border border-movipack/20 bg-white px-3 py-2 text-sm font-semibold"
-                  onChange={(e) => cambiarEstado(pedido.id, e.target.value)}
-                >
-                  <option value="sin_atender">{ESTADO_LABEL.sin_atender}</option>
-                  <option value="en_proceso">{ESTADO_LABEL.en_proceso}</option>
-                  <option value="terminado">{ESTADO_LABEL.terminado}</option>
-                </select>
+                <div className="flex flex-col items-stretch gap-2">
+                  {pedido.estado !== "terminado" && (
+                    <button
+                      type="button"
+                      className="rounded-lg bg-movipack px-3 py-2 text-sm font-bold text-white"
+                      onClick={() => mandarACaja(pedido)}
+                    >
+                      Mandar a la caja
+                    </button>
+                  )}
+                  {pedido.estado === "sin_atender" && (
+                    <button
+                      type="button"
+                      disabled={pending}
+                      className="rounded-lg bg-cape px-3 py-2 text-sm font-bold text-white hover:bg-cape/90 disabled:opacity-60"
+                      onClick={() => cambiarEstado(pedido.id, "en_proceso")}
+                    >
+                      Poner en proceso
+                    </button>
+                  )}
+                  <select
+                    key={`${pedido.id}-${pedido.estado}`}
+                    defaultValue={pedido.estado}
+                    disabled={pending}
+                    className="rounded-lg border border-movipack/20 bg-white px-3 py-2 text-sm font-semibold"
+                    onChange={(e) => cambiarEstado(pedido.id, e.target.value)}
+                  >
+                    <option value="sin_atender">{ESTADO_LABEL.sin_atender}</option>
+                    <option value="en_proceso">{ESTADO_LABEL.en_proceso}</option>
+                    <option value="enviando">{ESTADO_LABEL.enviando}</option>
+                    <option value="terminado">{ESTADO_LABEL.terminado}</option>
+                  </select>
+                </div>
               </div>
               <div className="mt-3 flex flex-wrap gap-3 text-xs font-bold">
                 <button
@@ -232,42 +423,7 @@ export function AdminPedidosPanel({ pedidos }: { pedidos: Pedido[] }) {
           );
         })}
       </ul>
-    </div>
-  );
-}
-
-function Tarjeta({
-  titulo,
-  cantidad,
-  total,
-  destaque,
-}: {
-  titulo: string;
-  cantidad: number;
-  total: number;
-  destaque?: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-2xl border p-4 shadow-sm ${
-        destaque
-          ? "border-cape/30 bg-cape text-white"
-          : "border-movipack/15 bg-white"
-      }`}
-    >
-      <p
-        className={`text-xs font-bold uppercase tracking-wide ${
-          destaque ? "text-white/80" : "text-neutral-500"
-        }`}
-      >
-        {titulo}
-      </p>
-      <p className="mt-1 font-display text-2xl font-bold italic">
-        {cantidad}
-      </p>
-      <p className={`text-sm font-semibold ${destaque ? "text-white" : "text-movipack"}`}>
-        {formatoPesos(total)} generado
-      </p>
+      </section>
     </div>
   );
 }

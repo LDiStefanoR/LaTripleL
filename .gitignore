@@ -49,6 +49,12 @@ yarn-error.log*
 /data/usuarios.json
 /data/pedidos.json
 /data/cuentas.json
+/data/ventas-caja.json
+
+# sqlite / auth local
+/auth
+/auth-wal
+/auth-shm
 
 # Google Drive (cuenta de servicio)
 /secrets/
@@ -61,3 +67,6 @@ google-credentials.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+.env*

@@ -1,4 +1,5 @@
 import { interesTotalDeuda } from "@/lib/deuda";
+import { politicaDeCliente } from "@/lib/politica-cliente";
 import type { UsuarioPublico } from "@/types/auth";
 import type { ResumenCliente } from "@/types/cuenta";
 import type { Pedido } from "@/types/pedido";
@@ -31,7 +32,7 @@ export function resumenOperativoFicha(
     comprobantes: tickets.length,
     pedidos: pedidos.length,
     deuda: resumen?.saldoTotal ?? 0,
-    mora: interesTotalDeuda(resumen?.ticketsVigentes ?? []),
+    mora: interesTotalDeuda(resumen?.ticketsVigentes ?? [], politicaDeCliente(resumen?.cliente)),
     clienteFiadoId: resumen?.cliente.id,
     ultimaActividad: fechas.at(-1) ?? usuario.creadoEn,
   };

@@ -1,6 +1,6 @@
 import type { TipoOferta } from "@/types/promo";
 
-export type EstadoPedido = "sin_atender" | "en_proceso" | "terminado";
+export type EstadoPedido = "sin_atender" | "en_proceso" | "enviando" | "terminado";
 
 export type FranjaReparto = "manana" | "tarde";
 
@@ -28,6 +28,28 @@ export type LineaPedido = {
   cantidad: number;
 };
 
+export type FormaPagoPedido =
+  | "transferencia"
+  | "cuenta_corriente"
+  | "mixto"
+  | "saldo"
+  | "saldo_transferencia";
+
+export type PagoPedido = {
+  forma: FormaPagoPedido;
+  cuentaCorriente: number;
+  transferencia: number;
+  saldo?: number;
+};
+
+export const ETIQUETA_PAGO_PEDIDO: Record<FormaPagoPedido, string> = {
+  transferencia: "Transferencia",
+  cuenta_corriente: "Cuenta corriente",
+  mixto: "Pago mixto",
+  saldo: "Saldo a cuenta",
+  saldo_transferencia: "Saldo y transferencia",
+};
+
 export type ContactoPedido = {
   nombre: string;
   email: string;
@@ -49,6 +71,12 @@ export type Pedido = {
   siFaltaProducto?: SiFaltaProducto;
   modoEntrega?: ModoEntrega;
   fechaEntrega?: string;
+  pago?: PagoPedido;
+  esRecarga?: boolean;
+  recargaAcreditada?: boolean;
+  recargaRechazada?: boolean;
+  /** Momento en que la caja cerró la venta y el pedido salió a envío. */
+  enviadoEn?: string;
   lineas: LineaPedido[];
   total: number;
 };

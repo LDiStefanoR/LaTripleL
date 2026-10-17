@@ -28,7 +28,7 @@ export function resumenOperativoPedidos(pedidos: Pedido[], ahora = new Date()) {
   }
 
   const activos = pedidos.filter(
-    (p) => p.estado === "sin_atender" || p.estado === "en_proceso",
+    (p) => p.estado === "sin_atender" || p.estado === "en_proceso" || p.estado === "enviando",
   );
   return {
     hoy: acumular(hoy),

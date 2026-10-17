@@ -1,10 +1,9 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AdminNav } from "@/components/AdminNav";
 import { AdminPedidosPanel } from "@/components/AdminPedidosPanel";
-import { contarNovedadesPendientes } from "@/lib/cuentas";
+import { listarCreditosPendientes } from "@/lib/cuentas";
 import { listarPedidos } from "@/lib/pedidos";
 import { getSesion } from "@/lib/sesion";
-import { listarUsuarios } from "@/lib/usuarios";
 
 export const dynamic = "force-dynamic";
 
@@ -12,13 +11,7 @@ export default async function AdminPedidosPage() {
   const sesion = await getSesion();
   if (sesion?.rol !== "admin") redirect("/ingresar");
 
-  const [pedidos, usuarios, novedades] = await Promise.all([
-    listarPedidos(),
-    listarUsuarios(),
-    contarNovedadesPendientes(),
-  ]);
-  const solicitudes = usuarios.filter((u) => u.estado === "pendiente").length;
-  const pedidosNuevos = pedidos.filter((p) => p.estado === "sin_atender").length;
+  const [pedidos, creditos] = await Promise.all([listarPedidos(), listarCreditosPendientes()]);
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
@@ -29,18 +22,15 @@ export default async function AdminPedidosPage() {
         Pedidos
       </h1>
       <p className="mt-3 max-w-2xl text-neutral-600">
-        Pedidos activos, totales del día, la semana y el mes, y búsqueda por
-        cliente genérico o registrado. El estado lo cambiás acá; el cliente lo
-        ve en Mi cuenta.
+        La mercadería se cobra desde la caja. El crédito y el saldo a cuenta se resuelven en su propia sección. Las ventas del día, la semana y el mes están en caja.
       </p>
-      <AdminNav
-        activa="pedidos"
-        solicitudes={solicitudes}
-        pedidosNuevos={pedidosNuevos}
-        novedades={novedades}
-      />
+      <p className="mt-3 text-sm font-bold">
+        <Link href="/admin/promos" className="text-movipack underline">
+          Ir a promos
+        </Link>
+      </p>
       <div className="mt-8">
-        <AdminPedidosPanel pedidos={pedidos} />
+        <AdminPedidosPanel pedidos={pedidos} creditos={creditos} />
       </div>
     </main>
   );

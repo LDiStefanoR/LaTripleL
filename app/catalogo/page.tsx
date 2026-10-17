@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ProductCatalog } from "@/components/ProductCatalog";
-import { leerAjustes } from "@/lib/ajustes";
+import { AJUSTES_PRECIOS_BASE, leerAjustes } from "@/lib/ajustes";
 import { BRAND_NAME } from "@/lib/brand";
 import { armarComboVitrina, idsEnCombos } from "@/lib/combo";
 import { armarVitrina, modoPrecio } from "@/lib/precios";
@@ -39,11 +39,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
   const combos = await combosActivos().catch(() => []);
   const porOferta = mapaOfertas(ofertas);
   const enCombo = idsEnCombos(combos);
-  const ajustesOk = ajustes ?? {
-    descuentoClienteGenerico: 10,
-    ajustePorSeccion: {},
-    descuentoClientePorSeccion: {},
-  };
+  const ajustesOk = ajustes ?? AJUSTES_PRECIOS_BASE;
   const vitrina = productos.map((p) => ({
     ...armarVitrina(p, sesion, ajustesOk, porOferta.get(p.id)),
     enCombo: enCombo.has(p.id),
@@ -55,12 +51,10 @@ export default async function CatalogoPage({ searchParams }: Props) {
   const modo = modoPrecio(sesion);
   const aviso =
     modo === "cliente"
-      ? "Estás viendo tu precio de cliente, en rojo. Al lado, en gris y tachado, está el precio de lista."
+      ? "Estás viendo tu precio de cliente registrado, en rojo. Al lado, en gris y tachado, está el precio de lista."
       : modo === "admin"
-        ? "Como admin ves el precio de lista y el descuento que se aplica a los clientes con descuento o crédito."
-        : sesion?.rol === "cliente"
-          ? "Tu cuenta es genérica: ves los precios de lista, sin descuento. Si te habilitan descuentos o crédito, aparecen acá."
-          : "Estos son los precios de lista. Si te registrás y te habilitan descuentos, ves tu precio en rojo y el de lista tachado.";
+        ? "Como admin ves el precio de lista y el descuento del catálogo para los clientes registrados."
+        : "Estos son los precios de lista. Con una cuenta en la página ves tu precio, más bajo, en rojo.";
 
   return (
     <main>

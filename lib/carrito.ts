@@ -1,5 +1,6 @@
 import { formatoPesos } from "@/lib/format";
 import { costoEnvio, etiquetaCostoEnvio } from "@/lib/envio";
+import type { EscalaEnvio } from "@/types/ajustes";
 import { resumenCombosEnCarrito, totalConCombos } from "@/lib/combo";
 import { totalLineaConPromo } from "@/lib/oferta";
 import { textoEntrega } from "@/lib/reparto";
@@ -23,6 +24,8 @@ export type LineaCarrito = {
   descuentoCliente?: number;
   tipoPromo?: TipoOferta;
   cantidad: number;
+  /** Tope que viene del stock de caja. Sin número, el catálogo no limita la cantidad. */
+  stock?: number;
 };
 
 export function esLineaEnvio(linea: { id?: string; codigo?: string }) {
@@ -58,9 +61,10 @@ export function lineaEnvio(costo: number): LineaCarrito {
 export function armarLineasPedido(
   lineas: LineaCarrito[],
   combos: ComboPromo[] = [],
+  escala?: EscalaEnvio,
 ) {
   const productos = lineasProducto(lineas);
-  const costo = costoEnvio(totalCarrito(productos, combos));
+  const costo = costoEnvio(totalCarrito(productos, combos), escala);
   return [...productos, lineaEnvio(costo)];
 }
 
@@ -80,10 +84,11 @@ export function mensajePedidoWhatsApp(
     modoEntrega?: ModoEntrega;
     fechaEntrega?: string;
     combos?: ComboPromo[];
+    envio?: EscalaEnvio;
   },
 ) {
   const combos = opciones?.combos ?? [];
-  const armadas = armarLineasPedido(lineas, combos);
+  const armadas = armarLineasPedido(lineas, combos, opciones?.envio);
   const productos = lineasProducto(armadas);
   const envio = armadas.find(esLineaEnvio);
   const resumen = resumenCombosEnCarrito(productos, combos);

@@ -29,7 +29,9 @@ export async function leerSesionToken(
     const email = String(payload.email ?? "");
     const nombre = String(payload.nombre ?? "");
     const rol = payload.rol as RolUsuario;
-    if (!email || (rol !== "admin" && rol !== "cliente")) return null;
+    if (!email || (rol !== "admin" && rol !== "cliente" && rol !== "caja")) {
+      return null;
+    }
     return { email, nombre, rol };
   } catch {
     return null;

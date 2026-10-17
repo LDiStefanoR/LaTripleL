@@ -1,0 +1,17 @@
+[
+  {
+    "id": "contado",
+    "nombre": "Contado",
+    "efectivo": true
+  },
+  {
+    "id": "tarjeta",
+    "nombre": "Tarjeta",
+    "efectivo": false
+  },
+  {
+    "id": "moto",
+    "nombre": "Moto",
+    "efectivo": false
+  }
+]

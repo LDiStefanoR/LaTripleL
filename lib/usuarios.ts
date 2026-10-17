@@ -7,6 +7,7 @@ import {
   normalizarEmailLogin,
 } from "@/lib/auth-config";
 import { escribirJsonData, leerJsonData } from "@/lib/data-fs";
+import { esPermisoCaja } from "@/lib/permisos-caja";
 import { parseTipoCuenta } from "@/lib/tipo-cuenta";
 import type {
   EstadoCuenta,
@@ -35,12 +36,18 @@ function normalizarUsuario(
     id: raw.id,
     email: normalizarEmail(raw.email),
     nombre: raw.nombre?.trim() || raw.email,
-    rol: raw.rol === "admin" ? "admin" : "cliente",
+    rol: raw.rol === "admin" ? "admin" : raw.rol === "caja" ? "caja" : "cliente",
     passwordHash: raw.passwordHash ?? "",
     estado: raw.estado ?? "activa",
     perfil: raw.perfil,
-    tipoCuenta: raw.rol === "admin" ? undefined : parseTipoCuenta(raw.tipoCuenta),
+    tipoCuenta:
+      raw.rol === "admin" || raw.rol === "caja"
+        ? undefined
+        : parseTipoCuenta(raw.tipoCuenta),
     notaInterna: raw.notaInterna?.trim() || "",
+    permisosCaja: Array.isArray(raw.permisosCaja)
+      ? raw.permisosCaja.filter(esPermisoCaja)
+      : undefined,
     creadoEn: raw.creadoEn ?? new Date().toISOString(),
   };
 }
@@ -58,7 +65,7 @@ async function leerArchivo(): Promise<Usuario[]> {
   if (!hayTiposNuevos) {
     for (const u of crudos) {
       if (u.rol === "admin") continue;
-      if (u.tipoCuenta === "credito") u.tipoCuenta = "credito_super";
+      if ((u.tipoCuenta as string) === "credito") u.tipoCuenta = "credito_super";
       else u.tipoCuenta = "descuentos";
     }
   }
@@ -245,6 +252,7 @@ export async function crearUsuarioAdmin(datos: {
   password: string;
   rol: RolUsuario;
   tipoCuenta?: TipoCuentaCliente;
+  permisosCaja?: string[];
 }) {
   const email = normalizarEmail(datos.email);
   if (!email.includes("@")) return { error: "Ingresá un mail válido." as const };
@@ -267,9 +275,28 @@ export async function crearUsuarioAdmin(datos: {
       datos.rol === "cliente"
         ? parseTipoCuenta(datos.tipoCuenta ?? "generico")
         : undefined,
+    permisosCaja:
+      datos.rol === "caja" ? (datos.permisosCaja ?? []).filter(esPermisoCaja) : undefined,
     creadoEn: new Date().toISOString(),
   };
   usuarios.push(usuario);
+  await escribirArchivo(usuarios);
+  return { usuario: sinPassword(usuario) };
+}
+
+export async function guardarPermisosCaja(id: string, permisos: string[]) {
+  const usuarios = await asegurarSemilla();
+  const usuario = usuarios.find((u) => u.id === id);
+  if (!usuario) return { error: "No encontramos a esa persona." as const };
+  if (usuario.rol === "admin") {
+    return { error: "La administración entra a todo el menú." as const };
+  }
+  if (usuario.rol !== "caja") {
+    return { error: "Esos permisos son para empleados de caja." as const };
+  }
+  const lista = permisos.filter(esPermisoCaja);
+  if (lista.length < 1) return { error: "Elegí al menos una parte del menú." as const };
+  usuario.permisosCaja = lista;
   await escribirArchivo(usuarios);
   return { usuario: sinPassword(usuario) };
 }
@@ -413,12 +440,41 @@ export async function actualizarPerfilUsuario(
     deseaAsesor: datos.perfil.deseaAsesor,
     franjaReparto: datos.perfil.franjaReparto ?? base?.franjaReparto,
     fotoPerfil: base?.fotoPerfil,
+    codigo: datos.perfil.codigo === undefined ? base?.codigo ?? "" : datos.perfil.codigo.trim(),
+    apellido: datos.perfil.apellido === undefined ? base?.apellido ?? "" : datos.perfil.apellido.trim(),
+    cumpleanos:
+      datos.perfil.cumpleanos === undefined ? base?.cumpleanos ?? "" : datos.perfil.cumpleanos.trim(),
+    documento:
+      datos.perfil.documento === undefined ? base?.documento ?? "" : datos.perfil.documento.trim(),
+    descuento:
+      datos.perfil.descuento === undefined
+        ? descuentoFicha(base?.descuento)
+        : descuentoFicha(datos.perfil.descuento),
+    direcciones: datos.perfil.direcciones ?? base?.direcciones,
   };
   if (datos.notaInterna !== undefined) {
     usuario.notaInterna = datos.notaInterna.trim();
   }
   await escribirArchivo(usuarios);
   return { usuario: sinPassword(usuario) };
+}
+
+export async function recordarDireccion(id: string, direccion: string) {
+  const limpia = direccion.trim();
+  if (limpia.length < 5) return { ok: true as const };
+  const usuarios = await asegurarSemilla();
+  const usuario = usuarios.find((u) => u.id === id);
+  if (!usuario?.perfil) return { ok: true as const };
+  const previas = (usuario.perfil.direcciones ?? [])
+    .map((d) => d.trim())
+    .filter((d) => d.length >= 5);
+  const ya = [usuario.perfil.direccion, ...previas].some(
+    (d) => d.trim().toLowerCase() === limpia.toLowerCase(),
+  );
+  usuario.perfil.direccion = limpia;
+  if (!ya) usuario.perfil.direcciones = [...previas, limpia].slice(-8);
+  await escribirArchivo(usuarios);
+  return { ok: true as const };
 }
 
 export async function eliminarUsuario(id: string, quienEliminaEmail: string) {
@@ -454,6 +510,12 @@ function perfilFiado(telefono: string): PerfilCliente {
     horarioAtencion: "A coordinar",
     deseaAsesor: false,
   };
+}
+
+export function descuentoFicha(valor: unknown) {
+  const n = Math.round(Number(valor) || 0);
+  if (n <= 0) return undefined;
+  return Math.min(100, n);
 }
 
 export function pinOPasswordValido(password: string) {

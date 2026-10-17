@@ -13,7 +13,8 @@ export async function getSesion(): Promise<SesionPublica | null> {
   const { parseTipoCuenta } = await import("@/lib/tipo-cuenta");
   const usuario = await buscarUsuarioPorEmail(base.email);
   if (!usuario) return base;
-  return { ...base, tipoCuenta: parseTipoCuenta(usuario.tipoCuenta) };
+  const descuento = Math.min(100, Math.max(0, Math.round(usuario.perfil?.descuento ?? 0)));
+  return { ...base, tipoCuenta: parseTipoCuenta(usuario.tipoCuenta), descuento };
 }
 
 export async function guardarSesion(

@@ -97,10 +97,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const agregar = useCallback(
     (producto: ProductoVitrina, opts?: { abrir?: boolean }) => {
       setLineas((prev) => {
+        const tope = typeof producto.stock === "number" ? producto.stock : null;
+        if (tope === 0) return prev;
         const existente = prev.find((l) => l.id === producto.id);
         if (existente) {
+          if (tope != null && existente.cantidad >= tope) return prev;
           return prev.map((l) =>
-            l.id === producto.id ? { ...l, cantidad: l.cantidad + 1 } : l,
+            l.id === producto.id
+              ? { ...l, cantidad: l.cantidad + 1, stock: tope ?? l.stock }
+              : l,
           );
         }
         return [
@@ -114,6 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             descuentoCliente: producto.descuentoCliente,
             tipoPromo: producto.tipoPromo,
             cantidad: 1,
+            ...(tope != null ? { stock: tope } : {}),
           },
         ];
       });
@@ -127,9 +133,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       let next = [...prev];
       for (const producto of productos) {
         const existente = next.find((l) => l.id === producto.id);
+        const tope = typeof producto.stock === "number" ? producto.stock : null;
+        if (tope === 0) continue;
         if (existente) {
+          if (tope != null && existente.cantidad >= tope) continue;
           next = next.map((l) =>
-            l.id === producto.id ? { ...l, cantidad: l.cantidad + 1 } : l,
+            l.id === producto.id
+              ? { ...l, cantidad: l.cantidad + 1, stock: tope ?? l.stock }
+              : l,
           );
         } else {
           next.push({
@@ -141,6 +152,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             descuentoCliente: producto.descuentoCliente,
             tipoPromo: producto.tipoPromo,
             cantidad: 1,
+            ...(tope != null ? { stock: tope } : {}),
           });
         }
       }
@@ -152,7 +164,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const setCantidad = useCallback((id: string, cantidad: number) => {
     setLineas((prev) => {
       if (cantidad < 1) return prev.filter((l) => l.id !== id);
-      return prev.map((l) => (l.id === id ? { ...l, cantidad } : l));
+      return prev.map((l) => {
+        if (l.id !== id) return l;
+        const tope = typeof l.stock === "number" ? l.stock : cantidad;
+        return { ...l, cantidad: Math.min(cantidad, Math.max(tope, 0)) };
+      });
     });
   }, []);
 

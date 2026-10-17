@@ -9,7 +9,7 @@ import type { ComboVitrina } from "@/lib/combo";
 export function ComboCard({ combo }: { combo: ComboVitrina }) {
   const sesion = useAuth();
   const { agregarCombo } = useCart();
-  const esAdmin = sesion?.rol === "admin";
+  const esStaff = sesion?.rol === "admin" || sesion?.rol === "caja";
   const n = combo.productos.length;
   const hayDto = combo.precioLista > combo.precioPagar;
 
@@ -59,11 +59,11 @@ export function ComboCard({ combo }: { combo: ComboVitrina }) {
             </p>
           )}
         </div>
-        {!esAdmin && (
+        {!esStaff && (
           <button
             type="button"
             onClick={() => agregarCombo(combo.productos)}
-            className="mt-2 flex h-10 w-full items-center justify-center rounded-lg bg-cape text-sm font-bold text-white transition hover:brightness-110"
+            className="mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-cape text-sm font-bold text-white touch-manipulation transition hover:brightness-110 active:scale-[0.98] sm:h-10"
           >
             Agregar combo
           </button>

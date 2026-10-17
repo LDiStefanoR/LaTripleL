@@ -10,9 +10,11 @@
     "prebuild": "node scripts/sync-recursos.mjs",
     "build": "next build",
     "start": "next start -p 3005 --hostname 0.0.0.0",
-    "lint": "eslint"
+    "lint": "eslint",
+    "subir-turso": "node --env-file=.env.local scripts/subir-turso.mjs"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "@vercel/blob": "^2.8.0",
     "bcryptjs": "^3.0.3",
     "exceljs": "^4.4.0",
@@ -34,6 +36,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^64.3.1"
   }
 }

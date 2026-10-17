@@ -1,10 +1,14 @@
 import { BrandLogo } from "@/components/BrandLogo";
-import { ADDRESS_LINE, HOURS_SHORT } from "@/lib/brand";
+import { ADDRESS_FULL, HOURS_SHORT } from "@/lib/brand";
 import { MENSAJE_PEDIDO_GENERAL } from "@/lib/categorias";
-import { whatsappPhoneDisplay, whatsappUrl } from "@/lib/whatsapp";
+import type { DatosLocal } from "@/lib/datos-local";
+import { whatsappATelefono, whatsappPhoneDisplay, whatsappUrl } from "@/lib/whatsapp";
 
-export function SiteFooter() {
-  const wa = whatsappUrl(MENSAJE_PEDIDO_GENERAL);
+export function SiteFooter({ datos }: { datos?: DatosLocal | null }) {
+  const direccion = datos?.direccion || ADDRESS_FULL;
+  const horarios = datos?.horarios || HOURS_SHORT;
+  const telefono = datos?.telefono || whatsappPhoneDisplay();
+  const wa = (datos?.telefono && whatsappATelefono(datos.telefono, MENSAJE_PEDIDO_GENERAL)) || whatsappUrl(MENSAJE_PEDIDO_GENERAL);
 
   return (
     <footer className="border-t border-white/10 bg-[#0a0a0a] text-neutral-200">
@@ -15,7 +19,7 @@ export function SiteFooter() {
           </div>
           <div>
             <p className="text-sm text-neutral-400">Minimarket · Rosario</p>
-            <p className="text-sm text-neutral-400">{ADDRESS_LINE}</p>
+            <p className="text-sm text-neutral-400">{direccion}</p>
           </div>
         </div>
         <div className="text-sm">
@@ -23,9 +27,9 @@ export function SiteFooter() {
             href={wa}
             className="font-semibold text-emerald-400 hover:underline"
           >
-            {whatsappPhoneDisplay()}
+            {telefono}
           </a>
-          <p className="mt-1 text-neutral-400">{HOURS_SHORT}</p>
+          <p className="mt-1 text-neutral-400">{horarios}</p>
         </div>
       </div>
     </footer>

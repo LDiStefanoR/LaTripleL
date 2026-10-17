@@ -7,9 +7,16 @@ import {
   HOURS_SHORT,
 } from "@/lib/brand";
 import { MENSAJE_PEDIDO_GENERAL } from "@/lib/categorias";
-import { whatsappPhoneDisplay, whatsappUrl } from "@/lib/whatsapp";
+import type { DatosLocal } from "@/lib/datos-local";
+import { whatsappATelefono, whatsappPhoneDisplay, whatsappUrl } from "@/lib/whatsapp";
 
-export function HeroSection() {
+export function HeroSection({ datos }: { datos?: DatosLocal | null }) {
+  const direccion = datos?.direccion || ADDRESS_LINE;
+  const horarios = datos?.horarios || HOURS_SHORT;
+  const telefono = datos?.telefono || whatsappPhoneDisplay();
+  const wa =
+    (datos?.telefono && whatsappATelefono(datos.telefono, MENSAJE_PEDIDO_GENERAL)) ||
+    whatsappUrl(MENSAJE_PEDIDO_GENERAL);
   return (
     <section className="relative overflow-hidden">
       <div className="hero-glow absolute inset-0" />
@@ -28,7 +35,7 @@ export function HeroSection() {
           <p className="max-w-xl text-lg leading-relaxed text-white/90 sm:text-xl">
             Somos {BRAND_NAME}, un minimarket de Rosario. Armás el pedido en
             esta plataforma, lo confirmamos y te lo llevamos a todo Rosario —
-            o lo pasás a buscar en {ADDRESS_LINE}.
+            o lo pasás a buscar en {direccion}.
           </p>
           <p className="text-base text-white/80">
             Precios de minimarket, no de góndola de cadena. Mirá las promos,
@@ -41,10 +48,10 @@ export function HeroSection() {
                 WhatsApp
               </p>
               <a
-                href={whatsappUrl(MENSAJE_PEDIDO_GENERAL)}
+                href={wa}
                 className="mt-1 block text-lg font-bold underline-offset-4 hover:underline"
               >
-                {whatsappPhoneDisplay()}
+                {telefono}
               </a>
             </div>
             <div>
@@ -52,7 +59,7 @@ export function HeroSection() {
                 Envío y local
               </p>
               <p className="mt-1 text-sm font-semibold">Todo Rosario</p>
-              <p className="text-sm font-semibold">{HOURS_SHORT}</p>
+              <p className="text-sm font-semibold">{horarios}</p>
             </div>
           </div>
 
@@ -64,7 +71,7 @@ export function HeroSection() {
               Pedir en la plataforma
             </Link>
             <WhatsAppButton
-              href={whatsappUrl(MENSAJE_PEDIDO_GENERAL)}
+              href={wa}
               size="xl"
               className="w-full sm:w-auto"
             >

@@ -3,7 +3,6 @@ import type { SesionPublica } from "@/types/auth";
 import type { ModoPrecio, Producto, ProductoVitrina } from "@/types/producto";
 import type { Oferta } from "@/types/promo";
 import { formatoPesos } from "@/lib/format";
-import { veDescuentos } from "@/lib/tipo-cuenta";
 
 export function precioLista(producto: Producto, ajustes: AjustesPrecios) {
   const extra = ajustes.ajustePorSeccion[producto.seccion] ?? 0;
@@ -11,12 +10,9 @@ export function precioLista(producto: Producto, ajustes: AjustesPrecios) {
 }
 
 export function descuentoClienteDe(
-  seccion: string,
+  _seccion: string,
   ajustes: AjustesPrecios,
 ) {
-  if (Object.prototype.hasOwnProperty.call(ajustes.descuentoClientePorSeccion ?? {}, seccion)) {
-    return ajustes.descuentoClientePorSeccion[seccion];
-  }
   return ajustes.descuentoClienteGenerico;
 }
 
@@ -26,7 +22,7 @@ export function precioConDescuentoCliente(lista: number, descuento: number) {
 
 export function modoPrecio(sesion: SesionPublica | null): ModoPrecio {
   if (sesion?.rol === "admin") return "admin";
-  if (sesion?.rol === "cliente" && veDescuentos(sesion.tipoCuenta)) return "cliente";
+  if (sesion?.rol === "cliente") return "cliente";
   return "publico";
 }
 
@@ -52,16 +48,13 @@ export function armarVitrina(
   oferta?: Oferta | null,
 ): ProductoVitrina {
   const lista = precioLista(producto, ajustes);
-  const descuento = descuentoClienteDe(producto.seccion, ajustes);
+  const especial = sesion?.rol === "cliente" ? Math.min(100, Math.max(0, Math.round(sesion.descuento ?? 0))) : 0;
+  const descuento = especial > 0 ? especial : descuentoClienteDe(producto.seccion, ajustes);
   const cliente = precioConDescuentoCliente(lista, descuento);
   const promo = precioPromoDe(producto, lista, oferta);
   const esPromo = Boolean(oferta?.activa) || Boolean(producto.promoActiva);
   const tipoPromo = oferta?.tipo;
   const modo = modoPrecio(sesion);
-  const propio = Object.prototype.hasOwnProperty.call(
-    ajustes.descuentoClientePorSeccion,
-    producto.seccion,
-  );
 
   const aplicaPrecio = tipoPromo === "precio" || (!oferta && promo != null);
   const mejorPublico = aplicaPrecio && promo != null ? Math.min(promo, lista) : lista;
@@ -94,9 +87,7 @@ export function armarVitrina(
       descuentoCliente: descuento,
       esPromo,
       tipoPromo,
-      notaAdmin: propio
-        ? `Dto. clientes de este rubro: ${descuento}% → ${formatoPesos(cliente)}${extra}`
-        : `Dto. clientes registrados: ${descuento}% → ${formatoPesos(cliente)}${extra}`,
+      notaAdmin: `Dto. clientes registrados: ${descuento}% → ${formatoPesos(cliente)}${extra}`,
     };
   }
 

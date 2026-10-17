@@ -34,10 +34,14 @@ export function AdminCuentasLista({
   resumenes,
   novedades,
   solicitudes,
+  onAbrir,
+  compacto = false,
 }: {
   resumenes: ResumenCliente[];
   novedades: NovedadAdmin[];
   solicitudes: SolicitudCuenta[];
+  onAbrir?: (id: string) => void;
+  compacto?: boolean;
 }) {
   const router = useRouter();
   const [q, setQ] = useState("");
@@ -75,7 +79,7 @@ export function AdminCuentasLista({
   }
 
   return (
-    <div className="space-y-6">
+    <div className={compacto ? "space-y-3" : "space-y-6"}>
       {mensaje?.error && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-cape">
           {mensaje.error}
@@ -161,11 +165,21 @@ export function AdminCuentasLista({
           Solo quienes deben
         </label>
       </div>
-      <p className="text-sm text-neutral-500">
+      <p className="text-sm font-semibold text-neutral-500">
         {filtrados.length} cliente{filtrados.length === 1 ? "" : "s"}
       </p>
 
-      <ul className="space-y-2">
+      {compacto && filtrados.length > 0 && (
+        <div className="grid grid-cols-[1.4rem_minmax(0,1.4fr)_minmax(0,1fr)_7rem_7.5rem] gap-2 px-3 text-[11px] font-bold uppercase tracking-wide text-neutral-500">
+          <span />
+          <span>Cliente</span>
+          <span>Teléfono</span>
+          <span>Estado</span>
+          <span className="text-right">Debe</span>
+        </div>
+      )}
+
+      <ul className={compacto ? "overflow-hidden rounded-2xl border border-neutral-200 bg-white" : "space-y-2"}>
         {filtrados.length === 0 && (
           <li className="rounded-2xl bg-white p-4 text-sm text-neutral-600 shadow-sm">
             No hay clientes con ese filtro.
@@ -177,8 +191,36 @@ export function AdminCuentasLista({
             <li key={r.cliente.id}>
               <Link
                 href={`/admin/cuentas/${r.cliente.id}`}
-                className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-3 shadow-sm ${TONO[semaforo]}`}
+                onClick={
+                  onAbrir
+                    ? (e) => {
+                        e.preventDefault();
+                        onAbrir(r.cliente.id);
+                      }
+                    : undefined
+                }
+                className={
+                  compacto
+                    ? `grid grid-cols-[1.4rem_minmax(0,1.4fr)_minmax(0,1fr)_7rem_7.5rem] items-center gap-2 border-b border-neutral-100 px-3 py-2 last:border-0 ${TONO[semaforo]}`
+                    : `flex items-center justify-between gap-3 rounded-2xl border px-4 py-3 shadow-sm ${TONO[semaforo]}`
+                }
               >
+                {compacto ? (
+                  <>
+                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${PUNTO[semaforo]}`} />
+                    <span className="truncate font-bold text-movipack-deep">{r.cliente.nombre}</span>
+                    <span className="truncate text-sm text-neutral-600">{r.cliente.telefono || "—"}</span>
+                    <span className="text-sm font-semibold">{LEYENDA[semaforo]}</span>
+                    <span
+                      className={`text-right font-bold ${
+                        r.saldoTotal > 0 ? "text-cape" : "text-emerald-700"
+                      }`}
+                    >
+                      {formatoPesos(r.saldoTotal)}
+                    </span>
+                  </>
+                ) : (
+                  <>
                 <div className="min-w-0">
                   <p className="flex items-center gap-2 font-bold text-movipack-deep">
                     <span
@@ -198,6 +240,8 @@ export function AdminCuentasLista({
                 >
                   {formatoPesos(r.saldoTotal)}
                 </p>
+                  </>
+                )}
               </Link>
             </li>
           );

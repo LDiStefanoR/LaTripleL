@@ -15,6 +15,17 @@ export function formatoPesos(valor: number) {
   return ars.format(valor);
 }
 
+export function digitosMonto(valor: string) {
+  return valor.replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 9);
+}
+
+/** Muestra un importe escrito como $10.000. El valor guardado sigue siendo el número. */
+export function textoMonto(valor: string | number) {
+  const digitos = typeof valor === "number" ? (valor > 0 ? String(Math.round(valor)) : "") : digitosMonto(valor);
+  if (!digitos) return "";
+  return formatoPesos(Number(digitos));
+}
+
 export function nombreVitrina(nombre: string) {
   const lower = nombre.toLowerCase();
   return lower.charAt(0).toUpperCase() + lower.slice(1);

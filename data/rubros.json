@@ -43,5 +43,9 @@
     "clave": "VAPERS",
     "etiqueta": "Vapers",
     "imagen": "/recursos/imagenes-rubros/vapers.jpg"
+  },
+  {
+    "clave": "VARIOS",
+    "etiqueta": "Varios"
   }
 ]

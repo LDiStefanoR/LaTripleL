@@ -15,57 +15,12 @@ import type { Rubro } from "@/types/rubro";
 
 type Props = {
   descuentoClienteGenerico: number;
-  descuentoClientePorSeccion: Record<string, number>;
   cantidades: Record<string, number>;
   rubros: Rubro[];
 };
 
-function DtoRubroCampos({
-  clave,
-  activoInicial,
-  valorInicial,
-  general,
-}: {
-  clave: string;
-  activoInicial: boolean;
-  valorInicial: number;
-  general: number;
-}) {
-  const [activo, setActivo] = useState(activoInicial);
-  return (
-    <div className="flex min-w-44 flex-col gap-1">
-      <label className="flex items-center gap-2 text-xs font-semibold text-neutral-600">
-        <input
-          type="checkbox"
-          name={`dto-activo-${clave}`}
-          value="1"
-          checked={activo}
-          onChange={(e) => setActivo(e.target.checked)}
-          className="accent-movipack"
-        />
-        Usar descuento propio
-      </label>
-      <input
-        type="number"
-        name={`dto-${clave}`}
-        defaultValue={valorInicial}
-        min={0}
-        max={90}
-        step={1}
-        disabled={!activo}
-        className="w-20 rounded-lg border border-neutral-300 px-2 py-1 font-semibold outline-none focus:border-movipack disabled:bg-neutral-100 disabled:text-neutral-400"
-        aria-label={`Descuento de clientes para ${clave}`}
-      />
-      {!activo && (
-        <span className="text-[11px] text-neutral-400">Usa {general}%</span>
-      )}
-    </div>
-  );
-}
-
 export function AdminPricesForm({
   descuentoClienteGenerico,
-  descuentoClientePorSeccion,
   cantidades,
   rubros,
 }: Props) {
@@ -94,9 +49,9 @@ export function AdminPricesForm({
             Descuento de clientes registrados
           </h2>
           <p className="mt-2 text-sm text-neutral-600">
-            Este porcentaje es el descuento general para clientes registrados,
-            salvo los rubros donde actives un descuento propio. En el catálogo
-            el cliente ve el precio ya rebajado y el % real de ese producto.
+            Este porcentaje es el descuento para todos los clientes registrados,
+            en cualquier rubro. En el catálogo el cliente ve el precio ya
+            rebajado.
           </p>
           <label className="mt-4 flex items-center gap-3">
             <input
@@ -116,26 +71,20 @@ export function AdminPricesForm({
 
         <section className="rounded-2xl border border-movipack/15 bg-white p-5 shadow-sm">
           <h2 className="font-display text-xl font-bold not-italic text-movipack-deep">
-            Precios por rubro
+            Rubros
           </h2>
           <p className="mt-2 text-sm text-neutral-600">
-            Acá definís si un rubro usa el descuento general de clientes (el de
-            arriba) o uno propio. Si no activás “Usar descuento propio”, ese
-            rubro toma el % general. Si lo activás, cargás el % de ese rubro y
-            guardás: los clientes registrados ven ese descuento en esos
-            productos, no el general. La foto de cada rubro es la que se ve en
-            el inicio, en “Precios y productos”. Si creás o eliminás un rubro,
-            el inicio se actualiza. Varios no se puede eliminar: si borrás
-            otro, sus productos pasan ahí.
+            La foto de cada rubro es la que se ve en el inicio. Si creás o
+            eliminás un rubro, el inicio y el catálogo se actualizan. Varios no
+            se puede eliminar: si borrás otro, sus productos pasan ahí.
           </p>
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
+            <table className="w-full min-w-[520px] text-left text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 text-neutral-500">
                   <th className="py-2 font-semibold">Foto</th>
                   <th className="py-2 font-semibold">Rubro</th>
                   <th className="py-2 font-semibold">Productos</th>
-                  <th className="py-2 font-semibold">Descuento clientes</th>
                   <th className="py-2 font-semibold"> </th>
                 </tr>
               </thead>
@@ -183,21 +132,6 @@ export function AdminPricesForm({
                     </td>
                     <td className="py-2 text-neutral-600">
                       {cantidades[rubro.clave] ?? 0}
-                    </td>
-                    <td className="py-2">
-                      <DtoRubroCampos
-                        key={`${rubro.clave}-${descuentoClientePorSeccion[rubro.clave] ?? "g"}`}
-                        clave={rubro.clave}
-                        activoInicial={Object.prototype.hasOwnProperty.call(
-                          descuentoClientePorSeccion,
-                          rubro.clave,
-                        )}
-                        valorInicial={
-                          descuentoClientePorSeccion[rubro.clave] ??
-                          descuentoClienteGenerico
-                        }
-                        general={descuentoClienteGenerico}
-                      />
                     </td>
                     <td className="py-2">
                       <div className="flex flex-wrap gap-3">

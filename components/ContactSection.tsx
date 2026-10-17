@@ -6,10 +6,16 @@ import {
   MENSAJE_CATALOGO_PDF,
   MENSAJE_PEDIDO_GENERAL,
 } from "@/lib/categorias";
-import { whatsappPhoneDisplay, whatsappUrl } from "@/lib/whatsapp";
+import type { DatosLocal } from "@/lib/datos-local";
+import { whatsappATelefono, whatsappPhoneDisplay, whatsappUrl } from "@/lib/whatsapp";
 
-export function ContactSection() {
-  const href = whatsappUrl(MENSAJE_PEDIDO_GENERAL);
+export function ContactSection({ datos }: { datos?: DatosLocal | null }) {
+  const href =
+    (datos?.telefono && whatsappATelefono(datos.telefono, MENSAJE_PEDIDO_GENERAL)) ||
+    whatsappUrl(MENSAJE_PEDIDO_GENERAL);
+  const telefono = datos?.telefono || whatsappPhoneDisplay();
+  const direccion = datos?.direccion || ADDRESS_FULL;
+  const horarios = datos?.horarios || HOURS_DETAIL;
 
   return (
     <section
@@ -39,14 +45,14 @@ export function ContactSection() {
                   href={href}
                   className="font-semibold text-emerald-700 underline-offset-4 hover:underline"
                 >
-                  {whatsappPhoneDisplay()}
+                  {telefono}
                 </a>
               </p>
               <p>
-                <span className="font-bold">Dirección:</span> {ADDRESS_FULL}
+                <span className="font-bold">Dirección:</span> {direccion}
               </p>
               <p>
-                <span className="font-bold">Horarios:</span> {HOURS_DETAIL}
+                <span className="font-bold">Horarios:</span> {horarios}
               </p>
             </div>
           </div>
@@ -55,7 +61,10 @@ export function ContactSection() {
               Escribinos ahora
             </WhatsAppButton>
             <a
-              href={whatsappUrl(MENSAJE_CATALOGO_PDF)}
+              href={
+                (datos?.telefono && whatsappATelefono(datos.telefono, MENSAJE_CATALOGO_PDF)) ||
+                whatsappUrl(MENSAJE_CATALOGO_PDF)
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex min-h-12 items-center justify-center rounded-xl border border-movipack/30 px-4 text-sm font-bold text-movipack"

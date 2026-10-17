@@ -53,7 +53,7 @@ export function LoginForm() {
           required
           autoComplete="username"
           inputMode="email"
-          placeholder="3415402089 o tu mail"
+          placeholder="tu teléfono o tu mail"
           value={login}
           onChange={(e) => setLogin(e.target.value)}
           className="w-full rounded-xl border border-movipack/20 bg-white px-4 py-3 outline-none ring-movipack/30 focus:border-movipack focus:ring-2"

@@ -1,5 +1,7 @@
 import { randomUUID } from "crypto";
 import { escribirJsonData, leerJsonData } from "@/lib/data-fs";
+import { leerAjustes } from "@/lib/ajustes";
+import { plazoCuentaDias } from "@/lib/plazo-cuenta";
 import {
   asegurarUsuariosFiado,
   listarUsuarios,
@@ -144,6 +146,23 @@ export async function sincronizarUsuariosCuenta() {
 
 export async function leerCuentas() {
   return sincronizarUsuariosCuenta();
+}
+
+export async function leerAjustesCuenta() {
+  const data = await leerBase();
+  return data.ajustes;
+}
+
+export async function cantidadCuentasPorTelefono(login: string) {
+  const data = await leerBase();
+  const enFiado = data.clientes.filter((c) =>
+    telefonosCoinciden(c.telefono, login),
+  ).length;
+  const usuarios = await listarUsuarios();
+  const enUsuarios = usuarios.filter((u) =>
+    telefonosCoinciden(u.perfil?.telefono ?? "", login),
+  ).length;
+  return Math.max(enFiado, enUsuarios);
 }
 
 export async function resolverLogin(login: string) {
@@ -315,12 +334,13 @@ export async function registrarTicketDesdePedido(datos: {
     return { ok: true as const };
   }
   const fecha = datos.fecha?.slice(0, 10) || hoyFecha();
+  const ajustes = await leerAjustes();
   const ticket: TicketDeuda = {
     id: `t-${randomUUID().slice(0, 8)}`,
     numero: datos.numero,
     clienteId: cliente.id,
     fecha,
-    vencimiento: masDias(fecha, 7),
+    vencimiento: masDias(fecha, plazoCuentaDias(cliente.plazoCuenta, ajustes.plazoCuenta)),
     descripcion: `Pedido web ${datos.numero}`,
     tipo: "almacen",
     total: Math.max(0, Math.round(datos.total) || 0),
@@ -532,6 +552,63 @@ export async function actualizarLimites(datos: {
   return { ok: true as const, cliente };
 }
 
+export async function guardarPoliticaMora(datos: {
+  email: string;
+  nombre: string;
+  telefono: string;
+  moraModo?: "escala" | "fijo" | "sin";
+  moraPorcentaje?: number;
+  moraCreditoModo?: "escala" | "fijo" | "sin";
+  moraCreditoPorcentaje?: number;
+  moraCuentaModo?: "escala" | "fijo" | "sin";
+  moraCuentaPorcentaje?: number;
+  plazoCuenta?: number | null;
+}) {
+  const email = normalizarEmail(datos.email);
+  const data = await leerBase();
+  let cliente = data.clientes.find((c) => normalizarEmail(c.email) === email);
+  if (!cliente) {
+    const sinCambios =
+      (datos.moraCreditoModo ?? datos.moraModo ?? "escala") === "escala" &&
+      (datos.moraCuentaModo ?? "escala") === "escala" &&
+      datos.plazoCuenta == null;
+    if (sinCambios) return { ok: true as const };
+    const tel = soloDigitos(datos.telefono);
+    cliente = {
+      id: `cli-${randomUUID().slice(0, 8)}`,
+      nombre: datos.nombre.trim() || email,
+      telefono: datos.telefono.trim() || "000",
+      email,
+      pinInicial: tel.length >= 8 && !/^0+$/.test(tel) ? tel.slice(-4) : "1234",
+      limiteAlmacen: 0,
+      limiteEfectivo: 0,
+      aliasCbu: "",
+      activo: true,
+    };
+    data.clientes.push(cliente);
+  }
+  const porcentaje = (modo: "escala" | "fijo" | "sin" | undefined, valor?: number) =>
+    modo === "fijo" ? Math.min(100, Math.max(0, Math.round(valor || 0))) : 0;
+  if (datos.moraCreditoModo) {
+    cliente.moraCreditoModo = datos.moraCreditoModo;
+    cliente.moraCreditoPorcentaje = porcentaje(datos.moraCreditoModo, datos.moraCreditoPorcentaje);
+  }
+  if (datos.moraCuentaModo) {
+    cliente.moraCuentaModo = datos.moraCuentaModo;
+    cliente.moraCuentaPorcentaje = porcentaje(datos.moraCuentaModo, datos.moraCuentaPorcentaje);
+    cliente.moraModo = datos.moraCuentaModo;
+    cliente.moraPorcentaje = cliente.moraCuentaPorcentaje;
+  } else if (datos.moraModo) {
+    cliente.moraModo = datos.moraModo;
+    cliente.moraPorcentaje = porcentaje(datos.moraModo, datos.moraPorcentaje);
+  }
+  if (typeof datos.plazoCuenta === "number" && datos.plazoCuenta >= 1 && datos.plazoCuenta <= 365) {
+    cliente.plazoCuenta = Math.round(datos.plazoCuenta);
+  } else if (datos.plazoCuenta === null) delete cliente.plazoCuenta;
+  await guardarBase(data);
+  return { ok: true as const, cliente };
+}
+
 export async function actualizarTicket(datos: {
   ticketId: string;
   numero?: string;
@@ -549,7 +626,6 @@ export async function actualizarTicket(datos: {
   const data = await leerBase();
   const ticket = data.tickets.find((t) => t.id === datos.ticketId);
   if (!ticket) return { error: "No encontramos ese ticket." as const };
-  if (datos.numero !== undefined) ticket.numero = datos.numero.trim() || ticket.numero;
   if (datos.descripcion !== undefined) {
     ticket.descripcion = datos.descripcion.trim() || ticket.descripcion;
   }
@@ -583,6 +659,23 @@ export async function actualizarTicket(datos: {
   return { ok: true as const, ticket };
 }
 
+export async function borrarTicketDeuda(ticketId: string) {
+  const data = await leerBase();
+  const ticket = data.tickets.find((t) => t.id === ticketId);
+  if (!ticket) return { error: "No encontramos esa deuda." as const };
+  data.tickets = data.tickets.filter((t) => t.id !== ticketId);
+  await guardarBase(data);
+  return { ok: true as const, numero: ticket.numero || ticket.id };
+}
+
+export async function ticketParaFactura(ticketId: string) {
+  const data = await leerBase();
+  const ticket = data.tickets.find((t) => t.id === ticketId);
+  if (!ticket) return null;
+  const cliente = data.clientes.find((c) => c.id === ticket.clienteId);
+  return { ticket, cliente: cliente?.nombre || "Cliente" };
+}
+
 export async function agregarTicket(datos: {
   clienteId: string;
   numero?: string;
@@ -603,6 +696,9 @@ export async function agregarTicket(datos: {
   if (!cliente) return { error: "No encontramos ese cliente." as const };
   const debe = Math.max(0, Math.min(total, Math.round(datos.debe ?? total) || 0));
   const fecha = datos.fecha || hoyFecha();
+  const ajustes = await leerAjustes();
+  const dias =
+    datos.tipo === "efectivo" ? 7 : plazoCuentaDias(cliente.plazoCuenta, ajustes.plazoCuenta);
   const numero = datos.numero?.trim() || siguienteNumero(data, "T");
   const medio =
     datos.medioPago === "local" ||
@@ -615,7 +711,7 @@ export async function agregarTicket(datos: {
     numero,
     clienteId: datos.clienteId,
     fecha,
-    vencimiento: datos.vencimiento || masDias(fecha, 7),
+    vencimiento: datos.vencimiento || masDias(fecha, dias),
     descripcion: datos.descripcion?.trim() || `Ticket ${numero}`,
     tipo: datos.tipo === "efectivo" ? "efectivo" : "almacen",
     total,
@@ -719,6 +815,132 @@ export async function agregarClienteFiado(datos: {
     },
   ]);
   return { ok: true as const, cliente };
+}
+
+export async function guardarLimitesCliente(datos: {
+  email: string;
+  nombre: string;
+  telefono: string;
+  limiteAlmacen: number;
+  limiteEfectivo: number;
+}) {
+  const email = normalizarEmail(datos.email);
+  const data = await leerBase();
+  let cliente = data.clientes.find((c) => normalizarEmail(c.email) === email);
+  const limiteAlmacen = Math.max(0, Math.round(datos.limiteAlmacen) || 0);
+  const limiteEfectivo = Math.max(0, Math.round(datos.limiteEfectivo) || 0);
+  if (!cliente) {
+    if (limiteAlmacen < 1 && limiteEfectivo < 1) return { ok: true as const };
+    const tel = soloDigitos(datos.telefono);
+    cliente = {
+      id: `cli-${randomUUID().slice(0, 8)}`,
+      nombre: datos.nombre.trim() || email,
+      telefono: datos.telefono.trim() || "000",
+      email,
+      pinInicial: tel.length >= 8 && !/^0+$/.test(tel) ? tel.slice(-4) : "1234",
+      limiteAlmacen,
+      limiteEfectivo,
+      aliasCbu: "",
+      activo: true,
+    };
+    data.clientes.push(cliente);
+  } else {
+    cliente.nombre = datos.nombre.trim() || cliente.nombre;
+    if (datos.telefono.trim()) cliente.telefono = datos.telefono.trim();
+    cliente.limiteAlmacen = limiteAlmacen;
+    cliente.limiteEfectivo = limiteEfectivo;
+    cliente.activo = true;
+  }
+  await guardarBase(data);
+  return { ok: true as const, cliente };
+}
+
+function clientePorEmail(data: BaseCuentas, email: string) {
+  const mail = normalizarEmail(email);
+  return data.clientes.find((c) => normalizarEmail(c.email) === mail) ?? null;
+}
+
+export async function guardarCondicionesCredito(datos: {
+  email: string;
+  cuotasMaximas: 1 | 2 | 3 | 6;
+  cuotasHabilitadas?: (1 | 2 | 3 | 6)[];
+  interesModo?: "general" | "propio";
+  interes1?: number;
+  interes2?: number;
+  interes3?: number;
+  interes6?: number;
+}) {
+  const data = await leerBase();
+  const cliente = clientePorEmail(data, datos.email);
+  if (!cliente) return { ok: true as const };
+  cliente.cuotasMaximas = datos.cuotasMaximas;
+  cliente.cuotasHabilitadas = datos.cuotasHabilitadas?.length ? datos.cuotasHabilitadas : [datos.cuotasMaximas];
+  cliente.interesModo = datos.interesModo === "propio" ? "propio" : "general";
+  const aplicar = (clave: "interes1" | "interes2" | "interes3" | "interes6", valor?: number) => {
+    if (cliente.interesModo === "propio" && typeof valor === "number" && Number.isFinite(valor)) cliente[clave] = valor;
+    else delete cliente[clave];
+  };
+  aplicar("interes1", datos.interes1);
+  aplicar("interes2", datos.interes2);
+  aplicar("interes3", datos.interes3);
+  aplicar("interes6", datos.interes6);
+  await guardarBase(data);
+  return { ok: true as const };
+}
+
+export async function descontarSaldoCliente(email: string, monto: number) {
+  const cantidad = Math.round(monto);
+  if (!Number.isFinite(cantidad) || cantidad < 1) {
+    return { error: "El saldo a usar no es válido." as const };
+  }
+  const data = await leerBase();
+  const cliente = clientePorEmail(data, email);
+  const saldo = Math.max(0, Math.round(cliente?.saldo ?? 0));
+  if (!cliente || saldo < cantidad) {
+    return { error: "No alcanza el saldo de la cuenta." as const };
+  }
+  cliente.saldo = saldo - cantidad;
+  await guardarBase(data);
+  return { ok: true as const, saldo: cliente.saldo };
+}
+
+export async function sumarSaldoCliente(email: string, monto: number) {
+  const cantidad = Math.round(monto);
+  if (!Number.isFinite(cantidad) || cantidad < 1) {
+    return { error: "El monto a acreditar no es válido." as const };
+  }
+  const data = await leerBase();
+  const cliente = clientePorEmail(data, email);
+  if (!cliente) return { error: "Esa cuenta no tiene ficha de cliente." as const };
+  cliente.saldo = Math.max(0, Math.round(cliente.saldo ?? 0)) + cantidad;
+  await guardarBase(data);
+  return { ok: true as const, saldo: cliente.saldo };
+}
+
+export async function quitarFiadoPorEmail(email: string) {
+  const mail = normalizarEmail(email);
+  if (!mail.includes("@")) return { ok: true as const };
+  const data = await leerBase();
+  const cliente = data.clientes.find((c) => normalizarEmail(c.email) === mail);
+  if (!cliente) return { ok: true as const };
+  const conDeuda = data.tickets.some(
+    (t) => t.clienteId === cliente.id && t.estado === "vigente" && t.debe > 0,
+  );
+  if (conDeuda) return { ok: true as const, conservado: true as const };
+  data.clientes = data.clientes.filter((c) => c.id !== cliente.id);
+  await guardarBase(data);
+  return { ok: true as const };
+}
+
+export async function reasignarEmailFiado(anterior: string, nuevo: string) {
+  const desde = normalizarEmail(anterior);
+  const hacia = normalizarEmail(nuevo);
+  if (!desde.includes("@") || !hacia.includes("@") || desde === hacia) return;
+  const data = await leerBase();
+  const cliente = data.clientes.find((c) => normalizarEmail(c.email) === desde);
+  if (!cliente) return;
+  cliente.email = hacia;
+  await guardarBase(data);
 }
 
 export async function asegurarClienteCredito(datos: {
@@ -868,6 +1090,63 @@ export async function atenderSolicitud(
   solicitud.estado = estado;
   await guardarBase(data);
   return { ok: true as const, solicitud };
+}
+
+export type CreditoPendiente = {
+  id: string;
+  clienteId: string;
+  nombre: string;
+  monto: number;
+  aliasCbu: string;
+  nota: string;
+};
+
+export async function listarCreditosPendientes(): Promise<CreditoPendiente[]> {
+  const data = await leerBase();
+  return data.solicitudes
+    .filter((s) => s.tipo === "efectivo" && s.estado === "pendiente")
+    .map((s) => {
+      const cliente = data.clientes.find((c) => c.id === s.clienteId);
+      return {
+        id: s.id,
+        clienteId: s.clienteId,
+        nombre: cliente?.nombre || "Cliente",
+        monto: s.monto,
+        aliasCbu: s.aliasCbu,
+        nota: s.nota,
+      };
+    });
+}
+
+export async function resolverCreditoSolicitado(datos: {
+  solicitudId: string;
+  monto: number;
+  aceptar: boolean;
+}) {
+  const monto = Math.round(Number(datos.monto) || 0);
+  if (datos.aceptar && monto < 1) return { error: "El importe tiene que ser mayor a 0." as const };
+  const data = await leerBase();
+  const solicitud = data.solicitudes.find((s) => s.id === datos.solicitudId && s.tipo === "efectivo");
+  if (!solicitud || solicitud.estado !== "pendiente") {
+    return { error: "Esa solicitud de crédito ya no está pendiente." as const };
+  }
+  solicitud.estado = datos.aceptar ? "atendida" : "rechazada";
+  if (datos.aceptar) solicitud.monto = monto;
+  for (const novedad of data.novedades) {
+    if (novedad.solicitudId === solicitud.id) novedad.leida = true;
+  }
+  await guardarBase(data);
+  if (!datos.aceptar) return { ok: true as const, nombre: "" };
+  const ticket = await agregarTicket({
+    clienteId: solicitud.clienteId,
+    tipo: "efectivo",
+    total: monto,
+    descripcion: "Crédito en efectivo",
+    medioPago: "transferencia",
+  });
+  if ("error" in ticket) return { error: ticket.error };
+  const cliente = (await leerBase()).clientes.find((c) => c.id === solicitud.clienteId);
+  return { ok: true as const, nombre: cliente?.nombre || "el cliente" };
 }
 
 export async function marcarNovedadesLeidas(ids?: string[]) {

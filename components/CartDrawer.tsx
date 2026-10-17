@@ -3,13 +3,16 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useCart } from "@/components/CartProvider";
+import { leerDatosLocal } from "@/app/acciones/local";
 import { enviarPedidoWeb, leerMiPerfil } from "@/app/acciones/pedidos";
+import { datosLocalDesde, type DatosLocal } from "@/lib/datos-local";
 import {
   cantidadTotal,
   mensajePedidoWhatsApp,
   subtotalProductos,
 } from "@/lib/carrito";
-import { avisoEnvio, costoEnvio, etiquetaCostoEnvio } from "@/lib/envio";
+import { avisoEnvio, costoEnvio } from "@/lib/envio";
+import type { EscalaEnvio } from "@/types/ajustes";
 import { formatoPesos, nombreVitrina } from "@/lib/format";
 import { resumenCombosEnCarrito } from "@/lib/combo";
 import {
@@ -27,17 +30,27 @@ import { whatsappUrl } from "@/lib/whatsapp";
 import type { PerfilCliente } from "@/types/auth";
 import {
   ETIQUETA_FRANJA,
-  ETIQUETA_SI_FALTA,
+  ETIQUETA_PAGO_PEDIDO,
   type ContactoPedido,
+  type FormaPagoPedido,
   type FranjaReparto,
   type ModoEntrega,
-  type SiFaltaProducto,
 } from "@/types/pedido";
+
+type ReciboPedido = {
+  entrega: string;
+  forma: FormaPagoPedido;
+  transferencia: number;
+  cuentaCorriente: number;
+  total: number;
+};
 
 type PerfilSesion = {
   nombre: string;
   email: string;
   perfil?: PerfilCliente;
+  direcciones: string[];
+  cuenta: { habilitada: boolean; disponible: number; saldo: number };
 };
 
 function contactoCompleto(c: {
@@ -54,19 +67,22 @@ function contactoCompleto(c: {
   );
 }
 
-export function CartDrawer() {
+export function CartDrawer({ envio }: { envio: EscalaEnvio }) {
   const sesion = useAuth();
   const { lineas, combos, abierto, cerrar, setCantidad, quitar, vaciar } = useCart();
-  const [viaWeb, setViaWeb] = useState(false);
   const [perfil, setPerfil] = useState<PerfilSesion | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [modoEntrega, setModoEntrega] = useState<ModoEntrega>("antes_posible");
   const [fechaProgramada, setFechaProgramada] = useState("");
   const [franjaProgramada, setFranjaProgramada] = useState<FranjaReparto | "">("");
-  const [siFalta, setSiFalta] = useState<SiFaltaProducto>("reemplazo_misma_marca");
   const [confirmar, setConfirmar] = useState<"web" | "whatsapp" | null>(null);
+  const [formaPago, setFormaPago] = useState<FormaPagoPedido>("transferencia");
+  const [montoCuenta, setMontoCuenta] = useState("");
+  const [direccionPedido, setDireccionPedido] = useState("");
   const [contactoConfirmar, setContactoConfirmar] = useState<ContactoPedido | null>(null);
+  const [local, setLocal] = useState<DatosLocal | null>(null);
+  const [recibo, setRecibo] = useState<ReciboPedido | null>(null);
   const [pending, start] = useTransition();
 
   const subtotal = subtotalProductos(lineas, combos);
@@ -74,8 +90,8 @@ export function CartDrawer() {
     () => resumenCombosEnCarrito(lineas, combos),
     [lineas, combos],
   );
-  const envio = costoEnvio(subtotal);
-  const total = subtotal + envio;
+  const costo = costoEnvio(subtotal, envio);
+  const total = subtotal + costo;
   const unidades = cantidadTotal(lineas);
   const registrado = sesion?.rol === "cliente";
   const asap = useMemo(() => proximoTurno(), [abierto, lineas.length]);
@@ -95,12 +111,13 @@ export function CartDrawer() {
 
   useEffect(() => {
     if (!abierto) {
-      setViaWeb(false);
       setMensaje(null);
       setError(null);
       setConfirmar(null);
+      setRecibo(null);
       return;
     }
+    void leerDatosLocal().then(setLocal);
     if (sesion?.rol === "cliente") {
       void leerMiPerfil().then(setPerfil);
     } else {
@@ -119,9 +136,40 @@ export function CartDrawer() {
         : "",
   };
 
-  const opcionesListas =
-    Boolean(fechaEntrega && franja) &&
-    (siFalta === "reemplazo_misma_marca" || siFalta === "omitir");
+  const opcionesListas = Boolean(fechaEntrega && franja);
+  const cuenta = perfil?.cuenta ?? { habilitada: false, disponible: 0, saldo: 0 };
+  const direcciones = perfil?.direcciones ?? [];
+  const puedeCuenta = cuenta.habilitada && cuenta.disponible >= total && total > 0;
+  const puedeMixto = cuenta.habilitada && cuenta.disponible > 0 && total > 1;
+  const puedeSaldo = cuenta.saldo >= total && total > 0;
+  const puedeSaldoParcial = cuenta.saldo > 0 && cuenta.saldo < total;
+  const datosLocal = local ?? datosLocalDesde(null);
+  const ahorro = useMemo(() => {
+    let cliente = 0;
+    let promos = 0;
+    for (const linea of lineas) {
+      const listaUnit = linea.precioLista ?? linea.precio;
+      const lista = listaUnit * linea.cantidad;
+      const neto =
+        resumen.porLinea.get(linea.id)?.neto ?? linea.precio * linea.cantidad;
+      let dtoCliente = 0;
+      if (
+        registrado &&
+        linea.descuentoCliente &&
+        listaUnit > linea.precio
+      ) {
+        const precioCliente = Math.round(
+          listaUnit * (1 - linea.descuentoCliente / 100),
+        );
+        if (linea.precio >= precioCliente - 1) {
+          dtoCliente = (listaUnit - linea.precio) * linea.cantidad;
+        }
+      }
+      cliente += dtoCliente;
+      promos += Math.max(0, lista - neto - dtoCliente);
+    }
+    return { cliente, promos };
+  }, [lineas, resumen, registrado]);
 
   const wa =
     lineas.length && opcionesListas && franja
@@ -130,10 +178,10 @@ export function CartDrawer() {
             clienteRegistrado: registrado,
             contacto: registrado ? contactoGuardado : undefined,
             franjaReparto: franja,
-            siFaltaProducto: siFalta,
             modoEntrega,
             fechaEntrega,
             combos,
+            envio,
           }),
         )
       : undefined;
@@ -143,12 +191,48 @@ export function CartDrawer() {
     setError(
       modoEntrega === "programado"
         ? "Elegí el día y la franja para programar el envío."
-        : "Revisá la entrega y qué hacemos si falta un producto.",
+        : "Revisá el día y la franja de entrega.",
     );
     return false;
   }
 
-  function enviarWeb(contacto: ContactoPedido) {
+  function pagoElegido() {
+    if (formaPago === "cuenta_corriente") {
+      if (!puedeCuenta) {
+        setError("La cuenta corriente no alcanza para este pedido.");
+        return null;
+      }
+      return { forma: "cuenta_corriente" as const, cuentaCorriente: total };
+    }
+    if (formaPago === "saldo") {
+      if (!puedeSaldo) {
+        setError("El saldo no alcanza para este pedido.");
+        return null;
+      }
+      return { forma: "saldo" as const, cuentaCorriente: 0 };
+    }
+    if (formaPago === "saldo_transferencia") {
+      if (!puedeSaldoParcial) {
+        setError("El saldo tiene que cubrir una parte del pedido.");
+        return null;
+      }
+      return { forma: "saldo_transferencia" as const, cuentaCorriente: 0 };
+    }
+    if (formaPago === "mixto") {
+      const cc = Math.round(Number(montoCuenta.replace(/\D/g, ""))) || 0;
+      if (!puedeMixto || cc < 1 || cc > cuenta.disponible || cc >= total) {
+        setError("Indicá cuánto va a cuenta corriente. El resto se paga por transferencia.");
+        return null;
+      }
+      return { forma: "mixto" as const, cuentaCorriente: cc };
+    }
+    return { forma: "transferencia" as const, cuentaCorriente: 0 };
+  }
+
+  function enviarWeb(
+    contacto: ContactoPedido,
+    pago: { forma: FormaPagoPedido; cuentaCorriente: number },
+  ) {
     if (!exigirOpciones() || !franja || !fechaEntrega) return;
     setError(null);
     setMensaje(null);
@@ -161,9 +245,9 @@ export function CartDrawer() {
         },
         {
           franjaReparto: franja,
-          siFaltaProducto: siFalta,
           modoEntrega,
           fechaEntrega,
+          pago,
         },
       );
       if (resultado?.error) {
@@ -171,46 +255,57 @@ export function CartDrawer() {
         setConfirmar(null);
         return;
       }
-      setMensaje(resultado?.ok ?? "Pedido enviado.");
+      const transferencia =
+        pago.forma === "saldo"
+          ? 0
+          : pago.forma === "saldo_transferencia"
+            ? Math.max(0, total - cuenta.saldo)
+            : Math.max(0, total - pago.cuentaCorriente);
+      setRecibo({
+        entrega:
+          modoEntrega === "antes_posible"
+            ? `lo antes posible, generalmente ${datosLocal.demoraEntrega}`
+            : textoEntrega(modoEntrega, fechaEntrega, franja),
+        forma: pago.forma,
+        transferencia,
+        cuentaCorriente: pago.cuentaCorriente,
+        total,
+      });
+      setMensaje(null);
       vaciar();
-      setViaWeb(false);
       setConfirmar(null);
       setModoEntrega("antes_posible");
       setFechaProgramada("");
       setFranjaProgramada("");
-      setSiFalta("reemplazo_misma_marca");
+      setFormaPago("transferencia");
+      setMontoCuenta("");
     });
-  }
-
-  function contactoDesdeForm(form: HTMLFormElement): ContactoPedido {
-    const data = new FormData(form);
-    return {
-      nombre: String(data.get("nombre") ?? "").trim(),
-      email: String(data.get("email") ?? "").trim(),
-      telefono: String(data.get("telefono") ?? "").trim(),
-      direccion: String(data.get("direccion") ?? "").trim(),
-      horarios: franja && fechaEntrega ? textoEntrega(modoEntrega, fechaEntrega, franja) : "",
-    };
   }
 
   function pedirEnvioWeb(contacto: ContactoPedido) {
     if (!exigirOpciones()) return;
     if (registrado) {
       if (!contactoCompleto(contacto)) {
-        setViaWeb(true);
         setError("Revisá domicilio y teléfono antes de enviar.");
         return;
       }
       setContactoConfirmar(contacto);
+      setDireccionPedido(contacto.direccion);
+      setFormaPago("transferencia");
+      setMontoCuenta(
+        cuenta.disponible > 0 && cuenta.disponible < total ? String(cuenta.disponible) : "",
+      );
       setConfirmar("web");
       return;
     }
     if (!contactoCompleto(contacto)) {
-      setViaWeb(true);
       setError("Completá tus datos para enviar el pedido por la web.");
       return;
     }
-    enviarWeb(contacto);
+    setContactoConfirmar(contacto);
+    setDireccionPedido(contacto.direccion);
+    setFormaPago("transferencia");
+    setConfirmar("web");
   }
 
   function pedirWhatsApp(contacto?: ContactoPedido) {
@@ -218,11 +313,11 @@ export function CartDrawer() {
     if (registrado) {
       const c = contacto ?? contactoGuardado;
       if (!contactoCompleto(c)) {
-        setViaWeb(true);
         setError("Revisá domicilio y teléfono antes de armar el pedido.");
         return;
       }
       setContactoConfirmar(c);
+      setDireccionPedido(c.direccion);
       setConfirmar("whatsapp");
       return;
     }
@@ -258,19 +353,37 @@ export function CartDrawer() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-3">
+        <div className="min-h-0 flex-[1.35] overflow-y-auto px-4 py-4">
+          {recibo && (
+            <ReciboEnviado recibo={recibo} datos={datosLocal} />
+          )}
           {mensaje && (
             <p className="mb-4 rounded-xl bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
               {mensaje}
             </p>
           )}
-          {lineas.length === 0 && !mensaje ? (
+          {lineas.length === 0 && !mensaje && !recibo ? (
             <p className="mt-8 text-center text-neutral-600">
               Todavía no agregaste productos. Recorré el catálogo y armá la
               lista.
             </p>
-          ) : (
-            <ul className="space-y-4">
+          ) : lineas.length > 0 ? (
+            <ul className="space-y-3">
+              {(ahorro.cliente > 0 || ahorro.promos > 0) && (
+                <li className="rounded-2xl bg-emerald-50 px-4 py-3">
+                  {ahorro.cliente > 0 && (
+                    <p className="text-sm font-bold text-emerald-800">
+                      Te estás ahorrando {formatoPesos(ahorro.cliente)} por ser cliente.
+                    </p>
+                  )}
+                  {ahorro.promos > 0 && (
+                    <p className={`text-sm font-semibold text-emerald-800 ${ahorro.cliente > 0 ? "mt-1" : ""}`}>
+                      {ahorro.cliente > 0 ? "Y " : "Te estás ahorrando "}
+                      {formatoPesos(ahorro.promos)} en promos.
+                    </p>
+                  )}
+                </li>
+              )}
               {lineas.map((linea) => {
                 const dato = resumen.porLinea.get(linea.id);
                 const bruto = linea.precio * linea.cantidad;
@@ -300,85 +413,41 @@ export function CartDrawer() {
                 return (
                 <li
                   key={linea.id}
-                  className="rounded-xl border border-neutral-200 p-3"
+                  className="rounded-2xl border border-neutral-200 px-3 py-3"
                 >
-                  <div className="flex flex-wrap gap-1">
-                    {productoPromo && (
-                      <span className="rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-extrabold uppercase text-amber-900">
-                        Producto promo
-                      </span>
-                    )}
-                    {aplicada && (
-                      <span className="rounded-md bg-cape px-1.5 py-0.5 text-[10px] font-extrabold uppercase text-white">
-                        Promo
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1 text-xs font-semibold text-neutral-400">
-                    Cód. {linea.codigo}
-                  </p>
-                  <p className="font-semibold leading-snug text-movipack-deep">
-                    {nombreVitrina(linea.nombre)}
-                  </p>
-                  {nxm && !aplicada && (
-                    <p className="text-xs font-bold text-cape">
-                      {avisoCantidadPromo(linea.tipoPromo)}
-                    </p>
-                  )}
-                  {comboPendiente && (
-                    <p className="text-xs font-bold text-cape">{comboPendiente}</p>
-                  )}
-                  <div className="mt-1 text-sm text-neutral-600">
-                    {hayDto ? (
-                      <div className="flex flex-wrap items-baseline gap-1.5">
-                        <p className="font-extrabold text-cape">
-                          {formatoPesos(linea.precio)} c/u
-                        </p>
-                        <p className="text-sm font-semibold text-neutral-400 line-through">
-                          {formatoPesos(linea.precioLista ?? 0)}
-                        </p>
-                      </div>
-                    ) : (
-                      <p>{formatoPesos(linea.precio)} c/u</p>
-                    )}
-                  </div>
-                  <div className="mt-3 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-300 font-bold"
-                        onClick={() => setCantidad(linea.id, linea.cantidad - 1)}
-                        aria-label="Quitar uno"
-                      >
-                        −
-                      </button>
-                      <span className="min-w-6 text-center font-bold">
-                        {linea.cantidad}
-                      </span>
-                      <button
-                        type="button"
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-300 font-bold"
-                        onClick={() => setCantidad(linea.id, linea.cantidad + 1)}
-                        aria-label="Agregar uno"
-                      >
-                        +
-                      </button>
-                    </div>
-                    <div className="text-right">
-                      {aplicada && neto < bruto ? (
-                        <>
-                          <p className="text-xs font-semibold text-neutral-400 line-through">
-                            {formatoPesos(bruto)}
-                          </p>
-                          <p className="font-bold text-cape">
-                            {formatoPesos(neto)}
-                          </p>
-                        </>
-                      ) : (
-                        <p className="font-bold text-movipack-deep">
-                          {formatoPesos(neto)}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-base font-semibold leading-snug text-movipack-deep">
+                        {nombreVitrina(linea.nombre)}
+                      </p>
+                      <p className="mt-0.5 text-xs text-neutral-500">
+                        Cód. {linea.codigo}
+                        {productoPromo ? " · Promo" : ""}
+                      </p>
+                      <p className="mt-1 text-sm">
+                        <span className={hayDto ? "font-bold text-cape" : "text-neutral-700"}>
+                          {formatoPesos(linea.precio)}
+                        </span>
+                        {hayDto && (
+                          <span className="ml-1.5 text-neutral-400 line-through">
+                            {formatoPesos(linea.precioLista ?? 0)}
+                          </span>
+                        )}
+                      </p>
+                      {nxm && !aplicada && (
+                        <p className="text-xs font-bold text-cape">
+                          {avisoCantidadPromo(linea.tipoPromo)}
                         </p>
                       )}
+                      {comboPendiente && (
+                        <p className="text-xs font-bold text-cape">{comboPendiente}</p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      {aplicada && neto < bruto && (
+                        <p className="text-xs text-neutral-400 line-through">{formatoPesos(bruto)}</p>
+                      )}
+                      <p className="font-bold text-movipack-deep">{formatoPesos(neto)}</p>
                       <button
                         type="button"
                         className="text-xs font-semibold text-cape hover:underline"
@@ -388,35 +457,34 @@ export function CartDrawer() {
                       </button>
                     </div>
                   </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-300 font-bold"
+                      onClick={() => setCantidad(linea.id, linea.cantidad - 1)}
+                      aria-label="Quitar uno"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-6 text-center font-bold">{linea.cantidad}</span>
+                    <button
+                      type="button"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-300 font-bold"
+                      onClick={() => setCantidad(linea.id, linea.cantidad + 1)}
+                      aria-label="Agregar uno"
+                    >
+                      +
+                    </button>
+                  </div>
                 </li>
                 );
               })}
-              {lineas.length > 0 && (
-                <li className="rounded-xl border-2 border-amber-300 bg-amber-50 p-3">
-                  <p className="text-xs font-bold uppercase tracking-wide text-amber-800">
-                    Envío
-                  </p>
-                  <p className="font-bold text-movipack-deep">
-                    {etiquetaCostoEnvio(envio)}
-                  </p>
-                  <p className="mt-1 font-display text-2xl font-bold italic text-cape">
-                    {envio > 0 ? formatoPesos(envio) : "Sin cargo"}
-                  </p>
-                  <p className="mt-1 text-xs font-medium text-neutral-600">
-                    {avisoEnvio(subtotal)}
-                  </p>
-                  <p className="mt-1 text-[11px] text-neutral-500">
-                    Menos de $15.000: $5.998 · menos de $30.000: $4.890 · hasta
-                    $60.000: $4.000 · más de $60.000: sin cargo.
-                  </p>
-                </li>
-              )}
             </ul>
-          )}
+          ) : null}
         </div>
 
         {lineas.length > 0 && (
-          <div className="max-h-[62%] overflow-y-auto border-t border-neutral-200 p-4">
+          <div className="max-h-[38%] min-h-0 shrink-0 overflow-y-auto border-t border-neutral-200 p-4">
             <div className="space-y-1 text-sm">
               <p className="flex justify-between text-neutral-600">
                 <span>
@@ -424,109 +492,50 @@ export function CartDrawer() {
                 </span>
                 <span>{formatoPesos(subtotal)}</span>
               </p>
+              <p className="flex justify-between text-neutral-600">
+                <span>Envío</span>
+                <span>{costo > 0 ? formatoPesos(costo) : "Sin cargo"}</span>
+              </p>
+              <p className="text-xs text-neutral-500">{avisoEnvio(subtotal, envio)}</p>
+              {ahorro.cliente > 0 && (
+                <p className="text-sm font-bold text-emerald-700">
+                  Ahorro por ser cliente: {formatoPesos(ahorro.cliente)}
+                </p>
+              )}
               <p className="flex justify-between text-base font-bold text-movipack-deep">
                 <span>Total</span>
                 <span>{formatoPesos(total)}</span>
               </p>
             </div>
 
-            <div className="mt-3">
-              <OpcionesPedido
-                modo={modoEntrega}
-                fecha={fechaEntrega}
-                franja={franja}
-                siFalta={siFalta}
-                dias={dias}
-                asapLabel={textoProximaEntrega(asap)}
-                onModo={(v) => {
-                  setModoEntrega(v);
-                  setError(null);
-                  if (v === "programado" && !fechaProgramada && dias[0]) {
-                    setFechaProgramada(dias[0].iso);
-                    setFranjaProgramada(dias[0].franjas[0] ?? "manana");
-                  }
-                }}
-                onFecha={(v) => {
-                  setFechaProgramada(v);
-                  const dia = dias.find((d) => d.iso === v);
-                  if (dia && !dia.franjas.includes(franjaProgramada as FranjaReparto)) {
-                    setFranjaProgramada(dia.franjas[0] ?? "");
-                  }
-                  setError(null);
-                }}
-                onFranja={(v) => {
-                  setFranjaProgramada(v);
-                  setError(null);
-                }}
-                onSiFalta={(v) => {
-                  setSiFalta(v);
-                  setError(null);
-                }}
-              />
-            </div>
-
-            {viaWeb && (
-              <form
-                className="mt-3 space-y-3 rounded-xl border border-movipack/20 bg-[#fff6ea] p-3"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  pedirEnvioWeb(contactoDesdeForm(e.currentTarget));
-                }}
-              >
-                <p className="text-sm font-bold text-movipack-deep">
-                  {registrado ? "Revisá tus datos de envío" : "Tus datos para el envío"}
-                </p>
-                <Campo nombre="nombre" etiqueta="Nombre" required defaultValue={contactoGuardado.nombre} />
-                <Campo nombre="direccion" etiqueta="Domicilio" required defaultValue={contactoGuardado.direccion} />
-                <Campo nombre="telefono" etiqueta="Teléfono" required defaultValue={contactoGuardado.telefono} />
-                <Campo
-                  nombre="email"
-                  etiqueta="Mail"
-                  type="email"
-                  required
-                  defaultValue={contactoGuardado.email}
-                />
-                <button
-                  type="submit"
-                  disabled={pending}
-                  className="w-full rounded-xl bg-cape px-4 py-3 text-sm font-bold text-white disabled:opacity-60"
-                >
-                  {registrado ? "Revisar y enviar" : "Enviar pedido por la web"}
-                </button>
-              </form>
-            )}
-
-            {error && (
+            {error && !confirmar && (
               <p className="mt-2 text-sm font-semibold text-cape">{error}</p>
             )}
 
-            {!viaWeb && (
-              <>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() => {
-                    if (registrado && contactoCompleto(contactoGuardado)) {
-                      pedirEnvioWeb(contactoGuardado);
-                    } else {
-                      if (!exigirOpciones()) return;
-                      setViaWeb(true);
-                      setError(null);
-                    }
-                  }}
-                  className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-cape px-6 text-sm font-bold text-white shadow-lg shadow-red-500/25 transition hover:brightness-110 disabled:opacity-60"
-                >
-                  Enviar pedido por la web
-                </button>
-                <button
-                  type="button"
-                  onClick={() => pedirWhatsApp()}
-                  className="mt-2 inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-neutral-300 px-6 text-sm font-semibold text-neutral-600 hover:bg-neutral-50"
-                >
-                  Crear pedido WhatsApp
-                </button>
-              </>
-            )}
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => {
+                if (registrado && contactoCompleto(contactoGuardado)) {
+                  pedirEnvioWeb(contactoGuardado);
+                } else {
+                  setError(null);
+                  setConfirmar("web");
+                  setContactoConfirmar(contactoGuardado);
+                  setDireccionPedido(contactoGuardado.direccion);
+                }
+              }}
+              className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-cape px-6 text-sm font-bold text-white shadow-lg shadow-red-500/25 transition hover:brightness-110 disabled:opacity-60"
+            >
+              Enviar pedido por la web
+            </button>
+            <button
+              type="button"
+              onClick={() => pedirWhatsApp()}
+              className="mt-2 inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-neutral-300 px-6 text-sm font-semibold text-neutral-600 hover:bg-neutral-50"
+            >
+              Crear pedido WhatsApp
+            </button>
             <button
               type="button"
               onClick={vaciar}
@@ -543,31 +552,198 @@ export function CartDrawer() {
               <p className="text-sm font-bold text-movipack-deep">
                 ¿Estás seguro que deseás enviar el pedido?
               </p>
+              <div className="mt-3">
+                <OpcionesPedido
+                  modo={modoEntrega}
+                  fecha={fechaEntrega}
+                  franja={franja}
+                  dias={dias}
+                  asapLabel={textoProximaEntrega(asap)}
+                  onModo={(v) => {
+                    setModoEntrega(v);
+                    setError(null);
+                    if (v === "programado" && !fechaProgramada && dias[0]) {
+                      setFechaProgramada(dias[0].iso);
+                      setFranjaProgramada(dias[0].franjas[0] ?? "manana");
+                    }
+                  }}
+                  onFecha={(v) => {
+                    setFechaProgramada(v);
+                    const dia = dias.find((d) => d.iso === v);
+                    if (dia && !dia.franjas.includes(franjaProgramada as FranjaReparto)) {
+                      setFranjaProgramada(dia.franjas[0] ?? "");
+                    }
+                    setError(null);
+                  }}
+                  onFranja={(v) => {
+                    setFranjaProgramada(v);
+                    setError(null);
+                  }}
+                />
+              </div>
+              <div className="mt-3 space-y-2">
+                <CampoControl
+                  etiqueta="Nombre"
+                  valor={contactoConfirmar.nombre}
+                  onChange={(nombre) =>
+                    setContactoConfirmar({ ...contactoConfirmar, nombre })
+                  }
+                />
+                <CampoControl
+                  etiqueta="Teléfono"
+                  valor={contactoConfirmar.telefono}
+                  onChange={(telefono) =>
+                    setContactoConfirmar({ ...contactoConfirmar, telefono })
+                  }
+                />
+                <CampoControl
+                  etiqueta="Mail"
+                  type="email"
+                  valor={contactoConfirmar.email}
+                  onChange={(email) =>
+                    setContactoConfirmar({ ...contactoConfirmar, email })
+                  }
+                />
+              </div>
               <dl className="mt-3 space-y-1.5 text-sm text-neutral-700">
-                <Dato etiqueta="Nombre" valor={contactoConfirmar.nombre} />
-                <Dato etiqueta="Domicilio" valor={contactoConfirmar.direccion} />
-                <Dato etiqueta="Teléfono" valor={contactoConfirmar.telefono} />
-                <Dato etiqueta="Mail" valor={contactoConfirmar.email} />
                 <Dato
                   etiqueta="Entrega"
                   valor={textoEntrega(modoEntrega, fechaEntrega, franja)}
                 />
-                <Dato etiqueta="Si falta un producto" valor={ETIQUETA_SI_FALTA[siFalta]} />
                 <Dato etiqueta="Productos" valor={formatoPesos(subtotal)} />
                 <Dato
                   etiqueta="Envío"
-                  valor={envio > 0 ? formatoPesos(envio) : "Sin cargo"}
+                  valor={costo > 0 ? formatoPesos(costo) : "Sin cargo"}
                 />
                 <Dato etiqueta="Total" valor={formatoPesos(total)} />
               </dl>
+              <label className="mt-4 block text-xs font-bold text-movipack-deep">
+                Dirección de entrega
+                <input
+                  value={direccionPedido}
+                  onChange={(e) => setDireccionPedido(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm font-semibold outline-none focus:border-movipack"
+                />
+              </label>
+              {direcciones.filter((d) => d.trim().toLowerCase() !== direccionPedido.trim().toLowerCase()).length > 0 && (
+                <div className="mt-2 flex flex-col gap-1">
+                  {direcciones
+                    .filter((d) => d.trim().toLowerCase() !== direccionPedido.trim().toLowerCase())
+                    .map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        className="rounded-lg border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700"
+                        onClick={() => setDireccionPedido(d)}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                </div>
+              )}
+              {confirmar === "web" && (
+                <fieldset className="mt-4 space-y-2">
+                  <legend className="text-xs font-bold text-movipack-deep">¿Cómo abonás?</legend>
+                  {puedeSaldo && (
+                    <OpcionRadio
+                      name="formaPago"
+                      checked={formaPago === "saldo"}
+                      onChange={() => setFormaPago("saldo")}
+                      titulo={ETIQUETA_PAGO_PEDIDO.saldo}
+                      detalle={`Tenés ${formatoPesos(cuenta.saldo)}. Cubre este pedido.`}
+                    />
+                  )}
+                  {puedeSaldoParcial && (
+                    <OpcionRadio
+                      name="formaPago"
+                      checked={formaPago === "saldo_transferencia"}
+                      onChange={() => setFormaPago("saldo_transferencia")}
+                      titulo={ETIQUETA_PAGO_PEDIDO.saldo_transferencia}
+                      detalle={`Usamos ${formatoPesos(cuenta.saldo)} de tu saldo. El resto, ${formatoPesos(total - cuenta.saldo)}, por transferencia.`}
+                    />
+                  )}
+                  <OpcionRadio
+                    name="formaPago"
+                    checked={formaPago === "transferencia"}
+                    onChange={() => setFormaPago("transferencia")}
+                    titulo={ETIQUETA_PAGO_PEDIDO.transferencia}
+                    detalle="Se despacha solo cuando pagás. No hace falta mandar el comprobante."
+                  />
+                  {puedeCuenta && (
+                    <OpcionRadio
+                      name="formaPago"
+                      checked={formaPago === "cuenta_corriente"}
+                      onChange={() => setFormaPago("cuenta_corriente")}
+                      titulo={ETIQUETA_PAGO_PEDIDO.cuenta_corriente}
+                      detalle={`Disponible ${formatoPesos(cuenta.disponible)}. Cubre este pedido.`}
+                    />
+                  )}
+                  {puedeMixto && (
+                    <OpcionRadio
+                      name="formaPago"
+                      checked={formaPago === "mixto"}
+                      onChange={() => {
+                        setFormaPago("mixto");
+                        if (!montoCuenta) {
+                          setMontoCuenta(String(Math.min(cuenta.disponible, total - 1)));
+                        }
+                      }}
+                      titulo={ETIQUETA_PAGO_PEDIDO.mixto}
+                      detalle={`Hasta ${formatoPesos(Math.min(cuenta.disponible, total - 1))} en cuenta corriente. El resto, transferencia.`}
+                    />
+                  )}
+                  {cuenta.habilitada && !puedeCuenta && cuenta.disponible <= 0 && (
+                    <p className="text-xs font-semibold text-neutral-500">
+                      Tu cuenta corriente no tiene disponible para este pedido.
+                    </p>
+                  )}
+                  {formaPago === "mixto" && (
+                    <label className="block text-xs font-bold text-neutral-600">
+                      Cuánto va a cuenta corriente
+                      <input
+                        inputMode="numeric"
+                        value={montoCuenta}
+                        onChange={(e) => setMontoCuenta(e.target.value.replace(/[^\d]/g, ""))}
+                        className="mt-1 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm font-semibold outline-none focus:border-movipack"
+                      />
+                    </label>
+                  )}
+                  {(formaPago === "transferencia" || formaPago === "mixto" || formaPago === "saldo_transferencia") && (
+                    <AvisoTransferencia
+                      datos={datosLocal}
+                      monto={
+                        formaPago === "mixto"
+                          ? Math.max(0, total - (Math.round(Number(montoCuenta.replace(/\D/g, ""))) || 0))
+                          : formaPago === "saldo_transferencia"
+                            ? Math.max(0, total - cuenta.saldo)
+                            : total
+                      }
+                      entrega={
+                        modoEntrega === "antes_posible"
+                          ? `lo antes posible, generalmente ${datosLocal.demoraEntrega}`
+                          : textoEntrega(modoEntrega, fechaEntrega, franja)
+                      }
+                    />
+                  )}
+                </fieldset>
+              )}
+              {error && <p className="mt-3 text-sm font-semibold text-cape">{error}</p>}
               <div className="mt-4 flex flex-col gap-2">
                 <button
                   type="button"
                   disabled={pending}
                   className="rounded-xl bg-cape px-4 py-3 text-sm font-bold text-white disabled:opacity-60"
                   onClick={() => {
+                    const contacto = { ...contactoConfirmar, direccion: direccionPedido.trim() };
+                    if (!contactoCompleto(contacto)) {
+                      setError("Completá nombre, mail, teléfono y una dirección.");
+                      return;
+                    }
+                    if (!exigirOpciones()) return;
                     if (confirmar === "web") {
-                      enviarWeb(contactoConfirmar);
+                      const pago = pagoElegido();
+                      if (!pago) return;
+                      enviarWeb(contacto, pago);
                       return;
                     }
                     const href =
@@ -575,12 +751,12 @@ export function CartDrawer() {
                       whatsappUrl(
                         mensajePedidoWhatsApp(lineas, {
                           clienteRegistrado: true,
-                          contacto: contactoConfirmar,
+                          contacto,
                           franjaReparto: franja,
-                          siFaltaProducto: siFalta,
                           modoEntrega,
                           fechaEntrega,
                           combos,
+                          envio,
                         }),
                       );
                     setConfirmar(null);
@@ -609,6 +785,139 @@ export function CartDrawer() {
   );
 }
 
+function AvisoTransferencia({
+  datos,
+  monto,
+  entrega,
+  recibido,
+  compacto,
+}: {
+  datos: DatosLocal;
+  monto: number;
+  entrega: string;
+  recibido?: boolean;
+  compacto?: boolean;
+}) {
+  return (
+    <div className="rounded-xl bg-[#f4f4f5] p-3 text-sm text-neutral-800">
+      {!compacto && (
+        <p className="font-semibold text-neutral-950">
+          {recibido
+            ? `El local recibió tu pedido y lo está procesando para que te llegue ${entrega}.`
+            : `Te llega ${entrega}.`}
+        </p>
+      )}
+      <p className="mt-2">
+        Transferí {formatoPesos(monto)}
+        {datos.titular ? ` a nombre de ${datos.titular}` : ""}. Una vez que pagues, se despacha
+        automáticamente. No hace falta que mandes el comprobante.
+      </p>
+      {datos.alias ? (
+        <DatoCopiable etiqueta="Alias" valor={datos.alias} />
+      ) : null}
+      {datos.cbu ? <DatoCopiable etiqueta="CBU" valor={datos.cbu} /> : null}
+      {!datos.alias && !datos.cbu && (
+        <p className="mt-2 text-xs font-semibold text-neutral-500">
+          El local todavía no cargó el alias. Si no aparece, pedilo por WhatsApp.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function DatoCopiable({ etiqueta, valor }: { etiqueta: string; valor: string }) {
+  const [copiado, setCopiado] = useState(false);
+  return (
+    <p className="mt-2 flex items-center justify-between gap-2 rounded-lg bg-white px-3 py-2">
+      <span>
+        <span className="block text-[11px] font-bold uppercase tracking-wide text-neutral-500">
+          {etiqueta}
+        </span>
+        <span className="font-semibold text-neutral-950">{valor}</span>
+      </span>
+      <button
+        type="button"
+        className="shrink-0 text-xs font-bold text-[#009ee3]"
+        onClick={() => {
+          void navigator.clipboard.writeText(valor).then(() => {
+            setCopiado(true);
+            window.setTimeout(() => setCopiado(false), 1500);
+          });
+        }}
+      >
+        {copiado ? "Copiado" : "Copiar"}
+      </button>
+    </p>
+  );
+}
+
+function ReciboEnviado({
+  recibo,
+  datos,
+}: {
+  recibo: ReciboPedido;
+  datos: DatosLocal;
+}) {
+  const conTransferencia = recibo.transferencia > 0;
+  return (
+    <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+      <p className="text-base font-bold text-emerald-950">
+        El local recibió tu pedido y lo está procesando para que te llegue {recibo.entrega}.
+      </p>
+      {(recibo.forma === "saldo" || recibo.forma === "saldo_transferencia") && (
+        <p className="mt-2 text-sm font-semibold text-emerald-900">
+          {recibo.forma === "saldo"
+            ? "Se descontó de tu saldo a cuenta."
+            : `Usamos tu saldo y el resto, ${formatoPesos(recibo.transferencia)}, queda para transferir.`}
+        </p>
+      )}
+      {recibo.cuentaCorriente > 0 && (
+        <p className="mt-2 text-sm font-semibold text-emerald-900">
+          {formatoPesos(recibo.cuentaCorriente)} quedaron en tu cuenta corriente.
+        </p>
+      )}
+      {conTransferencia ? (
+        <div className="mt-3">
+          <AvisoTransferencia
+            datos={datos}
+            monto={recibo.transferencia}
+            entrega={recibo.entrega}
+            compacto
+          />
+        </div>
+      ) : (
+        <p className="mt-2 text-sm text-emerald-900">
+          Lo vas a ver en Mi perfil, con el estado en el que está.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function CampoControl({
+  etiqueta,
+  valor,
+  onChange,
+  type = "text",
+}: {
+  etiqueta: string;
+  valor: string;
+  onChange: (valor: string) => void;
+  type?: string;
+}) {
+  return (
+    <label className="block text-xs font-bold text-movipack-deep">
+      {etiqueta}
+      <input
+        type={type}
+        value={valor}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-1 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm font-semibold outline-none focus:border-movipack"
+      />
+    </label>
+  );
+}
+
 function Dato({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
     <div>
@@ -622,24 +931,20 @@ function OpcionesPedido({
   modo,
   fecha,
   franja,
-  siFalta,
   dias,
   asapLabel,
   onModo,
   onFecha,
   onFranja,
-  onSiFalta,
 }: {
   modo: ModoEntrega;
   fecha: string;
   franja: FranjaReparto | "";
-  siFalta: SiFaltaProducto;
   dias: ReturnType<typeof diasParaProgramar>;
   asapLabel: string;
   onModo: (v: ModoEntrega) => void;
   onFecha: (v: string) => void;
   onFranja: (v: FranjaReparto) => void;
-  onSiFalta: (v: SiFaltaProducto) => void;
 }) {
   const dia = dias.find((d) => d.iso === fecha);
   return (
@@ -705,25 +1010,6 @@ function OpcionesPedido({
           </fieldset>
         </div>
       )}
-      <fieldset>
-        <legend className="text-xs font-bold text-movipack-deep">
-          Si no hay stock de algún producto
-        </legend>
-        <div className="mt-1.5 space-y-2">
-          <OpcionRadio
-            name="siFaltaProducto"
-            checked={siFalta === "reemplazo_misma_marca"}
-            onChange={() => onSiFalta("reemplazo_misma_marca")}
-            titulo={ETIQUETA_SI_FALTA.reemplazo_misma_marca}
-          />
-          <OpcionRadio
-            name="siFaltaProducto"
-            checked={siFalta === "omitir"}
-            onChange={() => onSiFalta("omitir")}
-            titulo={ETIQUETA_SI_FALTA.omitir}
-          />
-        </div>
-      </fieldset>
     </div>
   );
 }
@@ -766,34 +1052,6 @@ function OpcionRadio({
           </span>
         ) : null}
       </span>
-    </label>
-  );
-}
-
-function Campo({
-  nombre,
-  etiqueta,
-  defaultValue,
-  required,
-  type = "text",
-}: {
-  nombre: string;
-  etiqueta: string;
-  defaultValue?: string;
-  required?: boolean;
-  type?: string;
-}) {
-  return (
-    <label className="block text-xs font-semibold text-neutral-600">
-      {etiqueta}
-      <input
-        name={nombre}
-        type={type}
-        required={required}
-        defaultValue={defaultValue}
-        key={`${nombre}-${defaultValue ?? ""}`}
-        className="mt-1 w-full rounded-lg border border-movipack/20 bg-white px-3 py-2 text-sm font-normal outline-none focus:border-movipack"
-      />
     </label>
   );
 }

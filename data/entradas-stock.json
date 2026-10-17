@@ -1,0 +1,17 @@
+[
+  {
+    "id": "3e547a8f-abab-4664-9fc8-442f3da36582",
+    "productoId": "p12",
+    "codigo": "298",
+    "nombre": "Cinta Adhesiva Rapifix",
+    "cantidad": 5,
+    "stockAnterior": null,
+    "stockNuevo": 5,
+    "costoAnterior": null,
+    "costoNuevo": 1500,
+    "margen": 35,
+    "precio": 2025,
+    "empleado": "Administración",
+    "creadoEn": "2026-10-12T05:12:59.265Z"
+  }
+]

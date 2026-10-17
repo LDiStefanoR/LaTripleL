@@ -1,10 +1,8 @@
 import Link from "next/link";
 
 type Props = {
-  activa: "precios" | "pedidos" | "clientes" | "cuentas" | "promos";
-  solicitudes?: number;
+  activa: "pedidos" | "promos";
   pedidosNuevos?: number;
-  novedades?: number;
 };
 
 function claseBoton(activo: boolean) {
@@ -28,40 +26,15 @@ function Badge({ n, claro }: { n: number; claro?: boolean }) {
   );
 }
 
-export function AdminNav({
-  activa,
-  solicitudes = 0,
-  pedidosNuevos = 0,
-  novedades = 0,
-}: Props) {
+export function AdminNav({ activa, pedidosNuevos = 0 }: Props) {
   return (
-    <nav
-      className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
-      aria-label="Secciones de administración"
-    >
-      <Link href="/admin" className={claseBoton(activa === "precios")}>
-        Precios y productos
-      </Link>
+    <nav className="mt-6 grid grid-cols-2 gap-2" aria-label="Secciones de administración">
       <Link href="/admin/pedidos" className={claseBoton(activa === "pedidos")}>
         Pedidos
         <span className={`text-xs font-semibold ${activa === "pedidos" ? "text-white/80" : "text-neutral-500"}`}>
           Notificaciones
         </span>
         <Badge n={pedidosNuevos} claro={activa === "pedidos"} />
-      </Link>
-      <Link href="/admin/clientes" className={claseBoton(activa === "clientes")}>
-        Clientes
-        <span className={`text-xs font-semibold ${activa === "clientes" ? "text-white/80" : "text-neutral-500"}`}>
-          Cuentas y fichas
-        </span>
-        <Badge n={solicitudes} claro={activa === "clientes"} />
-      </Link>
-      <Link href="/admin/cuentas" className={claseBoton(activa === "cuentas")}>
-        Deudas
-        <span className={`text-xs font-semibold ${activa === "cuentas" ? "text-white/80" : "text-neutral-500"}`}>
-          Tickets y fiado
-        </span>
-        <Badge n={novedades} claro={activa === "cuentas"} />
       </Link>
       <Link href="/admin/promos" className={claseBoton(activa === "promos")}>
         Promos

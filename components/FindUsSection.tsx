@@ -5,8 +5,11 @@ import {
   MAPS_EMBED_SRC,
   MAPS_SHARE_URL,
 } from "@/lib/brand";
+import type { DatosLocal } from "@/lib/datos-local";
 
-export function FindUsSection() {
+export function FindUsSection({ datos }: { datos?: DatosLocal | null }) {
+  const direccion = datos?.direccion || ADDRESS_FULL;
+  const horarios = datos?.horarios || HOURS_DETAIL;
   return (
     <section
       id="donde"
@@ -17,11 +20,11 @@ export function FindUsSection() {
           Dónde encontrarnos
         </p>
         <h2 className="mt-2 font-display text-3xl font-bold italic text-movipack-deep sm:text-4xl">
-          Garay 1005, Rosario
+          {direccion}
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-neutral-700">
-          Estamos en el barrio. Pedí con envío a Rosario o pasá a buscar a
-          Garay 1005.
+          Estamos en el barrio. Pedí con envío a Rosario o pasá a buscar a{" "}
+          {datos?.direccion || ADDRESS_LINE}.
         </p>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
@@ -30,10 +33,10 @@ export function FindUsSection() {
               Dirección
             </p>
             <p className="mt-2 font-display text-2xl font-semibold not-italic text-movipack-deep">
-              {ADDRESS_LINE}
+              {datos?.direccion || ADDRESS_LINE}
             </p>
             <p className="mt-1 text-neutral-600">Rosario, Santa Fe, Argentina</p>
-            <p className="mt-6 text-sm text-neutral-600">{HOURS_DETAIL}</p>
+            <p className="mt-6 text-sm text-neutral-600">{horarios}</p>
             <a
               href={MAPS_SHARE_URL}
               target="_blank"

@@ -5,9 +5,14 @@ import { AdminAlarma } from "@/components/AdminAlarma";
 import { AuthProvider } from "@/components/AuthProvider";
 import { CartShell } from "@/components/CartShell";
 import { FloatingWhatsapp } from "@/components/FloatingWhatsapp";
+import { OcultarEnCaja } from "@/components/OcultarEnCaja";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { leerDatosLocal } from "@/app/acciones/local";
+import { leerAjustes } from "@/lib/ajustes";
+import { ENVIO_BASE } from "@/lib/envio";
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand";
+import { datosLocalDesde } from "@/lib/datos-local";
 import { urlBaseSitio } from "@/lib/site-url";
 import { getSesion } from "@/lib/sesion";
 import type { AlertasAdmin } from "@/types/cuenta";
@@ -29,6 +34,10 @@ const siteDescription =
   "Minimarket de Rosario con pedido online. Envío a todo Rosario, promociones y precios más bajos que en el supermercado. Garay 1005.";
 
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
   themeColor: "#0a0a0a",
 };
 
@@ -57,6 +66,18 @@ export default async function RootLayout({
     novedades: 0,
     total: 0,
   };
+  let datosLocal = datosLocalDesde(null);
+  let envio = ENVIO_BASE;
+  try {
+    envio = (await leerAjustes()).envio;
+  } catch (error) {
+    console.error("[layout] envío", error);
+  }
+  try {
+    datosLocal = await leerDatosLocal();
+  } catch (error) {
+    console.error("[layout] datos del local", error);
+  }
   if (sesion?.rol === "admin") {
     try {
       alertasIniciales = await contarAlertasAdmin();
@@ -73,12 +94,16 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground antialiased">
         <AuthProvider sesion={sesion}>
-          <CartShell>
-            <SiteHeader alertasIniciales={alertasIniciales} />
-            {sesion?.rol === "admin" && <AdminAlarma inicial={alertasIniciales} />}
+          <CartShell envio={envio}>
+            <OcultarEnCaja>
+              <SiteHeader alertasIniciales={alertasIniciales} />
+              {sesion?.rol === "admin" && <AdminAlarma inicial={alertasIniciales} />}
+            </OcultarEnCaja>
             {children}
-            <SiteFooter />
-            <FloatingWhatsapp />
+            <OcultarEnCaja>
+              <SiteFooter datos={datosLocal} />
+              <FloatingWhatsapp telefono={datosLocal.telefono} />
+            </OcultarEnCaja>
           </CartShell>
         </AuthProvider>
       </body>

@@ -9,7 +9,7 @@ import {
   adminQuitarOferta,
   type EstadoPromo,
 } from "@/app/acciones/promos";
-import { formatoPesos, nombreVitrina } from "@/lib/format";
+import { formatoPesos, nombreVitrina, textoMonto } from "@/lib/format";
 import { avisoCombo } from "@/lib/combo";
 import { ETIQUETA_OFERTA } from "@/lib/oferta";
 import type { Producto } from "@/types/producto";
@@ -202,9 +202,12 @@ export function AdminPromosPanel({
                 Precio promo (opcional)
                 <input
                   name="precioPromo"
-                  type="number"
-                  min={0}
-                  placeholder="Vacío = solo destacar"
+                  inputMode="numeric"
+                  placeholder="$0 o vacío para solo destacar"
+                  onChange={(e) => {
+                    const limpio = e.target.value.replace(/\D/g, "");
+                    e.target.value = limpio ? textoMonto(limpio) : "";
+                  }}
                   className="mt-1 w-full rounded-lg border border-movipack/20 px-3 py-2"
                 />
               </label>
@@ -339,9 +342,12 @@ export function AdminPromosPanel({
               Precio del combo (opcional)
               <input
                 name="precioCombo"
-                type="number"
-                min={0}
-                placeholder="Vacío = el más barato sale gratis"
+                inputMode="numeric"
+                placeholder="$0 o vacío = el más barato sale gratis"
+                onChange={(e) => {
+                  const limpio = e.target.value.replace(/\D/g, "");
+                  e.target.value = limpio ? textoMonto(limpio) : "";
+                }}
                 className="mt-1 w-full rounded-lg border border-movipack/20 px-3 py-2"
               />
             </label>

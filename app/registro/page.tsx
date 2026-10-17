@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { RegisterForm } from "@/components/RegisterForm";
+import { rutaPorRol } from "@/lib/roles";
 import { getSesion } from "@/lib/sesion";
 
 export default async function RegistroPage() {
   const sesion = await getSesion();
-  if (sesion) redirect(sesion.rol === "admin" ? "/admin" : "/cuenta");
+  if (sesion) redirect(rutaPorRol(sesion.rol));
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-4 py-12">

@@ -1,17 +1,19 @@
 "use client";
 
 import { MENSAJE_PEDIDO_GENERAL } from "@/lib/categorias";
-import { whatsappUrl } from "@/lib/whatsapp";
+import { whatsappATelefono, whatsappUrl } from "@/lib/whatsapp";
 
-export function FloatingWhatsapp() {
-  const href = whatsappUrl(MENSAJE_PEDIDO_GENERAL);
+export function FloatingWhatsapp({ telefono }: { telefono?: string }) {
+  const href =
+    (telefono && whatsappATelefono(telefono, MENSAJE_PEDIDO_GENERAL)) ||
+    whatsappUrl(MENSAJE_PEDIDO_GENERAL);
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/30 ring-4 ring-white transition hover:scale-105 hover:brightness-110 sm:bottom-6 sm:right-24 sm:h-16 sm:w-16"
+      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/30 ring-4 ring-white transition hover:scale-105 hover:brightness-110 sm:bottom-6 sm:right-24 sm:h-16 sm:w-16"
       aria-label="Abrir WhatsApp con La Triple L"
     >
       <svg className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden>

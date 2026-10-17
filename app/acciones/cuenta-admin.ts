@@ -8,6 +8,7 @@ import {
   agregarClienteFiado,
   agregarTicket,
   atenderSolicitud,
+  borrarTicketDeuda,
   guardarAjustesCuenta,
   marcarDeudaTotalPagada,
   marcarNovedadesLeidas,
@@ -15,6 +16,7 @@ import {
   registrarPagoParcial,
 } from "@/lib/cuentas";
 import { cambiarPasswordUsuario, listarUsuarios } from "@/lib/usuarios";
+import { exigirPermisoCaja } from "@/lib/exigir-permiso";
 import { getSesion } from "@/lib/sesion";
 import { normalizarEmail } from "@/lib/usuarios";
 import { guardarFotoSitio } from "@/lib/fotos-sitio";
@@ -27,10 +29,11 @@ function texto(form: FormData, campo: string) {
 }
 
 function numero(form: FormData, campo: string) {
-  return Number(texto(form, campo).replace(/\./g, "").replace(",", ".")) || 0;
+  return Number(texto(form, campo).replace(/\D/g, "")) || 0;
 }
 
 function revalidar() {
+  revalidatePath("/caja");
   revalidatePath("/cuenta");
   revalidatePath("/admin/cuentas");
   revalidatePath("/admin/cuentas", "layout");
@@ -42,6 +45,10 @@ function revalidar() {
 async function exigirAdmin() {
   const sesion = await getSesion();
   return sesion?.rol === "admin" ? sesion : null;
+}
+
+async function exigirDeudas() {
+  return exigirPermisoCaja("deudas");
 }
 
 async function adjuntoDesdeForm(form: FormData, campo = "adjunto") {
@@ -81,7 +88,7 @@ async function adjuntoDesdeForm(form: FormData, campo = "adjunto") {
 export async function adminMarcarTicketPagado(
   form: FormData,
 ): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   const resultado = await marcarTicketPagado(
     texto(form, "ticketId"),
     texto(form, "nota"),
@@ -94,7 +101,7 @@ export async function adminMarcarTicketPagado(
 export async function adminMarcarDeudaTotal(
   form: FormData,
 ): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   const resultado = await marcarDeudaTotalPagada(
     texto(form, "clienteId"),
     texto(form, "nota"),
@@ -107,7 +114,7 @@ export async function adminMarcarDeudaTotal(
 export async function adminPagoParcial(
   form: FormData,
 ): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   const resultado = await registrarPagoParcial({
     clienteId: texto(form, "clienteId"),
     ticketId: texto(form, "ticketId") || undefined,
@@ -137,7 +144,7 @@ export async function adminGuardarLimites(
 export async function adminGuardarTicket(
   form: FormData,
 ): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   const adjunto = await adjuntoDesdeForm(form);
   if (typeof adjunto === "object") return { error: adjunto.error };
   const tipo = texto(form, "tipo") as TipoTicket;
@@ -146,7 +153,6 @@ export async function adminGuardarTicket(
   const interesManualTxt = texto(form, "interesManual");
   const resultado = await actualizarTicket({
     ticketId: texto(form, "ticketId"),
-    numero: texto(form, "numero") || undefined,
     descripcion: texto(form, "descripcion") || undefined,
     tipo: tipo === "efectivo" ? "efectivo" : tipo === "almacen" ? "almacen" : undefined,
     medioPago:
@@ -174,10 +180,20 @@ export async function adminGuardarTicket(
   return { ok: "Guardamos el movimiento." };
 }
 
+export async function adminBorrarTicket(
+  form: FormData,
+): Promise<EstadoCuentaAdmin> {
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
+  const resultado = await borrarTicketDeuda(texto(form, "ticketId"));
+  if ("error" in resultado) return { error: resultado.error };
+  revalidar();
+  return { ok: `Borramos la deuda ${resultado.numero}.` };
+}
+
 export async function adminAgregarTicket(
   form: FormData,
 ): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   const adjunto = await adjuntoDesdeForm(form);
   if (typeof adjunto === "object") return { error: adjunto.error };
   const tipo = texto(form, "tipo") as TipoTicket;
@@ -190,7 +206,7 @@ export async function adminAgregarTicket(
   const medio = texto(form, "medioPago");
   const resultado = await agregarTicket({
     clienteId: texto(form, "clienteId"),
-    numero: texto(form, "numero") || undefined,
+    numero: undefined,
     fecha: texto(form, "fecha") || undefined,
     vencimiento: texto(form, "vencimiento") || undefined,
     descripcion: texto(form, "descripcion") || undefined,
@@ -264,7 +280,7 @@ export async function adminResetPinCliente(
 export async function adminAtenderSolicitud(
   form: FormData,
 ): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   const estado = texto(form, "estado");
   if (estado !== "atendida" && estado !== "rechazada") {
     return { error: "Estado no válido." };
@@ -290,7 +306,7 @@ export async function adminAtenderSolicitud(
 }
 
 export async function adminMarcarNovedadesLeidas(): Promise<EstadoCuentaAdmin> {
-  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  if (!(await exigirDeudas())) return { error: "No tenés permiso." };
   await marcarNovedadesLeidas();
   revalidar();
   return { ok: "Marcamos las novedades como vistas." };

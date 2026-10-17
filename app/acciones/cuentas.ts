@@ -1,11 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cambiarEstadoPedido, listarPedidos } from "@/lib/pedidos";
+import { cambiarEstadoPedido, listarPedidos, ajustarMontoRecarga, resolverRecarga } from "@/lib/pedidos";
+import { puedeCobrar } from "@/lib/roles";
+import { quitarFiadoPorEmail } from "@/lib/cuentas";
 import { getSesion } from "@/lib/sesion";
 import {
   actualizarPerfilUsuario,
   actualizarTipoCuenta,
+  buscarUsuarioPorId,
   cambiarEmailUsuario,
   cambiarEstadoCuenta,
   cambiarPasswordUsuario,
@@ -25,7 +28,8 @@ async function exigirAdmin() {
 }
 
 export async function contarAlertasAdmin() {
-  if (!(await exigirAdmin())) {
+  const sesion = await getSesion();
+  if (!sesion || !puedeCobrar(sesion.rol)) {
     return { solicitudes: 0, pedidosNuevos: 0, novedades: 0, total: 0 };
   }
   const { contarNovedadesPendientes } = await import("@/lib/cuentas");
@@ -34,8 +38,11 @@ export async function contarAlertasAdmin() {
     listarPedidos(),
     contarNovedadesPendientes(),
   ]);
+  const pedidosNuevos = pedidos.filter((p) => !p.esRecarga && p.estado === "sin_atender").length;
+  if (sesion.rol !== "admin") {
+    return { solicitudes: 0, pedidosNuevos, novedades: 0, total: pedidosNuevos };
+  }
   const solicitudes = usuarios.filter((u) => u.estado === "pendiente").length;
-  const pedidosNuevos = pedidos.filter((p) => p.estado === "sin_atender").length;
   return {
     solicitudes,
     pedidosNuevos,
@@ -64,13 +71,53 @@ export async function adminCambiarEstadoPedido(
   if (!(await exigirAdmin())) return { error: "No tenés permiso." };
   const id = texto(form, "id");
   const estado = texto(form, "estado") as EstadoPedido;
-  if (!["sin_atender", "en_proceso", "terminado"].includes(estado)) {
+  if (!["sin_atender", "en_proceso", "enviando", "terminado"].includes(estado)) {
     return { error: "Estado no válido." };
   }
   const resultado = await cambiarEstadoPedido(id, estado);
   if ("error" in resultado) return { error: resultado.error };
   revalidar();
   return { ok: "Actualizamos el estado del pedido." };
+}
+
+export async function adminResolverRecarga(form: FormData): Promise<EstadoAdminCuentas> {
+  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  const acreditar = texto(form, "acreditar") === "1";
+  const id = texto(form, "id");
+  if (acreditar) {
+    const monto = Math.round(Number(String(form.get("monto") ?? "").replace(/[^\d]/g, "")));
+    if (monto > 0) {
+      const ajuste = await ajustarMontoRecarga(id, monto);
+      if ("error" in ajuste) return { error: ajuste.error };
+    }
+  }
+  const resultado = await resolverRecarga(id, acreditar);
+  if ("error" in resultado) return { error: resultado.error };
+  revalidar();
+  return {
+    ok: acreditar
+      ? `Acreditamos ${resultado.pedido.total} al saldo de ${resultado.pedido.contacto.nombre}.`
+      : "Rechazamos la recarga. El saldo no cambió.",
+  };
+}
+
+export async function adminResolverCredito(form: FormData): Promise<EstadoAdminCuentas> {
+  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  const { resolverCreditoSolicitado } = await import("@/lib/cuentas");
+  const aceptar = texto(form, "aceptar") === "1";
+  const monto = Math.round(Number(String(form.get("monto") ?? "").replace(/[^\d]/g, "")));
+  const resultado = await resolverCreditoSolicitado({
+    solicitudId: texto(form, "id"),
+    monto,
+    aceptar,
+  });
+  if ("error" in resultado) return { error: resultado.error };
+  revalidar();
+  return {
+    ok: aceptar
+      ? `Aceptamos el crédito${resultado.nombre ? ` de ${resultado.nombre}` : ""}. Quedó como deuda en efectivo.`
+      : "Rechazamos el crédito. No se generó deuda.",
+  };
 }
 
 export async function adminCambiarEstadoCuenta(
@@ -100,7 +147,9 @@ export async function adminCambiarRol(
   if (!(await exigirAdmin())) return { error: "No tenés permiso." };
   const id = texto(form, "id");
   const rol = texto(form, "rol") as RolUsuario;
-  if (rol !== "admin" && rol !== "cliente") return { error: "Permiso no válido." };
+  if (rol !== "admin" && rol !== "cliente" && rol !== "caja") {
+    return { error: "Permiso no válido." };
+  }
   const resultado = await cambiarRolUsuario(id, rol);
   if ("error" in resultado) return { error: resultado.error };
   revalidar();
@@ -108,7 +157,9 @@ export async function adminCambiarRol(
     ok:
       rol === "admin"
         ? "Ahora tiene permiso de administrador."
-        : "Ahora tiene permiso general (cliente).",
+        : rol === "caja"
+          ? "Ahora puede cobrar en la caja."
+          : "Ahora tiene permiso general (cliente).",
   };
 }
 
@@ -178,8 +229,11 @@ export async function adminEliminarUsuario(
 ): Promise<EstadoAdminCuentas> {
   const sesion = await exigirAdmin();
   if (!sesion) return { error: "No tenés permiso." };
-  const resultado = await eliminarUsuario(texto(form, "id"), sesion.email);
+  const id = texto(form, "id");
+  const usuario = await buscarUsuarioPorId(id);
+  const resultado = await eliminarUsuario(id, sesion.email);
   if ("error" in resultado) return { error: resultado.error };
+  if (usuario?.rol === "cliente") await quitarFiadoPorEmail(usuario.email);
   revalidar();
   return { ok: "Eliminamos la cuenta." };
 }

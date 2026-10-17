@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/LoginForm";
+import { rutaPorRol } from "@/lib/roles";
 import { getSesion } from "@/lib/sesion";
 
 export default async function IngresarPage() {
   const sesion = await getSesion();
-  if (sesion?.rol === "admin") redirect("/admin");
-  if (sesion) redirect("/cuenta");
+  if (sesion) redirect(rutaPorRol(sesion.rol));
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-12">

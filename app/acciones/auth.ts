@@ -8,8 +8,13 @@ import {
   solicitarCuenta,
   verificarPassword,
 } from "@/lib/usuarios";
-import { resolverLogin, sincronizarUsuariosCuenta } from "@/lib/cuentas";
+import {
+  cantidadCuentasPorTelefono,
+  resolverLogin,
+  sincronizarUsuariosCuenta,
+} from "@/lib/cuentas";
 import { PASSWORD_ADMIN_SEMILLA } from "@/lib/auth-config";
+import { rutaPorRol } from "@/lib/roles";
 import { ETIQUETA_FRANJA } from "@/types/pedido";
 import type { PerfilCliente, TipoPersona } from "@/types/auth";
 
@@ -44,6 +49,11 @@ export async function ingresar(
   const recordar = texto(form, "recordar") === "1";
   if (!login || !password) {
     return { error: "Completá teléfono o mail, y tu PIN o contraseña." };
+  }
+  if (!login.includes("@") && (await cantidadCuentasPorTelefono(login)) > 1) {
+    return {
+      error: "Hay varias cuentas con ese teléfono. Entrá con el mail.",
+    };
   }
   await sincronizarUsuariosCuenta();
   const resuelto = await resolverLogin(login);
@@ -90,7 +100,7 @@ export async function ingresar(
         "No se pudo iniciar sesión. En Vercel tiene que estar cargada la variable AUTH_SECRET.",
     };
   }
-  redirect(usuario.rol === "admin" ? "/admin" : "/cuenta");
+  redirect(rutaPorRol(usuario.rol));
 }
 
 export async function registrar(
