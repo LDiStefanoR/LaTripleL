@@ -177,6 +177,24 @@ export function CuentaClientePanel({
           })),
         };
       }
+      if (pedido.estado === "cancelado") {
+        const nota = pedido.motivoCancelacion
+          ? `Cancelado: ${pedido.motivoCancelacion}.`
+          : "El local canceló este pedido.";
+        return {
+          id: pedido.id,
+          fecha: pedido.creadoEn,
+          origen: "web" as const,
+          titulo: pedido.numeroTicket ? `Pedido ${pedido.numeroTicket}` : "Pedido web",
+          total: pedido.total,
+          detalle: nota,
+          lineas: pedido.lineas.map((linea) => ({
+            nombre: linea.nombre,
+            cantidad: linea.cantidad,
+            monto: linea.precio * linea.cantidad,
+          })),
+        };
+      }
       const paso = pedido.estado === "terminado" ? 2 : pedido.estado === "en_proceso" || pedido.estado === "enviando" ? 1 : 0;
       const etiqueta =
         pedido.estado === "enviando" ? "Enviando" : paso === 2 ? "Entregado" : paso === 1 ? "En preparación" : "Recibido";

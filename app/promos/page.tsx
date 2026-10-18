@@ -3,7 +3,7 @@ import { PromosVista } from "@/components/PromosVista";
 import { BRAND_NAME } from "@/lib/brand";
 import { leerAjustes } from "@/lib/ajustes";
 import { armarComboVitrina, idsEnCombos } from "@/lib/combo";
-import { armarVitrina } from "@/lib/precios";
+import { armarVitrina, sinStock } from "@/lib/precios";
 import { leerProductos } from "@/lib/productos";
 import { leerPromos, mapaOfertas } from "@/lib/promos";
 import { getSesion } from "@/lib/sesion";
@@ -32,6 +32,8 @@ export default async function PromosPage() {
     }))
     .filter((p) => p.esPromo)
     .sort((a, b) => {
+      const stock = Number(sinStock(a.stock)) - Number(sinStock(b.stock));
+      if (stock !== 0) return stock;
       const rank = (t?: string) => (t === "2x1" || t === "3x2" ? 0 : 1);
       return rank(a.tipoPromo) - rank(b.tipoPromo);
     });

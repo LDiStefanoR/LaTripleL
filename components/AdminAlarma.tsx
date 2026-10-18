@@ -54,7 +54,15 @@ function firmaOtros(a: AlertasAdmin) {
   return `${a.solicitudes}:${a.novedades}`;
 }
 
-export function AdminAlarma({ inicial, enCaja = false }: { inicial: AlertasAdmin; enCaja?: boolean }) {
+export function AdminAlarma({
+  inicial,
+  enCaja = false,
+  onPedidos,
+}: {
+  inicial: AlertasAdmin;
+  enCaja?: boolean;
+  onPedidos?: () => void;
+}) {
   const router = useRouter();
   const [alertas, setAlertas] = useState(inicial);
   const [silencioOtros, setSilencioOtros] = useState(false);
@@ -180,11 +188,16 @@ export function AdminAlarma({ inicial, enCaja = false }: { inicial: AlertasAdmin
               Caja
             </Link>
           )}
-          {hayPedido && (
-            <Link href="/admin/pedidos" className="underline underline-offset-2">
-              Pedidos
-            </Link>
-          )}
+          {hayPedido &&
+            (onPedidos ? (
+              <button type="button" className="underline underline-offset-2" onClick={onPedidos}>
+                Pedidos
+              </button>
+            ) : (
+              <Link href="/caja?vista=pedidos" className="underline underline-offset-2">
+                Pedidos
+              </Link>
+            ))}
           {alertas.solicitudes > 0 && !silencioOtros && (
             <Link href="/caja" className="underline underline-offset-2">
               Caja

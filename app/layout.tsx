@@ -96,7 +96,7 @@ export default async function RootLayout({
         <AuthProvider sesion={sesion}>
           <CartShell envio={envio}>
             <OcultarEnCaja>
-              <SiteHeader alertasIniciales={alertasIniciales} />
+              <SiteHeader />
               {sesion?.rol === "admin" && <AdminAlarma inicial={alertasIniciales} />}
             </OcultarEnCaja>
             {children}

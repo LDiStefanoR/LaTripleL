@@ -313,19 +313,40 @@ export async function resolverRecarga(id: string, acreditar: boolean) {
 }
 
 export async function cambiarEstadoPedido(id: string, estado: EstadoPedido) {
+  if (estado === "cancelado") {
+    return { error: "Para cancelar el pedido registrá el motivo." as const };
+  }
   const pedidos = await leerArchivo();
   const pedido = pedidos.find((p) => p.id === id);
   if (!pedido) return { error: "No encontramos ese pedido." as const };
+  if (pedido.estado === "cancelado") return { error: "Ese pedido está cancelado." as const };
   pedido.estado = estado;
   if (estado === "enviando") pedido.enviadoEn = new Date().toISOString();
   await escribirArchivo(pedidos);
   return { pedido };
 }
 
+export async function cancelarPedido(id: string, motivo: string) {
+  const limpio = motivo.replace(/\s+/g, " ").trim();
+  if (limpio.length < 3) return { error: "Escribí el motivo de la cancelación." as const };
+  if (limpio.length > 240) return { error: "El motivo es demasiado largo." as const };
+  const pedidos = await leerArchivo();
+  const pedido = pedidos.find((p) => p.id === id);
+  if (!pedido || pedido.esRecarga) return { error: "No encontramos ese pedido." as const };
+  if (pedido.estado === "cancelado") return { error: "Ese pedido ya está cancelado." as const };
+  if (pedido.estado === "terminado") return { error: "Ese pedido ya está entregado." as const };
+  pedido.estado = "cancelado";
+  pedido.motivoCancelacion = limpio;
+  pedido.canceladoEn = new Date().toISOString();
+  await escribirArchivo(pedidos);
+  return { ok: true as const, motivo: limpio };
+}
+
 export async function marcarPedidoEnviando(id: string) {
   const pedidos = await leerArchivo();
   const pedido = pedidos.find((p) => p.id === id);
   if (!pedido || pedido.esRecarga) return { error: "No encontramos ese pedido de mercadería." as const };
+  if (pedido.estado === "cancelado") return { error: "Ese pedido está cancelado." as const };
   if (pedido.estado === "terminado") return { error: "Ese pedido ya está finalizado." as const };
   pedido.estado = "enviando";
   pedido.enviadoEn = new Date().toISOString();

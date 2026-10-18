@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ComboCard } from "@/components/ComboCard";
 import { ProductCard } from "@/components/ProductCard";
 import type { ComboVitrina } from "@/lib/combo";
+import { sinStock } from "@/lib/precios";
 import type { ProductoVitrina } from "@/types/producto";
 import type { Rubro } from "@/types/rubro";
 
@@ -66,19 +67,23 @@ export function ProductCatalog({
       );
     });
     const copia = [...filtrados];
-    if (orden === "precio-asc") {
-      copia.sort((a, b) => a.precioMostrar - b.precioMostrar);
-    } else if (orden === "precio-desc") {
-      copia.sort((a, b) => b.precioMostrar - a.precioMostrar);
-    } else if (orden === "nombre") {
-      copia.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
-    } else {
-      copia.sort((a, b) => Number(b.esPromo) - Number(a.esPromo));
-    }
+    const porOrden = (a: ProductoVitrina, b: ProductoVitrina) => {
+      if (orden === "precio-asc") return a.precioMostrar - b.precioMostrar;
+      if (orden === "precio-desc") return b.precioMostrar - a.precioMostrar;
+      if (orden === "nombre") return a.nombre.localeCompare(b.nombre, "es");
+      return Number(b.esPromo) - Number(a.esPromo);
+    };
+    copia.sort((a, b) => {
+      const stock = Number(sinStock(a.stock)) - Number(sinStock(b.stock));
+      if (stock !== 0) return stock;
+      return porOrden(a, b);
+    });
     return copia;
   }, [productos, filtro, busqueda, etiquetas, orden]);
 
-  const mostrados = listado.slice(0, visible);
+  const conStock = listado.filter((p) => !sinStock(p.stock));
+  const agotados = listado.filter((p) => sinStock(p.stock));
+  const mostrados = conStock.slice(0, visible);
   const mostrarCombos =
     (filtro === "promos" || filtro === "todas") &&
     combos.length > 0 &&
@@ -222,7 +227,7 @@ export function ProductCatalog({
                   Promos activas
                 </h2>
               )}
-              {listado.length > 0 && (
+              {mostrados.length > 0 && (
                 <div className="grid grid-cols-2 gap-2.5 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                   {mostrados.map((p) => (
                     <ProductCard
@@ -236,7 +241,7 @@ export function ProductCatalog({
             </>
           )}
 
-          {visible < listado.length && (
+          {visible < conStock.length && (
             <div className="mt-8 flex justify-center">
               <button
                 type="button"
@@ -246,6 +251,26 @@ export function ProductCatalog({
                 Mostrar más productos
               </button>
             </div>
+          )}
+
+          {agotados.length > 0 && (
+            <section className="mt-10">
+              <h2 className="font-display text-xl font-bold not-italic text-neutral-500">
+                Sin stock
+              </h2>
+              <p className="mt-1 text-sm text-neutral-400">
+                {agotados.length} producto{agotados.length === 1 ? "" : "s"} sin unidades. No se pueden pedir hasta que vuelvan.
+              </p>
+              <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+                {agotados.map((p) => (
+                  <ProductCard
+                    key={p.id}
+                    producto={p}
+                    etiqueta={etiquetas[p.seccion] ?? p.seccion}
+                  />
+                ))}
+              </div>
+            </section>
           )}
         </div>
       </div>

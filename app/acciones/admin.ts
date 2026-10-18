@@ -90,11 +90,6 @@ export async function guardarPreciosAdmin(
     return { error: "No tenés permiso para cambiar precios." };
   }
 
-  const descuento = numero(form.get("descuentoClienteGenerico"), 10);
-  if (descuento < -90 || descuento > 90) {
-    return { error: "El porcentaje tiene que estar entre -90 y 90. Positivo descuenta y negativo aumenta." };
-  }
-
   const ajustes = await leerAjustes();
   function tasa(campo: string, base: number) {
     const n = numero(form.get(campo), base);
@@ -119,14 +114,33 @@ export async function guardarPreciosAdmin(
 
   await guardarAjustes({
     ...ajustes,
-    descuentoClienteGenerico: descuento,
     tasasCuota: tasasCuota as AjustesPrecios["tasasCuota"],
     moraCredito: moraCredito as AjustesPrecios["moraCredito"],
     moraCuenta: moraCuenta as AjustesPrecios["moraCuenta"],
     plazoCuenta,
   });
   revalidarSitio();
-  return { ok: "Guardamos descuentos, aumentos y tasas." };
+  return { ok: "Guardamos los intereses de créditos y cuentas corrientes." };
+}
+
+export async function guardarCatalogoWeb(form: FormData): Promise<EstadoAdmin> {
+  if (!(await exigirAdmin())) return { error: "No tenés permiso para cambiar el catálogo." };
+  const recargo = numero(form.get("recargoWeb"), 0);
+  const descuento = numero(form.get("descuentoClienteGenerico"), 0);
+  if (recargo < 0 || recargo > 200) {
+    return { error: "El recargo tiene que estar entre 0 y 200." };
+  }
+  if (descuento < 0 || descuento > 90) {
+    return { error: "El descuento de clientes tiene que estar entre 0 y 90." };
+  }
+  const ajustes = await leerAjustes();
+  await guardarAjustes({
+    ...ajustes,
+    recargoWeb: recargo,
+    descuentoClienteGenerico: descuento,
+  });
+  revalidarSitio();
+  return { ok: "Guardamos el recargo y el descuento del catálogo web." };
 }
 
 export async function guardarEnvioAdmin(form: FormData): Promise<EstadoAdmin> {

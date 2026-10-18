@@ -31,7 +31,7 @@ export default async function AdminPromosPage() {
         misma página.
       </p>
       <p className="mt-3 text-sm font-bold">
-        <Link href="/admin/pedidos" className="text-movipack underline">
+        <Link href="/caja?vista=pedidos" className="text-movipack underline">
           Ir a pedidos
         </Link>
       </p>

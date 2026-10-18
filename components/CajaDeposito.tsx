@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   crearRubro,
   eliminarRubro,
+  guardarCatalogoWeb,
   guardarEnvioAdmin,
   guardarPreciosAdmin,
   renombrarRubro,
@@ -101,7 +102,7 @@ export type DeudaCaja = {
 };
 
 type PantallaStock = "menu" | "pedido" | "regularizar" | "entrada" | "inventario";
-type PantallaMant = "menu" | "proveedores" | "clientes" | "empleados" | "productos" | "secciones" | "pagos" | "descuento" | "envio" | "local";
+type PantallaMant = "menu" | "proveedores" | "clientes" | "empleados" | "productos" | "secciones" | "pagos" | "descuento" | "catalogo" | "envio" | "local";
 type ModoDeposito = "stock" | "mantenimiento" | "clientes" | "productos";
 
 const BOTON = caja.botonAlto;
@@ -122,6 +123,7 @@ export function CajaDeposito({
   fichaProductos,
   fichaRubros,
   descuentoClienteGenerico,
+  recargoWeb,
   tasasCuota,
   moraCredito,
   moraCuenta,
@@ -145,6 +147,7 @@ export function CajaDeposito({
   fichaProductos: Producto[];
   fichaRubros: Rubro[];
   descuentoClienteGenerico: number;
+  recargoWeb: number;
   tasasCuota: { 1: number; 2: number; 3: number; 6: number };
   moraCredito: number[];
   moraCuenta: number[];
@@ -314,8 +317,13 @@ export function CajaDeposito({
             Datos del local
           </button>
           {esAdmin && (
+            <button type="button" className={BOTON} onClick={() => setMant("catalogo")}>
+              Catálogo web
+            </button>
+          )}
+          {esAdmin && (
             <button type="button" className={BOTON} onClick={() => setMant("descuento")}>
-              Descuentos y aumentos
+              Intereses créditos y cuentas corrientes
             </button>
           )}
           {esAdmin && (
@@ -335,10 +343,19 @@ export function CajaDeposito({
     return <EnvioDomicilio escala={envio} onVolver={() => setMant("menu")} />;
   }
 
+  if (mant === "catalogo") {
+    return (
+      <CatalogoWeb
+        recargo={recargoWeb}
+        descuento={Math.max(0, descuentoClienteGenerico)}
+        onVolver={() => setMant("menu")}
+      />
+    );
+  }
+
   if (mant === "descuento") {
     return (
       <DescuentoClientes
-        porcentaje={descuentoClienteGenerico}
         tasasCuota={tasasCuota}
         moraCredito={moraCredito}
         moraCuenta={moraCuenta}
@@ -1021,15 +1038,129 @@ function Porcentajes({
   );
 }
 
+function CatalogoWeb({
+  recargo,
+  descuento,
+  onVolver,
+}: {
+  recargo: number;
+  descuento: number;
+  onVolver: () => void;
+}) {
+  const router = useRouter();
+  const [mensaje, setMensaje] = useState<EstadoAdmin>(null);
+  const [pending, start] = useTransition();
+  const [recargoVista, setRecargoVista] = useState(String(recargo));
+  const [descuentoVista, setDescuentoVista] = useState(String(descuento));
+  const recargoNum = Math.min(200, Math.max(0, Math.round(Number(recargoVista) || 0)));
+  const descuentoNum = Math.min(90, Math.max(0, Math.round(Number(descuentoVista) || 0)));
+  const base = 10000;
+  const normal = Math.round(base * (1 + recargoNum / 100));
+  const clientes = Math.round(normal * (1 - descuentoNum / 100));
+
+  return (
+    <section className="mx-auto max-w-3xl px-4 py-6">
+      <p className={caja.kicker}>Mantenimiento</p>
+      <h2 className="font-display text-3xl font-bold">Catálogo web</h2>
+      <p className="mt-2 text-sm text-neutral-600">
+        El catálogo usa el precio guardado de cada producto. El recargo se suma a ese precio. Al lado se muestra el descuento de los clientes registrados.
+      </p>
+      <form
+        className={`${caja.panel} mt-4 space-y-4 p-4`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const data = new FormData(e.currentTarget);
+          start(async () => {
+            const resultado = await guardarCatalogoWeb(data);
+            setMensaje(resultado);
+            if (resultado?.ok) router.refresh();
+          });
+        }}
+      >
+        {mensaje?.error && <p className={caja.avisoErrorPlano}>{mensaje.error}</p>}
+        {mensaje?.ok && <p className={caja.avisoOkPlano}>{mensaje.ok}</p>}
+        <label className="block text-sm font-bold">
+          Recargo sobre el precio de la base
+          <span className="mt-1 flex items-center gap-2">
+            <input
+              type="number"
+              name="recargoWeb"
+              value={recargoVista}
+              min={0}
+              max={200}
+              step={1}
+              onChange={(e) => setRecargoVista(e.target.value)}
+              className="w-28 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-2xl font-bold"
+            />
+            %
+          </span>
+          <span className="mt-1 block text-xs font-semibold text-neutral-600">
+            0 deja el precio tal cual está en la base. Un producto de {formatoPesos(base)} se publica a {formatoPesos(normal)}.
+          </span>
+        </label>
+        <label className="block text-sm font-bold">
+          Descuento de clientes generales
+          <span className="mt-1 flex items-center gap-2">
+            <input
+              type="number"
+              name="descuentoClienteGenerico"
+              value={descuentoVista}
+              min={0}
+              max={90}
+              step={1}
+              onChange={(e) => setDescuentoVista(e.target.value)}
+              className="w-28 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-2xl font-bold"
+            />
+            %
+          </span>
+          <span className="mt-1 block text-xs font-semibold text-neutral-600">
+            Se muestra al lado del precio normal. En el ejemplo, los clientes ven {formatoPesos(clientes)}. El descuento especial de una ficha, si lo tiene, reemplaza a este.
+          </span>
+        </label>
+        <div className="flex items-end justify-between gap-3 rounded-2xl border border-movipack/30 bg-movipack/5 p-4">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-neutral-500">Precio</p>
+            <p className="font-display text-3xl font-bold">{formatoPesos(normal)}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-cape">Clientes -{descuentoNum}%</p>
+            <p className="font-display text-3xl font-bold text-cape">{formatoPesos(clientes)}</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button type="submit" disabled={pending} className={caja.primario}>
+            {pending ? "Guardando…" : "Guardar"}
+          </button>
+          <button type="button" className={caja.boton} onClick={onVolver}>
+            Volver
+          </button>
+        </div>
+      </form>
+      <div className={`${caja.panel} mt-4 p-4`}>
+        <p className="font-bold">Catálogo de precios</p>
+        <p className="mt-1 text-sm text-neutral-600">
+          Foto, nombre, precio del catálogo y precio con el descuento de cliente registrado.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a href="/admin/catalogo-precios?formato=xlsx" className={caja.primario}>
+            Descargar Excel
+          </a>
+          <a href="/admin/catalogo-precios?formato=pdf" className={caja.boton}>
+            Descargar PDF
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function DescuentoClientes({
-  porcentaje,
   tasasCuota,
   moraCredito,
   moraCuenta,
   plazoCuenta,
   onVolver,
 }: {
-  porcentaje: number;
   tasasCuota: { 1: number; 2: number; 3: number; 6: number };
   moraCredito: number[];
   moraCuenta: number[];
@@ -1043,9 +1174,9 @@ function DescuentoClientes({
   return (
     <section className="mx-auto max-w-3xl px-4 py-6">
       <p className={caja.kicker}>Mantenimiento</p>
-      <h2 className="font-display text-3xl font-bold">Descuentos y aumentos</h2>
+      <h2 className="font-display text-3xl font-bold">Intereses créditos y cuentas corrientes</h2>
       <p className="mt-2 text-sm text-neutral-600">
-        El porcentaje de clientes registrados descuenta si es positivo y aumenta el precio si es negativo. El descuento especial de una ficha, si lo tiene, reemplaza a este.
+        El interés de las cuotas y el recargo si no pagan el crédito o la mercadería de cuenta corriente.
       </p>
       <form
         className={`${caja.panel} mt-4 p-4`}
@@ -1061,29 +1192,7 @@ function DescuentoClientes({
       >
         {mensaje?.error && <p className={`${caja.avisoErrorPlano} mb-3`}>{mensaje.error}</p>}
         {mensaje?.ok && <p className={`${caja.avisoOkPlano} mb-3`}>{mensaje.ok}</p>}
-        <section className="rounded-2xl border border-movipack/30 bg-movipack/5 p-4">
-          <h3 className="font-display text-xl font-bold">Descuento del catálogo online</h3>
-          <p className="mt-1 text-sm text-neutral-700">
-            Este porcentaje lo ven los clientes registrados que entran a la página. Si el número es positivo, baja el precio de lista. Si es negativo, lo aumenta. El descuento especial de una ficha, cuando tiene uno, reemplaza a este.
-          </p>
-          <p className="mt-3 font-display text-4xl font-bold text-movipack">{porcentaje}%</p>
-          <label className="mt-3 flex items-center gap-3 text-sm font-bold">
-            <input
-              type="number"
-              name="descuentoClienteGenerico"
-              defaultValue={porcentaje}
-              min={-90}
-              max={90}
-              step={1}
-              className="w-28 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-2xl font-bold"
-            />
-            % para clientes con cuenta web
-          </label>
-          <p className="mt-2 text-sm font-semibold text-neutral-700">
-            Un producto de {formatoPesos(10000)} queda en {formatoPesos(Math.round(10000 * (1 - porcentaje / 100)))} en el catálogo.
-          </p>
-        </section>
-        <section className="mt-5 rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
+        <section className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
           <h3 className="font-display text-xl font-bold">Crédito</h3>
           <p className="mt-1 text-xs text-neutral-600">
             El interés de cada cuota y, aparte, el interés semanal si esas cuotas se vencen. Una ficha puede usar esta escala o una propia.
@@ -1147,20 +1256,6 @@ function DescuentoClientes({
           </button>
         </div>
       </form>
-      <div className={`${caja.panel} mt-4 p-4`}>
-        <p className="font-bold">Catálogo de precios</p>
-        <p className="mt-1 text-sm text-neutral-600">
-          Foto, nombre, precio de lista y precio con el descuento de cliente registrado.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <a href="/admin/catalogo-precios?formato=xlsx" className={caja.primario}>
-            Descargar Excel
-          </a>
-          <a href="/admin/catalogo-precios?formato=pdf" className={caja.boton}>
-            Descargar PDF
-          </a>
-        </div>
-      </div>
     </section>
   );
 }

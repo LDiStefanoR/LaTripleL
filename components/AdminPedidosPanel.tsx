@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { adminCambiarEstadoPedido, adminResolverCredito, adminResolverRecarga, type EstadoAdminCuentas } from "@/app/acciones/cuentas";
+import { adminCambiarEstadoPedido, adminCancelarPedido, adminResolverCredito, adminResolverRecarga, type EstadoAdminCuentas } from "@/app/acciones/cuentas";
+import { caja } from "@/components/caja-estilo";
 import { digitosMonto, formatoPesos, nombreVitrina, textoMonto } from "@/lib/format";
+import { fechaHoraVenta } from "@/lib/venta-texto";
 import { publicarPedidoEnCaja } from "@/lib/caja-pedido-web";
 import { whatsappUrl } from "@/lib/whatsapp";
 import type { CreditoPendiente } from "@/lib/cuentas";
@@ -13,15 +15,15 @@ import {
   type Pedido,
 } from "@/types/pedido";
 
-const campo =
-  "w-full rounded-lg border border-movipack/20 px-3 py-2 text-sm outline-none focus:border-movipack";
-
 const ESTADO_LABEL: Record<Pedido["estado"], string> = {
   sin_atender: "Sin atender",
   en_proceso: "En proceso",
   enviando: "Enviando pedido",
   terminado: "Entregado",
+  cancelado: "Cancelado",
 };
+
+const MOTIVOS_RAPIDOS = ["Falta de pago", "El cliente canceló", "Sin stock", "Dirección incorrecta"];
 
 export function AdminPedidosPanel({
   pedidos,
@@ -40,6 +42,8 @@ export function AdminPedidosPanel({
   const [mensaje, setMensaje] = useState<EstadoAdminCuentas>(null);
   const [avisoCaja, setAvisoCaja] = useState("");
   const [montos, setMontos] = useState<Record<string, string>>({});
+  const [cancelando, setCancelando] = useState<Pedido | null>(null);
+  const [motivo, setMotivo] = useState("");
   const [pending, start] = useTransition();
 
   const filtrados = useMemo(() => {
@@ -128,10 +132,29 @@ export function AdminPedidosPanel({
     setAvisoCaja(`Mandamos el pedido ${pedido.numeroTicket || ""} a la caja. Si la caja está abierta en otra pestaña, los productos ya quedaron cargados.`);
   }
 
+  function confirmarCancelacion(evento: FormEvent) {
+    evento.preventDefault();
+    if (!cancelando) return;
+    const data = new FormData();
+    data.set("id", cancelando.id);
+    data.set("motivo", motivo);
+    setMensaje(null);
+    start(async () => {
+      const resultado = await adminCancelarPedido(data);
+      setMensaje(resultado);
+      if (resultado?.ok) {
+        setCancelando(null);
+        setMotivo("");
+        router.refresh();
+      }
+    });
+  }
+
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl border border-amber-200 bg-amber-50 p-4">
-        <h2 className="font-display text-2xl font-bold text-amber-950">Crédito y saldo</h2>
+      <section className={`${caja.panel} p-4`}>
+        <p className={caja.kicker}>Pendientes</p>
+        <h2 className="font-display text-2xl font-bold">Crédito y saldo</h2>
         <p className="mt-1 text-sm text-amber-950/80">
           Los pedidos de efectivo y las recargas de saldo se atienden acá, separados de la mercadería. Podés corregir el importe antes de aceptar, por si transfirieron otro monto o no transfirieron.
         </p>
@@ -140,7 +163,7 @@ export function AdminPedidosPanel({
         )}
         <ul className="mt-3 space-y-3">
           {creditos.map((credito) => (
-            <li key={credito.id} className="rounded-2xl bg-white p-3">
+            <li key={credito.id} className={`${caja.panel} p-3`}>
               <p className="font-bold">Crédito solicitado · {credito.nombre}</p>
               <p className="text-sm text-neutral-600">
                 Acreditar en {credito.aliasCbu || "sin alias"}
@@ -152,14 +175,14 @@ export function AdminPedidosPanel({
                   inputMode="numeric"
                   value={textoMonto(montoDe(credito.id, credito.monto))}
                   onChange={(e) => setMontos((prev) => ({ ...prev, [credito.id]: digitosMonto(e.target.value) }))}
-                  className={`${campo} mt-1 max-w-40`}
+                  className={`${caja.campo} mt-1 max-w-40`}
                 />
               </label>
               <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   type="button"
                   disabled={pending}
-                  className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-bold text-white disabled:opacity-60"
+                  className={caja.primario}
                   onClick={() => {
                     const data = new FormData();
                     data.set("id", credito.id);
@@ -177,7 +200,7 @@ export function AdminPedidosPanel({
                 <button
                   type="button"
                   disabled={pending}
-                  className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-bold"
+                  className={caja.boton}
                   onClick={() => {
                     const data = new FormData();
                     data.set("id", credito.id);
@@ -196,7 +219,7 @@ export function AdminPedidosPanel({
             </li>
           ))}
           {recargas.map((pedido) => (
-            <li key={pedido.id} className="rounded-2xl bg-white p-3">
+            <li key={pedido.id} className={`${caja.panel} p-3`}>
               <p className="font-bold">Saldo a cuenta · {pedido.contacto.nombre}</p>
               <p className="text-sm text-neutral-600">
                 {pedido.contacto.email} · avisó una transferencia de {formatoPesos(pedido.total)}
@@ -207,14 +230,14 @@ export function AdminPedidosPanel({
                   inputMode="numeric"
                   value={textoMonto(montoDe(pedido.id, pedido.total))}
                   onChange={(e) => setMontos((prev) => ({ ...prev, [pedido.id]: digitosMonto(e.target.value) }))}
-                  className={`${campo} mt-1 max-w-40`}
+                  className={`${caja.campo} mt-1 max-w-40`}
                 />
               </label>
               <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   type="button"
                   disabled={pending}
-                  className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-bold text-white disabled:opacity-60"
+                  className={caja.primario}
                   onClick={() => {
                     const data = new FormData();
                     data.set("id", pedido.id);
@@ -232,7 +255,7 @@ export function AdminPedidosPanel({
                 <button
                   type="button"
                   disabled={pending}
-                  className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-bold"
+                  className={caja.boton}
                   onClick={() => {
                     const data = new FormData();
                     data.set("id", pedido.id);
@@ -253,7 +276,8 @@ export function AdminPedidosPanel({
       </section>
 
       <section className="space-y-4">
-        <h2 className="font-display text-2xl font-bold text-movipack-deep">Pedidos de mercadería</h2>
+        <p className={caja.kicker}>Web</p>
+        <h2 className="font-display text-2xl font-bold">Pedidos de mercadería</h2>
         <p className="text-sm text-neutral-600">
           Mandá el pedido a la caja para cobrarlo con los productos ya cargados. Al cerrar la venta pasa a enviando y, 30 minutos después, queda entregado.
         </p>
@@ -264,7 +288,7 @@ export function AdminPedidosPanel({
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Nombre, mail, teléfono, ticket o producto"
-            className={`${campo} mt-1`}
+            className={`${caja.campo} mt-1`}
           />
         </label>
         <label className="text-xs font-bold text-neutral-600">
@@ -272,7 +296,7 @@ export function AdminPedidosPanel({
           <select
             value={estado}
             onChange={(e) => setEstado(e.target.value as typeof estado)}
-            className={`${campo} mt-1`}
+            className={`${caja.campo} mt-1`}
           >
             <option value="activos">Activos (sin entregar)</option>
             <option value="todos">Todos</option>
@@ -280,6 +304,7 @@ export function AdminPedidosPanel({
             <option value="en_proceso">En proceso</option>
             <option value="enviando">Enviando</option>
             <option value="terminado">Entregados</option>
+            <option value="cancelado">Cancelados</option>
           </select>
         </label>
         <label className="text-xs font-bold text-neutral-600">
@@ -287,7 +312,7 @@ export function AdminPedidosPanel({
           <select
             value={tipo}
             onChange={(e) => setTipo(e.target.value as typeof tipo)}
-            className={`${campo} mt-1`}
+            className={`${caja.campo} mt-1`}
           >
             <option value="todos">Todos</option>
             <option value="registrado">Registrados</option>
@@ -299,45 +324,39 @@ export function AdminPedidosPanel({
         </p>
       </div>
 
-      {mensaje?.error && (
-        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-cape">
-          {mensaje.error}
-        </p>
-      )}
-      {mensaje?.ok && (
-        <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
-          {mensaje.ok}
-        </p>
-      )}
-      {avisoCaja && (
-        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-950">
-          {avisoCaja}
-        </p>
-      )}
+      {mensaje?.error && <p className={caja.avisoErrorPlano}>{mensaje.error}</p>}
+      {mensaje?.ok && <p className={caja.avisoOkPlano}>{mensaje.ok}</p>}
+      {avisoCaja && <p className={caja.nota}>{avisoCaja}</p>}
 
       <ul className="space-y-4">
         {filtrados.length === 0 && (
-          <li className="rounded-2xl bg-white p-4 text-sm text-neutral-600 shadow-sm">
+          <li className={`${caja.panel} p-4 text-sm text-neutral-600`}>
             No hay pedidos con ese filtro.
           </li>
         )}
         {filtrados.map((pedido) => {
           const ver = abierto === pedido.id;
+          const cuando = fechaHoraVenta(pedido.creadoEn);
           return (
             <li
               key={pedido.id}
-              className="rounded-2xl border border-movipack/15 bg-white p-4 shadow-sm"
+              className={`${caja.panel} p-4`}
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-semibold text-neutral-400">
-                    {new Date(pedido.creadoEn).toLocaleString("es-AR")} ·{" "}
+                    {cuando.dia} {cuando.hora} ·{" "}
                     {pedido.numeroTicket || "Sin n°"} ·{" "}
                     {pedido.clienteRegistrado ? "Registrado" : "Genérico"}
                   </p>
-                  <p className="mt-1 font-bold text-movipack-deep">
+                  <p className="mt-1 font-bold">
                     {pedido.contacto.nombre} · {formatoPesos(pedido.total)}
                   </p>
+                  {pedido.estado === "cancelado" && (
+                    <p className="mt-1 text-sm font-bold text-cape">
+                      Cancelado{pedido.motivoCancelacion ? `: ${pedido.motivoCancelacion}` : ""}
+                    </p>
+                  )}
                   <p className="mt-1 text-sm text-neutral-600">
                     {pedido.contacto.direccion}
                     <br />
@@ -356,11 +375,11 @@ export function AdminPedidosPanel({
                       : ""}
                   </p>
                 </div>
-                <div className="flex flex-col items-stretch gap-2">
-                  {pedido.estado !== "terminado" && (
+                <div className="flex min-w-44 flex-col items-stretch gap-2">
+                  {pedido.estado !== "terminado" && pedido.estado !== "cancelado" && (
                     <button
                       type="button"
-                      className="rounded-lg bg-movipack px-3 py-2 text-sm font-bold text-white"
+                      className={caja.primario}
                       onClick={() => mandarACaja(pedido)}
                     >
                       Mandar a la caja
@@ -370,24 +389,39 @@ export function AdminPedidosPanel({
                     <button
                       type="button"
                       disabled={pending}
-                      className="rounded-lg bg-cape px-3 py-2 text-sm font-bold text-white hover:bg-cape/90 disabled:opacity-60"
+                      className={caja.boton}
                       onClick={() => cambiarEstado(pedido.id, "en_proceso")}
                     >
                       Poner en proceso
                     </button>
                   )}
-                  <select
-                    key={`${pedido.id}-${pedido.estado}`}
-                    defaultValue={pedido.estado}
-                    disabled={pending}
-                    className="rounded-lg border border-movipack/20 bg-white px-3 py-2 text-sm font-semibold"
-                    onChange={(e) => cambiarEstado(pedido.id, e.target.value)}
-                  >
-                    <option value="sin_atender">{ESTADO_LABEL.sin_atender}</option>
-                    <option value="en_proceso">{ESTADO_LABEL.en_proceso}</option>
-                    <option value="enviando">{ESTADO_LABEL.enviando}</option>
-                    <option value="terminado">{ESTADO_LABEL.terminado}</option>
-                  </select>
+                  {pedido.estado !== "cancelado" && (
+                    <select
+                      key={`${pedido.id}-${pedido.estado}`}
+                      defaultValue={pedido.estado}
+                      disabled={pending}
+                      className={caja.campo}
+                      onChange={(e) => cambiarEstado(pedido.id, e.target.value)}
+                    >
+                      <option value="sin_atender">{ESTADO_LABEL.sin_atender}</option>
+                      <option value="en_proceso">{ESTADO_LABEL.en_proceso}</option>
+                      <option value="enviando">{ESTADO_LABEL.enviando}</option>
+                      <option value="terminado">{ESTADO_LABEL.terminado}</option>
+                    </select>
+                  )}
+                  {pedido.estado !== "terminado" && pedido.estado !== "cancelado" && (
+                    <button
+                      type="button"
+                      className={`${caja.boton} border-cape/40 text-cape`}
+                      onClick={() => {
+                        setCancelando(pedido);
+                        setMotivo("");
+                        setMensaje(null);
+                      }}
+                    >
+                      Cancelar pedido
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="mt-3 flex flex-wrap gap-3 text-xs font-bold">
@@ -424,6 +458,56 @@ export function AdminPedidosPanel({
         })}
       </ul>
       </section>
+      {cancelando && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <form onSubmit={confirmarCancelacion} className={`${caja.popup} max-w-md`}>
+            <p className={caja.kicker}>Pedido {cancelando.numeroTicket || ""}</p>
+            <h2 className="font-display text-2xl font-bold">Motivo de la cancelación</h2>
+            <p className="mt-1 text-sm text-neutral-600">
+              {cancelando.contacto.nombre} · {formatoPesos(cancelando.total)}. El motivo queda registrado en el pedido.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {MOTIVOS_RAPIDOS.map((opcion) => (
+                <button
+                  key={opcion}
+                  type="button"
+                  className={`${caja.chip} ${motivo === opcion ? caja.chipActivo : caja.chipIdle}`}
+                  onClick={() => setMotivo(opcion)}
+                >
+                  {opcion}
+                </button>
+              ))}
+            </div>
+            <label className="mt-3 block text-sm font-bold">
+              Motivo
+              <textarea
+                required
+                minLength={3}
+                maxLength={240}
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
+                placeholder="Por ejemplo, falta de pago"
+                className={`${caja.campo} mt-1 min-h-24`}
+              />
+            </label>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                className={caja.boton}
+                onClick={() => {
+                  setCancelando(null);
+                  setMotivo("");
+                }}
+              >
+                Volver
+              </button>
+              <button type="submit" disabled={pending} className={caja.peligroAlto}>
+                {pending ? "Cancelando…" : "Confirmar"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

@@ -63,6 +63,7 @@ export async function solicitarRecargaSaldo(monto: number): Promise<EstadoPedido
   });
   if ("error" in resultado) return { error: resultado.error };
   revalidatePath("/admin/pedidos");
+  revalidatePath("/caja");
   revalidatePath("/cuenta");
   return { ok: "Avisamos al local. Cuando confirme la transferencia, el saldo se suma." };
 }
@@ -107,6 +108,7 @@ export async function enviarPedidoWeb(
   if (usuario) await recordarDireccion(usuario.id, contacto.direccion);
   revalidatePath("/admin/clientes");
   revalidatePath("/admin/pedidos");
+  revalidatePath("/caja");
   revalidatePath("/cuenta");
   revalidatePath("/", "layout");
   return {

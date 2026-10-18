@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { CajaPanel } from "@/components/CajaPanel";
 import { leerAjustes } from "@/lib/ajustes";
-import { leerCuentas, listarFichasAdmin } from "@/lib/cuentas";
+import { leerCuentas, listarCreditosPendientes, listarFichasAdmin } from "@/lib/cuentas";
+import { listarPedidos } from "@/lib/pedidos";
 import { contarAlertasAdmin } from "@/app/acciones/cuentas";
 import { leerVentasCaja, ultimoNumeroVenta, ventasDelDia } from "@/lib/caja";
 import { leerRetirosCaja } from "@/lib/retiros-caja";
@@ -25,11 +26,17 @@ import { listarUsuarios, normalizarEmail, sinPassword } from "@/lib/usuarios";
 
 export const dynamic = "force-dynamic";
 
-export default async function CajaPage() {
+export default async function CajaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ vista?: string | string[] }>;
+}) {
   const sesion = await getSesion();
   if (!sesion || !puedeCobrar(sesion.rol)) redirect("/ingresar?siguiente=/caja");
+  const params = await searchParams;
+  const vistaPedidos = (Array.isArray(params.vista) ? params.vista[0] : params.vista) === "pedidos";
 
-  const [ajustes, productos, ventas, historial, ultima, proveedores, pedidosProveedor, regularizaciones, entradas, usuarios, cuentas, mediosPago, alertasIniciales, retiros, comprobantes] =
+  const [ajustes, productos, ventas, historial, ultima, proveedores, pedidosProveedor, regularizaciones, entradas, usuarios, cuentas, mediosPago, alertasIniciales, retiros, comprobantes, pedidosWeb, creditos] =
     await Promise.all([
       leerAjustes(),
       leerProductos(),
@@ -46,6 +53,8 @@ export default async function CajaPage() {
       contarAlertasAdmin(),
       leerRetirosCaja(),
       leerComprobantesCompra(),
+      listarPedidos(),
+      listarCreditosPendientes(),
     ]);
   const [rubros, fichas] = await Promise.all([
     leerRubros(productos.map((p) => p.seccion)),
@@ -151,6 +160,7 @@ export default async function CajaPage() {
       fichaProductos={productos}
       fichaRubros={rubros}
       descuentoClienteGenerico={ajustes.descuentoClienteGenerico}
+      recargoWeb={ajustes.recargoWeb}
       tasasCuota={ajustes.tasasCuota}
       moraCredito={ajustes.moraCredito}
       moraCuenta={ajustes.moraCuenta}
@@ -165,6 +175,9 @@ export default async function CajaPage() {
       retiros={retiros}
       comprobantes={comprobantes}
       envio={ajustes.envio}
+      pedidosWeb={pedidosWeb}
+      creditos={creditos}
+      vistaInicial={vistaPedidos && sesion.rol === "admin" ? "pedidos" : "inicio"}
     />
   );
 }

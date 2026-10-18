@@ -16,12 +16,13 @@ export function ProductCard({ producto, etiqueta }: Props) {
   const [broken, setBroken] = useState(false);
   const cantidad = lineas.find((l) => l.id === producto.id)?.cantidad ?? 0;
   const unidad = unidadProducto(producto.nombre);
-  const hayDto = producto.precioLista > producto.precioMostrar;
-  const pct =
-    hayDto && producto.precioLista > 0
-      ? Math.round(
-          (1 - producto.precioMostrar / producto.precioLista) * 100,
-        )
+  const normal = producto.precioLista;
+  const clientes = producto.precioCliente;
+  const hayClientes = clientes > 0 && clientes < normal;
+  const promoVisible = producto.precioMostrar < normal && producto.precioMostrar !== clientes;
+  const pctPromo =
+    promoVisible && normal > 0
+      ? Math.round((1 - producto.precioMostrar / normal) * 100)
       : 0;
 
   useEffect(() => {
@@ -29,12 +30,15 @@ export function ProductCard({ producto, etiqueta }: Props) {
   }, [producto.imagen]);
 
   const esStaff = sesion?.rol === "admin" || sesion?.rol === "caja";
-  const agotado = producto.stock === 0;
+  const agotado = typeof producto.stock === "number" && producto.stock <= 0;
 
   return (
-    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:border-movipack/30 hover:shadow-md">
+    <article
+      className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:border-movipack/30 hover:shadow-md"
+    >
       <div className="relative aspect-square bg-white">
-        {!broken ? (
+        <div className={agotado ? "h-full grayscale" : "h-full"}>
+        {producto.imagen && !broken ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             key={producto.imagen}
@@ -51,9 +55,9 @@ export function ProductCard({ producto, etiqueta }: Props) {
             🛒
           </div>
         )}
-        {hayDto && pct > 0 && (
+        {promoVisible && pctPromo > 0 && (
           <span className="absolute left-1.5 top-1.5 rounded-md bg-cape px-1.5 py-0.5 text-[10px] font-bold text-white sm:left-2 sm:top-2 sm:text-[11px]">
-            -{pct}%
+            -{pctPromo}%
           </span>
         )}
         {producto.tipoPromo === "2x1" || producto.tipoPromo === "3x2" ? (
@@ -69,6 +73,7 @@ export function ProductCard({ producto, etiqueta }: Props) {
             COMBO
           </span>
         ) : null}
+        </div>
         {agotado && (
           <span className="absolute bottom-1.5 left-1.5 rounded-md bg-neutral-900 px-1.5 py-0.5 text-[10px] font-extrabold text-white sm:bottom-2 sm:left-2 sm:text-[11px]">
             SIN STOCK
@@ -85,28 +90,42 @@ export function ProductCard({ producto, etiqueta }: Props) {
           {unidad ? ` · ${unidad}` : ""}
         </p>
 
-        <div className="mt-auto pt-1">
-          {hayDto ? (
-            <div className="flex flex-wrap items-baseline gap-1 sm:gap-1.5">
-              <p className="text-base font-extrabold tabular-nums leading-none text-cape sm:text-lg">
-                {formatoPesos(producto.precioMostrar)}
+        <div className="mt-auto flex items-end justify-between gap-2 pt-1">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-neutral-400">Precio</p>
+            {promoVisible ? (
+              <>
+                <p className={`text-base font-extrabold tabular-nums leading-none sm:text-lg ${agotado ? "text-neutral-500" : "text-cape"}`}>
+                  {formatoPesos(producto.precioMostrar)}
+                </p>
+                <p className="mt-0.5 text-[11px] font-semibold text-neutral-400 line-through">
+                  {formatoPesos(normal)}
+                </p>
+              </>
+            ) : (
+              <p className={`text-base font-extrabold tabular-nums leading-none sm:text-lg ${agotado ? "text-neutral-500" : "text-neutral-900"}`}>
+                {formatoPesos(normal)}
               </p>
-              <p className="text-[11px] font-semibold text-neutral-400 line-through sm:text-xs">
-                {formatoPesos(producto.precioLista)}
+            )}
+          </div>
+          {hayClientes && (
+            <div className="min-w-0 text-right">
+              <p className={`text-[10px] font-bold uppercase tracking-wide ${agotado ? "text-neutral-400" : "text-cape"}`}>
+                Clientes{producto.descuentoCliente > 0 ? ` -${producto.descuentoCliente}%` : ""}
+              </p>
+              <p className={`text-base font-extrabold tabular-nums leading-none sm:text-lg ${agotado ? "text-neutral-500" : "text-cape"}`}>
+                {formatoPesos(clientes)}
               </p>
             </div>
-          ) : (
-            <p className="text-base font-extrabold tabular-nums leading-none text-neutral-900 sm:text-lg">
-              {formatoPesos(producto.precioMostrar)}
-            </p>
           )}
+        </div>
           {producto.tipoPromo === "2x1" || producto.tipoPromo === "3x2" ? (
             <p className="mt-1 text-[11px] font-bold text-cape">
               {avisoCantidadPromo(producto.tipoPromo)}
             </p>
           ) : null}
           {typeof producto.stock === "number" && (
-            <p className={`mt-1 text-[10px] font-bold sm:text-[11px] ${agotado ? "text-cape" : "text-neutral-500"}`}>
+            <p className="mt-1 text-[10px] font-bold text-neutral-500 sm:text-[11px]">
               {agotado ? "Sin stock" : `Stock ${producto.stock}`}
             </p>
           )}
@@ -115,7 +134,6 @@ export function ProductCard({ producto, etiqueta }: Props) {
               {producto.notaAdmin}
             </p>
           )}
-        </div>
 
         {!esStaff && (
           <div className="mt-2">

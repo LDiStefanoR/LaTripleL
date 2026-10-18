@@ -22,11 +22,11 @@ import type { RetiroCaja } from "@/lib/retiros-caja";
 import type { VentaCaja } from "@/lib/caja";
 import type { EntradaStock } from "@/lib/deposito";
 import {
-  IconoAdmin,
   IconoCliente,
   IconoDeuda,
   IconoListado,
   IconoMantenimiento,
+  IconoPedido,
   IconoProducto,
   IconoStock,
   IconoVenta,
@@ -45,6 +45,7 @@ import { AdminCuentasLista } from "@/components/AdminCuentasLista";
 import { CajaBuscarCliente } from "@/components/CajaBuscarCliente";
 import { CajaUltimasVentas } from "@/components/CajaUltimasVentas";
 import { AdminAlarma } from "@/components/AdminAlarma";
+import { AdminPedidosPanel } from "@/components/AdminPedidosPanel";
 import { caja } from "@/components/caja-estilo";
 import {
   CANAL_CAJA_PEDIDO,
@@ -54,6 +55,8 @@ import {
   type CargaPedidoCaja,
 } from "@/lib/caja-pedido-web";
 import type { AlertasAdmin } from "@/types/cuenta";
+import type { CreditoPendiente } from "@/lib/cuentas";
+import type { Pedido } from "@/types/pedido";
 import type { PedidoProveedor, Proveedor, RegularizacionStock } from "@/lib/deposito";
 import type { NovedadAdmin, ResumenCliente, SolicitudCuenta } from "@/types/cuenta";
 import type { Producto } from "@/types/producto";
@@ -75,7 +78,7 @@ export type ProductoCaja = {
 };
 
 const POR_PAGINA = 12;
-type Vista = "inicio" | "empleado" | "venta" | "cierre" | "listados" | "stock" | "clientes" | "productos" | "mantenimiento" | "deudas";
+type Vista = "inicio" | "empleado" | "venta" | "cierre" | "listados" | "stock" | "clientes" | "productos" | "mantenimiento" | "deudas" | "pedidos";
 type Linea = { id: string; cantidad: number; precio?: number };
 
 const GRILLA_TICKET = "grid grid-cols-[minmax(0,1fr)_6.5rem_5.5rem_5.5rem] items-center gap-1";
@@ -98,6 +101,7 @@ export function CajaPanel({
   fichaProductos,
   fichaRubros,
   descuentoClienteGenerico,
+  recargoWeb,
   tasasCuota,
   moraCredito,
   moraCuenta,
@@ -112,6 +116,9 @@ export function CajaPanel({
   retiros,
   comprobantes,
   envio,
+  pedidosWeb,
+  creditos,
+  vistaInicial = "inicio",
 }: {
   productos: ProductoCaja[];
   rubros: { clave: string; etiqueta: string }[];
@@ -130,6 +137,7 @@ export function CajaPanel({
   fichaProductos: Producto[];
   fichaRubros: Rubro[];
   descuentoClienteGenerico: number;
+  recargoWeb: number;
   tasasCuota: { 1: number; 2: number; 3: number; 6: number };
   moraCredito: number[];
   moraCuenta: number[];
@@ -144,9 +152,12 @@ export function CajaPanel({
   retiros: RetiroCaja[];
   comprobantes: ComprobanteCompra[];
   envio: EscalaEnvio;
+  pedidosWeb: Pedido[];
+  creditos: CreditoPendiente[];
+  vistaInicial?: Vista;
 }) {
   const router = useRouter();
-  const [vista, setVista] = useState<Vista>("inicio");
+  const [vista, setVista] = useState<Vista>(vistaInicial);
   const [seccion, setSeccion] = useState(rubros[0]?.clave ?? "");
   const [pagina, setPagina] = useState(0);
   const [lineas, setLineas] = useState<Linea[]>([]);
@@ -512,6 +523,13 @@ export function CajaPanel({
     });
   }
 
+  function irMenu() {
+    setVista("inicio");
+    if (typeof window !== "undefined" && window.location.search) {
+      router.replace("/caja");
+    }
+  }
+
   function abrirVenta(nueva: boolean) {
     if (nueva) {
       setLineas([]);
@@ -631,34 +649,44 @@ export function CajaPanel({
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
-      <AdminAlarma inicial={alertasIniciales} enCaja />
+      <AdminAlarma
+        inicial={alertasIniciales}
+        enCaja
+        onPedidos={esAdmin ? () => setVista("pedidos") : undefined}
+      />
       {pedidoWebId && (
         <p className="shrink-0 bg-amber-100 px-4 py-2 text-sm font-bold text-amber-950">
           Pedido web {pedidoWebNumero || ""} cargado. Los precios quedan los del pedido. Al cobrarlo pasa a enviando y, 30 minutos después, a entregado.
         </p>
       )}
       <header className={`${caja.header} shrink-0`}>
-        <p className={caja.marca}>La Triple L</p>
+        <a href="/catalogo" className={`${caja.marca} rounded-lg outline-offset-4 hover:underline`}>
+          La Triple L
+        </a>
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">Caja</p>
         <p className={caja.reloj}>{reloj || " "}</p>
         <p className={`${caja.meta} capitalize`}>{fecha}</p>
         <p className={caja.meta}>
           Última factura: <span className={caja.metaFuerte}>{ultimaFactura || "—"}</span>
         </p>
-        <button
-          type="button"
-          onClick={() => abrirVenta(true)}
-          className={caja.botonHeaderPrimario}
-        >
-          🛒 Nueva venta
-        </button>
-        <button
-          type="button"
-          onClick={() => setUltimasAbiertas(true)}
-          className="rounded-xl bg-cape px-3 py-2 text-sm font-bold text-white transition hover:brightness-110"
-        >
-          ↩️ Devolución
-        </button>
+        {vista === "venta" && (
+          <>
+            <button
+              type="button"
+              onClick={() => abrirVenta(true)}
+              className={caja.botonHeaderPrimario}
+            >
+              🛒 Nueva venta
+            </button>
+            <button
+              type="button"
+              onClick={() => setUltimasAbiertas(true)}
+              className="rounded-xl bg-cape px-3 py-2 text-sm font-bold text-white transition hover:brightness-110"
+            >
+              ↩️ Devolución
+            </button>
+          </>
+        )}
         <p className={caja.meta}>
           Empleado:{" "}
           <span className={caja.metaFuerte}>
@@ -675,12 +703,7 @@ export function CajaPanel({
           Hoy {formatoPesos(totalDia)} · {ventasOk.length} ventas
         </p>
         <div className="ml-auto flex gap-2">
-          {esAdmin && (
-            <a href="/admin/pedidos" className={caja.botonHeader}>
-              Admin
-            </a>
-          )}
-          <button type="button" onClick={() => setVista("inicio")} className={caja.botonHeader}>
+          <button type="button" onClick={irMenu} className={caja.botonHeader}>
             Menú
           </button>
           <form action={salir}>
@@ -706,6 +729,7 @@ export function CajaPanel({
           onClientes={() => setVista("clientes")}
           onProductos={() => setVista("productos")}
           onMantenimiento={() => setVista("mantenimiento")}
+          onPedidos={() => setVista("pedidos")}
           onDeudas={() => {
             setDeudaAbierta(null);
             setVista("deudas");
@@ -1125,7 +1149,7 @@ export function CajaPanel({
         />
       )}
 
-      {(vista === "cierre" || vista === "listados" || vista === "stock" || vista === "clientes" || vista === "productos" || vista === "mantenimiento" || vista === "deudas") && (
+      {(vista === "cierre" || vista === "listados" || vista === "stock" || vista === "clientes" || vista === "productos" || vista === "mantenimiento" || vista === "deudas" || vista === "pedidos") && (
         <div className="min-h-0 flex-1 overflow-auto">
       {vista === "cierre" && (
         <CajaCierre
@@ -1209,6 +1233,7 @@ export function CajaPanel({
           fichaProductos={fichaProductos}
           fichaRubros={fichaRubros}
           descuentoClienteGenerico={descuentoClienteGenerico}
+          recargoWeb={recargoWeb}
           tasasCuota={tasasCuota}
           moraCredito={moraCredito}
           moraCuenta={moraCuenta}
@@ -1236,6 +1261,7 @@ export function CajaPanel({
           fichaProductos={fichaProductos}
           fichaRubros={fichaRubros}
           descuentoClienteGenerico={descuentoClienteGenerico}
+          recargoWeb={recargoWeb}
           tasasCuota={tasasCuota}
           moraCredito={moraCredito}
           moraCuenta={moraCuenta}
@@ -1263,6 +1289,7 @@ export function CajaPanel({
           fichaProductos={fichaProductos}
           fichaRubros={fichaRubros}
           descuentoClienteGenerico={descuentoClienteGenerico}
+          recargoWeb={recargoWeb}
           tasasCuota={tasasCuota}
           moraCredito={moraCredito}
           moraCuenta={moraCuenta}
@@ -1272,6 +1299,25 @@ export function CajaPanel({
           mediosPago={mediosPago}
           onSalir={() => setVista("inicio")}
         />
+      )}
+
+      {vista === "pedidos" && (
+        <section className="flex h-full min-h-0 flex-col">
+          <div className="flex shrink-0 items-center justify-between gap-3 border-b border-neutral-200 bg-white px-4 py-3">
+            <div>
+              <h2 className="font-display text-2xl font-bold leading-none">Pedidos</h2>
+              <p className="mt-1 text-xs font-semibold text-neutral-500">
+                Mercadería de la web, crédito y saldo
+              </p>
+            </div>
+            <button type="button" className={caja.boton} onClick={irMenu}>
+              Menú
+            </button>
+          </div>
+          <div className="min-h-0 flex-1 overflow-auto px-4 py-3">
+            <AdminPedidosPanel pedidos={pedidosWeb} creditos={creditos} />
+          </div>
+        </section>
       )}
 
       {vista === "deudas" && (
@@ -1537,6 +1583,7 @@ function MenuCaja({
   onProductos,
   onMantenimiento,
   onDeudas,
+  onPedidos,
 }: {
   esAdmin: boolean;
   permisos: PermisoCaja[];
@@ -1547,13 +1594,16 @@ function MenuCaja({
   onProductos: () => void;
   onMantenimiento: () => void;
   onDeudas: () => void;
+  onPedidos: () => void;
 }) {
   const puede = (permiso: PermisoCaja) => permisos.includes(permiso);
   return (
     <div className="mx-auto grid max-w-5xl items-start gap-6 px-4 py-8 lg:grid-cols-[280px_1fr]">
       <div className="hero-glow flex flex-col items-center justify-center overflow-hidden rounded-3xl px-5 py-10 text-center text-white shadow-xl">
         <p className="text-xs font-bold uppercase tracking-[0.22em] text-confetti">Minimarket</p>
-        <p className="mt-2 font-display text-4xl font-bold italic leading-none">La Triple L</p>
+        <a href="/catalogo" className="mt-2 font-display text-4xl font-bold italic leading-none hover:underline">
+          La Triple L
+        </a>
         <p className="mt-3 text-sm text-white/80">Caja · Garay 1005</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -1564,7 +1614,7 @@ function MenuCaja({
         {puede("productos") && <TarjetaAccion icono={<IconoProducto />} titulo="Productos" detalle="Cargar y modificar" onClick={onProductos} />}
         {puede("mantenimiento") && <TarjetaAccion icono={<IconoMantenimiento />} titulo="Mantenimiento" detalle="Datos del local y tasas" onClick={onMantenimiento} />}
         {puede("deudas") && <TarjetaAccion icono={<IconoDeuda />} titulo="Deudas" detalle="Cuentas corrientes" onClick={onDeudas} />}
-        {esAdmin && <TarjetaAccion icono={<IconoAdmin />} titulo="Admin" detalle="Volver al menú de administración" href="/admin/pedidos" />}
+        {esAdmin && <TarjetaAccion icono={<IconoPedido />} titulo="Pedidos" detalle="Web, crédito y saldo" onClick={onPedidos} />}
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ function Badge({ n, claro }: { n: number; claro?: boolean }) {
 export function AdminNav({ activa, pedidosNuevos = 0 }: Props) {
   return (
     <nav className="mt-6 grid grid-cols-2 gap-2" aria-label="Secciones de administración">
-      <Link href="/admin/pedidos" className={claseBoton(activa === "pedidos")}>
+      <Link href="/caja?vista=pedidos" className={claseBoton(activa === "pedidos")}>
         Pedidos
         <span className={`text-xs font-semibold ${activa === "pedidos" ? "text-white/80" : "text-neutral-500"}`}>
           Notificaciones

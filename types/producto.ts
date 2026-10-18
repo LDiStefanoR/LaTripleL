@@ -30,6 +30,8 @@ export interface Producto {
 export type ProductoVitrina = Producto & {
   precioLista: number;
   precioMostrar: number;
+  /** Precio con el descuento de clientes, al lado del precio normal. */
+  precioCliente: number;
   descuentoCliente: number;
   esPromo: boolean;
   tipoPromo?: TipoOferta;

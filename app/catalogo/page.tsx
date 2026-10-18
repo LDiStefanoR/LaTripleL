@@ -51,10 +51,10 @@ export default async function CatalogoPage({ searchParams }: Props) {
   const modo = modoPrecio(sesion);
   const aviso =
     modo === "cliente"
-      ? "Estás viendo tu precio de cliente registrado, en rojo. Al lado, en gris y tachado, está el precio de lista."
+      ? "A la izquierda está el precio del catálogo. A la derecha, en rojo, el tuyo de cliente."
       : modo === "admin"
-        ? "Como admin ves el precio de lista y el descuento del catálogo para los clientes registrados."
-        : "Estos son los precios de lista. Con una cuenta en la página ves tu precio, más bajo, en rojo.";
+        ? "El precio sale de la base de datos, más el recargo del catálogo si está cargado. A la derecha está el descuento de clientes."
+        : "El precio es el de la base de datos. A la derecha, en rojo, está el de clientes registrados.";
 
   return (
     <main>

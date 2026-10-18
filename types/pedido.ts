@@ -1,6 +1,6 @@
 import type { TipoOferta } from "@/types/promo";
 
-export type EstadoPedido = "sin_atender" | "en_proceso" | "enviando" | "terminado";
+export type EstadoPedido = "sin_atender" | "en_proceso" | "enviando" | "terminado" | "cancelado";
 
 export type FranjaReparto = "manana" | "tarde";
 
@@ -77,6 +77,8 @@ export type Pedido = {
   recargaRechazada?: boolean;
   /** Momento en que la caja cerró la venta y el pedido salió a envío. */
   enviadoEn?: string;
+  motivoCancelacion?: string;
+  canceladoEn?: string;
   lineas: LineaPedido[];
   total: number;
 };

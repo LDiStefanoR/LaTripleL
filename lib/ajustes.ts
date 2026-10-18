@@ -7,6 +7,7 @@ import type { AjustesPrecios, EscalaMora, TasasCuota } from "@/types/ajustes";
 
 export const AJUSTES_PRECIOS_BASE: AjustesPrecios = {
   descuentoClienteGenerico: 10,
+  recargoWeb: 0,
   ajustePorSeccion: {},
   descuentoClientePorSeccion: {},
   tasasCuota: { ...TASA_CUOTA_BASE },
@@ -62,8 +63,10 @@ function mapaPorcentajes(raw: unknown): Record<string, number> {
 export async function leerAjustes(): Promise<AjustesPrecios> {
   const parsed = await leerJsonData<Partial<AjustesPrecios>>("ajustes.json", vacio);
   const descuento = porcentajeFirmado(parsed.descuentoClienteGenerico) ?? 10;
+  const recargo = porcentaje(parsed.recargoWeb, 200) ?? 0;
   return {
     descuentoClienteGenerico: descuento,
+    recargoWeb: recargo,
     ajustePorSeccion:
       parsed.ajustePorSeccion && typeof parsed.ajustePorSeccion === "object"
         ? parsed.ajustePorSeccion

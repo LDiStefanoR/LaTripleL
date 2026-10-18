@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { contarAlertasAdmin } from "@/app/acciones/cuentas";
 import { salir } from "@/app/acciones/auth";
 import { useAuth } from "@/components/AuthProvider";
 import { BrandLogo } from "@/components/BrandLogo";
@@ -11,21 +10,16 @@ import { CartButton } from "@/components/CartButton";
 import { MENSAJE_PEDIDO_GENERAL } from "@/lib/categorias";
 import { whatsappUrl } from "@/lib/whatsapp";
 
-import type { AlertasAdmin } from "@/types/cuenta";
-
 const links = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/promos", label: "Promos" },
   { href: whatsappUrl(MENSAJE_PEDIDO_GENERAL), label: "Contacto", externo: true },
 ];
 
-export function SiteHeader({ alertasIniciales }: { alertasIniciales?: AlertasAdmin }) {
+export function SiteHeader() {
   const pathname = usePathname();
   const sesion = useAuth();
   const [menu, setMenu] = useState(false);
-  const [alertas, setAlertas] = useState<AlertasAdmin>(
-    alertasIniciales ?? { solicitudes: 0, pedidosNuevos: 0, novedades: 0, total: 0 },
-  );
 
   useEffect(() => {
     setMenu(false);
@@ -39,21 +33,6 @@ export function SiteHeader({ alertasIniciales }: { alertasIniciales?: AlertasAdm
       document.body.style.overflow = prev;
     };
   }, [menu]);
-
-  useEffect(() => {
-    if (sesion?.rol !== "admin") return;
-    let cancelado = false;
-    async function refrescar() {
-      const actual = await contarAlertasAdmin();
-      if (!cancelado) setAlertas(actual);
-    }
-    void refrescar();
-    const id = window.setInterval(() => void refrescar(), 4000);
-    return () => {
-      cancelado = true;
-      window.clearInterval(id);
-    };
-  }, [sesion?.rol, pathname]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-movipack/15 bg-white/95 shadow-sm shadow-movipack/5 backdrop-blur-md">
@@ -102,33 +81,12 @@ export function SiteHeader({ alertasIniciales }: { alertasIniciales?: AlertasAdm
 
         <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
           {sesion?.rol === "admin" && (
-            <div className="hidden items-center gap-2 lg:flex">
-              <Link
-                href="/admin/pedidos"
-                className={`relative rounded-xl border px-3 py-2 text-sm font-bold ${
-                  pathname.startsWith("/admin/pedidos")
-                    ? "border-movipack bg-movipack/10 text-movipack"
-                    : "border-movipack/30 text-movipack"
-                }`}
-              >
-                Pedidos
-                {alertas.pedidosNuevos > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-cape px-1 text-[11px] text-white">
-                    {alertas.pedidosNuevos > 99 ? "99+" : alertas.pedidosNuevos}
-                  </span>
-                )}
-              </Link>
-              <Link
-                href="/caja"
-                className={`rounded-xl border px-3 py-2 text-sm font-bold ${
-                  pathname.startsWith("/caja")
-                    ? "border-movipack bg-movipack/10 text-movipack"
-                    : "border-movipack/30 text-movipack"
-                }`}
-              >
-                Caja
-              </Link>
-            </div>
+            <Link
+              href="/caja"
+              className="hidden rounded-xl border border-movipack/30 px-3 py-2 text-sm font-bold text-movipack lg:inline-flex"
+            >
+              Caja
+            </Link>
           )}
           {sesion?.rol === "caja" && (
             <Link
@@ -229,14 +187,6 @@ export function SiteHeader({ alertasIniciales }: { alertasIniciales?: AlertasAdm
             })}
             {sesion?.rol === "admin" && (
               <>
-                <Link
-                  href="/admin/pedidos"
-                  className="rounded-xl px-3 py-3 text-base font-bold text-movipack"
-                  onClick={() => setMenu(false)}
-                >
-                  Pedidos
-                  {alertas.pedidosNuevos > 0 ? ` (${alertas.pedidosNuevos})` : ""}
-                </Link>
                 <Link
                   href="/admin/promos"
                   className="rounded-xl px-3 py-3 text-base font-bold text-movipack"

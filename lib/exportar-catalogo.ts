@@ -8,7 +8,7 @@ import { formatoPesos, nombreVitrina } from "@/lib/format";
 import {
   descuentoClienteDe,
   precioConDescuentoCliente,
-  precioLista,
+  precioWeb,
 } from "@/lib/precios";
 import { leerProductos } from "@/lib/productos";
 import { leerRubros } from "@/lib/rubros";
@@ -32,7 +32,7 @@ export async function filasCatalogo(): Promise<FilaCatalogo[]> {
 
   return productos
     .map((producto) => {
-      const minorista = precioLista(producto, ajustes);
+      const minorista = precioWeb(producto, ajustes);
       const dto = descuentoClienteDe(producto.seccion, ajustes);
       return {
         codigo: producto.codigo,

@@ -9,6 +9,16 @@ export function precioLista(producto: Producto, ajustes: AjustesPrecios) {
   return Math.round(producto.precio * (1 + extra / 100));
 }
 
+/** Precio del catálogo web: el de la base, más el recargo configurado. */
+export function precioWeb(producto: Producto, ajustes: AjustesPrecios) {
+  const recargo = ajustes.recargoWeb ?? 0;
+  return Math.round(producto.precio * (1 + recargo / 100));
+}
+
+export function sinStock(stock: number | null | undefined) {
+  return typeof stock === "number" && stock <= 0;
+}
+
 export function descuentoClienteDe(
   _seccion: string,
   ajustes: AjustesPrecios,
@@ -47,9 +57,10 @@ export function armarVitrina(
   ajustes: AjustesPrecios,
   oferta?: Oferta | null,
 ): ProductoVitrina {
-  const lista = precioLista(producto, ajustes);
+  const lista = precioWeb(producto, ajustes);
   const especial = sesion?.rol === "cliente" ? Math.min(100, Math.max(0, Math.round(sesion.descuento ?? 0))) : 0;
-  const descuento = especial > 0 ? especial : descuentoClienteDe(producto.seccion, ajustes);
+  const general = Math.max(0, descuentoClienteDe(producto.seccion, ajustes));
+  const descuento = especial > 0 ? especial : general;
   const cliente = precioConDescuentoCliente(lista, descuento);
   const promo = precioPromoDe(producto, lista, oferta);
   const esPromo = Boolean(oferta?.activa) || Boolean(producto.promoActiva);
@@ -67,6 +78,7 @@ export function armarVitrina(
       precio: mejorCliente,
       precioLista: lista,
       precioMostrar: mejorCliente,
+      precioCliente: cliente,
       descuentoCliente: descuento,
       esPromo,
       tipoPromo,
@@ -74,20 +86,20 @@ export function armarVitrina(
   }
 
   if (modo === "admin") {
-    const extra = esPromo
-      ? tipoPromo === "2x1" || tipoPromo === "3x2"
-        ? ` · Promo ${tipoPromo}`
-        : ` · Promo ${formatoPesos(mejorPublico)}`
-      : "";
     return {
       ...producto,
       precio: lista,
       precioLista: lista,
       precioMostrar: lista,
+      precioCliente: cliente,
       descuentoCliente: descuento,
       esPromo,
       tipoPromo,
-      notaAdmin: `Dto. clientes registrados: ${descuento}% → ${formatoPesos(cliente)}${extra}`,
+      notaAdmin: esPromo
+        ? tipoPromo === "2x1" || tipoPromo === "3x2"
+          ? `Promo ${tipoPromo}`
+          : `Promo ${formatoPesos(mejorPublico)}`
+        : undefined,
     };
   }
 
@@ -96,6 +108,7 @@ export function armarVitrina(
     precio: mejorPublico,
     precioLista: lista,
     precioMostrar: mejorPublico,
+    precioCliente: cliente,
     descuentoCliente: descuento,
     esPromo,
     tipoPromo,

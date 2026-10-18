@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cambiarEstadoPedido, listarPedidos, ajustarMontoRecarga, resolverRecarga } from "@/lib/pedidos";
+import { cambiarEstadoPedido, cancelarPedido, listarPedidos, ajustarMontoRecarga, resolverRecarga } from "@/lib/pedidos";
 import { puedeCobrar } from "@/lib/roles";
 import { quitarFiadoPorEmail } from "@/lib/cuentas";
 import { getSesion } from "@/lib/sesion";
@@ -55,6 +55,7 @@ function revalidar() {
   revalidatePath("/admin/clientes", "layout");
   revalidatePath("/admin/cuentas", "layout");
   revalidatePath("/admin/pedidos");
+  revalidatePath("/caja");
   revalidatePath("/admin");
   revalidatePath("/catalogo");
   revalidatePath("/cuenta");
@@ -78,6 +79,14 @@ export async function adminCambiarEstadoPedido(
   if ("error" in resultado) return { error: resultado.error };
   revalidar();
   return { ok: "Actualizamos el estado del pedido." };
+}
+
+export async function adminCancelarPedido(form: FormData): Promise<EstadoAdminCuentas> {
+  if (!(await exigirAdmin())) return { error: "No tenés permiso." };
+  const resultado = await cancelarPedido(texto(form, "id"), texto(form, "motivo"));
+  if ("error" in resultado) return { error: resultado.error };
+  revalidar();
+  return { ok: `Cancelamos el pedido. Motivo: ${resultado.motivo}.` };
 }
 
 export async function adminResolverRecarga(form: FormData): Promise<EstadoAdminCuentas> {
